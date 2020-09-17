@@ -1,9 +1,17 @@
 import serial
 import json
 
+from similarFunctions import getCOMPorts
+
+
 def readSerialData():
+    arduinoPorts, emuPorts = getCOMPorts()
+    if not arduinoPorts:
+        readPort = emuPorts[0]
+    else:
+        readPort = arduinoPorts[0]
     s = serial.Serial(
-        port='COM5',
+        port=readPort,
         baudrate=20000,
         parity=serial.PARITY_NONE,
         stopbits=serial.STOPBITS_ONE,
