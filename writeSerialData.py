@@ -11,6 +11,7 @@ s = serial.Serial(
     timeout=1)
 
 my_arr = [1,2,3,4,5]
+
 data = (json.dumps(my_arr) + '\n').encode()
 
 while 1:
