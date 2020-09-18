@@ -1,6 +1,8 @@
 readme for the guys
 
+
 **Emulation**
+
 Without a PI with serial cable handy, you will need to emulate COM ports to develop/test
 you can do this with the a null-modem emulator which can be downloaded 
 here: https://sourceforge.net/projects/com0com/
@@ -15,6 +17,13 @@ Then hit the reset button on com0com
 The second pair should change "COM#->COM#" to something like "COM4->COM5"
 to check this, expand "ports(COM & LPT)" in device manager
 and check that "com0com - serial port emulator(COM5)" and "com0com - serial port emulator(COM6)" are listed
+
+
+**Electron**
+
+Set up the nodejs by running 
+`npm install` and then running with `npm start`
+
 
 
 
