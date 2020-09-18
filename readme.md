@@ -22,7 +22,7 @@ and check that "com0com - serial port emulator(COM5)" and "com0com - serial port
 **Electron**
 
 Set up the nodejs by running 
-`npm install` and then running with `npm start`
+`npm install` and then running with `npm start` in devices directory
 
 
 
