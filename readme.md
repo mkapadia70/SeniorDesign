@@ -24,6 +24,10 @@ and check that "com0com - serial port emulator(COM5)" and "com0com - serial port
 Set up the nodejs by running 
 `npm install` and then running with `npm start` in devices directory
 
+**Diagram**
+![alt text](https://github.com/EECSisFUN/SeniorDesign/blob/master/image.png)
+
+
 
 
 
