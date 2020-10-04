@@ -3,12 +3,11 @@ const { app, BrowserWindow } = require('electron')
 let pressed = false
 
 function sendToPython() {
-  console.log("Test")
+  pressed = !pressed;
   var python = require('child_process').spawn('python', ['./Testing.py', pressed]);
   python.stdout.on('data', function (data) {
     console.log("Python response: ", data.toString('utf8'));
-    console.log(pressed)
-    pressed = !pressed;
+    
   });
 
   python.stderr.on('data', (data) => {
