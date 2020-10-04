@@ -10,9 +10,9 @@ def main():
             time.sleep(10)
         port = PortsHandler.getCOMPort()
         print("Device has been found on port", port)
-        SerialHandler.connectPort(port)
+        s = SerialHandler.connectPort(port)
 
         while(PortsHandler.checkConnected()):
-            print(SerialHandler.listen())
+            SerialHandler.listen(s)
 
 main()

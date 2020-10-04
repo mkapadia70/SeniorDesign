@@ -27,6 +27,6 @@ def muteApplicationVolume(session):
 def unmuteApplicationVolume(session):
     session.SimpleAudioVolume.SetMute(0, None)
 
-# param: application session
+# param: application session, and new level from 0.0 to 1.0
 def setApplicationVolume(session, newVolume):
     session.SimpleAudioVolume.SetMasterVolume(newVolume, None)
