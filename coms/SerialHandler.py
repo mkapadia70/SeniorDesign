@@ -13,7 +13,7 @@ def connectPort(port):
         timeout=1)
 
 def sendData(data):
-    data = (json.dumps(my_arr) + '\n').encode()
+    data = (json.dumps(data) + '\n').encode()
     s.write(data)
 
 def listen():
