@@ -1,14 +1,7 @@
-import Apps/WindowsVolumeMixerControl
-
-def callFunctions(json):
-    for i in json:
-        if(i["Name"] == "Windows"): WindowsVolumeMixerControl(i["Funcs"])
-
-testData = [{"Name":"Windows","Funcs":[{"Name":"SetMasterVolume","params":["1","2"]},{"Name":"Mute","params":["1","2","3"]}]},{"Name":"Spotify","Funcs":{"Func1":{"Name":"SkipSongy","params":["1","2"]},"Func2":{"Name":"FindTriPham","params":["1","2","3"]}}}]
-callFunctions(testData)
+from Apps import WindowsVolumeMixerControl
 
 # WindowsVolumeMixerControl
-def WindowsVolumeMixerControl(funcs):
+def WindowsVolumeMixer(funcs):
     for i in funcs:
         if(i["Name"] == "muteMasterVolume"):
             WindowsVolumeMixerControl.muteMasterVolume()
@@ -22,3 +15,7 @@ def WindowsVolumeMixerControl(funcs):
             WindowsVolumeMixerControl.unmuteApplicationVolume(i["Params"][0])
         elif(i["Name"] == "setApplicationVolume"):
             WindowsVolumeMixerControl.setApplicationVolume(i["Params"][0], i["Params"][1])
+
+def callFunctions(json):
+    for i in json:
+        if(i["Name"] == "WindowsVolumeMixerControl"): WindowsVolumeMixer(i["Funcs"])
