@@ -15,4 +15,5 @@ def main():
         while(PortsHandler.checkConnected()):
             SerialHandler.listen(s)
 
-main()
+if __name__ == '__main__':    
+    main()

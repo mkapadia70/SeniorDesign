@@ -1,5 +1,8 @@
 import serial.tools.list_ports
 
+#note: should fix how this all does this. 
+# Hopefully can do both of these in one function
+# and not have to return to main until the end
 def getCOMPort():
     piPort = emuPort = None
 
@@ -7,7 +10,7 @@ def getCOMPort():
     for p in ports:
         if ('Prolific USB-to-Serial Comm Port' in p.description):
             piPort = p.device
-        if ('com0com' in p.description):
+        elif ('com0com' in p.description):
             emuPort = p.device
     if (piPort != None):
         return piPort
@@ -15,9 +18,8 @@ def getCOMPort():
 
 def checkConnected():
     ports = list(serial.tools.list_ports.comports())
-
     for p in ports:
-        if (("Prolific USB-to-Serial Comm Port" or "com0com") in p.description):
+        if (("Prolific USB-to-Serial Comm Port" in p.description) or ("com0com" in p.description)):
             return True
 
     return False
