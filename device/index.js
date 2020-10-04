@@ -1,5 +1,28 @@
 const { app, BrowserWindow } = require('electron')
 
+let pressed = false
+
+function sendToPython() {
+  console.log("Test")
+  var python = require('child_process').spawn('python', ['./Testing.py', pressed]);
+  python.stdout.on('data', function (data) {
+    console.log("Python response: ", data.toString('utf8'));
+    console.log(pressed)
+    pressed = !pressed;
+  });
+
+  python.stderr.on('data', (data) => {
+    console.error(`stderr: ${data}`);
+  });
+
+  python.on('close', (code) => {
+    console.log(`child process exited with code ${code}`);
+  });
+
+
+
+}
+
 function createWindow () {
   // Create the browser window.
   const win = new BrowserWindow({
@@ -13,8 +36,9 @@ function createWindow () {
   // and load the index.html of the app.
   win.loadFile('index.html')
 
-  // Open the DevTools.
+
 }
+
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
