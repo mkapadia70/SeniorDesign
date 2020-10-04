@@ -1,6 +1,6 @@
 import PortsHandler
 import SerialHandler
-import time
+import time 
 
 def main():
     running = True

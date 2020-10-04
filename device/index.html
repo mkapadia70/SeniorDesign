@@ -2,15 +2,25 @@
 <html>
   <head>
     <meta charset="UTF-8">
+    <script src="index.js"></script>
     <title>Hello World!</title>
+    <link rel="stylesheet" href="css/style.css"></link>
     
   </head>
   <body>
     <h1>Hello World!</h1>
 
-    <button id="btn" onClick="sendToPython();">push me</button>
+    <div style="text-align:center;padding-top: 12.5%">
+      <button id="btn" type="button" class = "button buttonRed" onmouseover="turnColor();" onmouseout="turnBack();" onclick="muteUnmute()">Mute
+      </button>
+    </div>
 
-    <script src="index.js"></script>
+    <input type="range" id="testSlider" oninput="updateAudio()"> 
+    
+    
+
     
   </body>
+
+
 </html>
