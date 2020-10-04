@@ -1,5 +1,6 @@
 import serial
 import json
+import JsonHandler
 
 s = None
 
@@ -21,6 +22,7 @@ def listen():
         try:
             response = s.readline().decode(errors="replace")
             response = json.loads(response)
+            JsonHandler.callFunctions(response)
         except:
             print("Timed out")
 
