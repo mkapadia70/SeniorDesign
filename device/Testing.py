@@ -16,22 +16,18 @@ ser = serial.Serial(
 
 def Testing(tfval):
 	
-    try:   
-        test1 = [{"Name": "WindowsVolumeMixerControl","Funcs":[{"Name":"muteMasterVolume"}]}]
-        test2 = [{"Name": "WindowsVolumeMixerControl","Funcs":[{"Name":"unmuteMasterVolume"}]}]
-
-        output1 = (json.dumps(test1) + '\n').encode()
-        output2 = (json.dumps(test2) + '\n').encode()
+    try:
+        
+        test = ""
 
         if tfval == "false":
-            print("here", tfval)
-            ser.write(output1)
-            return output1
-
+            test = [{"Name": "WindowsVolumeMixerControl","Funcs":[{"Name":"muteMasterVolume"}]}]
         elif tfval == "true":
-            print("there", tfval)
-            ser.write(output2)
-            return output2
+            test = [{"Name": "WindowsVolumeMixerControl","Funcs":[{"Name":"unmuteMasterVolume"}]}]
+           
+        output = (json.dumps(test) + '\n').encode()
+        ser.write(output)
+        return output
 
     except Exception as e:
         print(e)

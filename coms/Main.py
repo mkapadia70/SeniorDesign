@@ -6,9 +6,10 @@ def main():
     running = True
     while(running):
         print("Device Not Found")
-        while(not PortsHandler.checkConnected()):
+        port = None
+        while(port == None):
+            port = PortsHandler.findPort()
             time.sleep(10)
-        port = PortsHandler.getCOMPort()
         print("Device has been found on port", port)
         s = SerialHandler.connectPort(port)
 
