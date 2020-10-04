@@ -2,11 +2,12 @@ import serial
 import json
 import JsonHandler
 import time
+#clean this up at some point
 
 s = None
 
 def connectPort(port):
-    s = serial.Serial(
+    return serial.Serial(
         port=port,
         baudrate=20000,
         parity=serial.PARITY_NONE,

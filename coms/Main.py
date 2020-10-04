@@ -7,13 +7,14 @@ def main():
     while(running):
         print("Device Not Found")
         port = None
-        while(port == None):
+        port = PortsHandler.findPort()
+        while(None == port):
             port = PortsHandler.findPort()
             time.sleep(10)
         print("Device has been found on port", port)
         s = SerialHandler.connectPort(port)
 
-        while(PortsHandler.checkConnected()):
+        while(PortsHandler.checkConnected(port)):
             SerialHandler.listen(s)
 
 if __name__ == '__main__':    

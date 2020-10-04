@@ -5,8 +5,8 @@ import json
 from sys import argv
 
 ser = serial.Serial(
-    #port='COM5', # for emulation insert your COMX port here
-    port='/dev/ttys0',
+    port='COM5', # for emulation insert your COMX port here
+    #port='/dev/ttys0',
     baudrate = 20000,
     parity=serial.PARITY_NONE,
     stopbits=serial.STOPBITS_ONE,
