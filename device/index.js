@@ -1,7 +1,5 @@
 const { app, BrowserWindow } = require('electron');
 const querystring = require('querystring');
-
-
 let { PythonShell } = require('python-shell');
 let process = require('child_process')
 
@@ -29,12 +27,8 @@ function turnBack()
 }
 
 
-//changes color and text of button, also runs python code to mute/unmute audio
+//changes color and text of button
 function muteUnmute() {
-  
-  pressed = !pressed;
-  vars = ["muteUnmute", pressed]
-  //toPython(vars)
   if(!pressed)
     {
         document.getElementById("btn").innerHTML = "Unmute"
@@ -46,14 +40,7 @@ function muteUnmute() {
         document.getElementById("btn").innerHTML = "Mute"
         document.getElementById("btn").style.backgroundColor = "red";       
         document.getElementById("btn").style.color = "white";       
-
     }
-    
-}
-
-function updateAudio() {
-  toPython(document.getElementById("testSlider").value)
-
 }
 
 function startPythonPersistent() {
@@ -88,13 +75,9 @@ function createWindow () {
 
   win.loadFile('index.html')
 
-
-
 }
 
 app.whenReady().then(createWindow)
-
-
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
@@ -107,6 +90,5 @@ app.on('activate', () => {
     createWindow()
   }
 })
-
 
 startPythonPersistent()

@@ -5,11 +5,13 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     <style>
         html {
+            height: 100%;
             overflow:scroll;
         }
         ::-webkit-scrollbar {
@@ -17,8 +19,8 @@
             background:transparent; /* make scrollbar transparent */
         }
         .horizontal-scrollable > .row {
-            width:90vw;
-            padding-top:10vh;
+            width:70vw;
+            padding-top:5vh;
             margin:0px auto;
             overflow-x:auto;
             white-space:nowrap;
@@ -36,7 +38,7 @@
         .slider {
             -webkit-appearance:none;
             width:50vh!important;
-            height:25px;
+            height:60px;
             margin:25vh -25vh;
             background:#d3d3d3;
             outline:none;
@@ -47,8 +49,8 @@
         .slider::-webkit-slider-thumb {
             -webkit-appearance:none;
             appearance:none;
-            width:25px;
-            height:25px;
+            width:30px;
+            height:70px;
             background:#4CAF50;
             cursor:pointer;
         }
@@ -62,52 +64,106 @@
     </style>
 </head>
 
-<body>
+<body style="background-color:#252525; color:white" >
+    <button class="button buttonRed" id="btn">Mute</button>
     <div class="container-fluid">
         <h1 class="text-center">Windows Volume Mixer Controller</h1>
         <div class="container-fluid horizontal-scrollable">
             <div class="row text-center">
                 <div class="col-xs-3">
-                    <input id="testslider" type="range" min="0" max="100" class="slider">
+                    <input id="testslider1" type="range" min="0" max="100" class="slider">
+                    <h3 class="text-center">Master</h3>
+                </div>
+                <div class="col-xs-3">
+                    <input id="testslider2" type="range" min="0" max="100" class="slider">
+                    <h3 class="text-center">System Sounds</h3>
+                </div>
+                <div class="col-xs-3">
+                    <input id="testslider3" type="range" min="0" max="100" class="slider">
+                    <h3 class="text-center">Discord</h3>
+                </div>
+                <div class="col-xs-3">
+                    <input id="testslider4" type="range" min="0" max="100" class="slider">
+                    <h3 class="text-center">Opera</h3>
+                </div>
+                <div class="col-xs-3">
+                    <input id="testslider5" type="range" min="0" max="100" class="slider">
                     <h3 class="text-center">Testing</h3>
                 </div>
                 <div class="col-xs-3">
-                    <input type="range" min="0" max="100" class="slider">
-                    <h3 class="text-center">Testing</h3>
-                </div>
-                <div class="col-xs-3">
-                    <input type="range" min="0" max="100" class="slider">
-                    <h3 class="text-center">Testing</h3>
-                </div>
-                <div class="col-xs-3">
-                    <input type="range" min="0" max="100" class="slider">
-                    <h3 class="text-center">Testing</h3>
-                </div>
-                <div class="col-xs-3">
-                    <input type="range" min="0" max="100" class="slider">
-                    <h3 class="text-center">Testing</h3>
-                </div>
-                <div class="col-xs-3">
-                    <input type="range" min="0" max="100" class="slider">
+                    <input id="testslider6" type="range" min="0" max="100" class="slider">
                     <h3 class="text-center">Testing</h3>
                 </div>
             </div>
         </div>
     </div>
     <script>
-      $(function() {
-        $('#testslider').bind('input', function() {
-            $.getJSON("http://127.0.0.1:5001" + '/data', {
-                Name: "WindowsVolumeMixerControl",
-                Func: "setApplicationVolume",
-                Params: document.getElementById("testslider").value/100.0,
-                ProcessId: 8724 // discord pID
-            }, function(data) {
-                console.log(data)
+        var pressed = false
+        //changes color and text of button
+        function muteUnmute() {
+        if(!pressed)
+            {
+                document.getElementById("btn").innerHTML = "Unmute"
+                document.getElementById("btn").style.backgroundColor = "green";       
+                document.getElementById("btn").style.color = "white"; 
+            }
+            else
+            {
+                document.getElementById("btn").innerHTML = "Mute"
+                document.getElementById("btn").style.backgroundColor = "red";       
+                document.getElementById("btn").style.color = "white";       
+            }
+        }
+        //mute/unmute button
+        $(function() {
+            $('#btn').bind('click', function() {
+                $.getJSON("http://127.0.0.1:5001" + '/data', {
+                    Name: "WindowsVolumeMixerControl",
+                    Func: (pressed ? "unmuteMasterVolume" : "muteMasterVolume"),
+                    Params: 0,
+                    ProcessId: -1 //whatever 
+                }, function(data) {
+                    muteUnmute()
+                    console.log(data)
+                    pressed = !pressed
+                });
+                return false;
             });
-            return false;
         });
-      });
+        //master volume
+        $(function() {
+            $('#testslider1').bind('input', function() {
+                $.getJSON("http://127.0.0.1:5001" + '/data', {
+                    Name: "WindowsVolumeMixerControl",
+                    Func: "setMasterVolume",
+                    Params: document.getElementById("testslider1").value/100.0,
+                    ProcessId: -1 //whatever 
+                }, function(data) {
+                    console.log(data)
+                });
+                return false;
+            });
+        });
+        //program volumes
+        $(function() {
+            var sliderNumbers = [2, 3, 4, 5, 6, 7, 8]; //why do we need 7 and 8 here???, it wont work otherwise
+            var pId = [0, 7024, 10744, 8724, 6212];
+            $.each(sliderNumbers, function(i) { 
+                $("#testslider" + i).bind('input', function() {
+                    $.getJSON("http://127.0.0.1:5001" + '/data', {
+                        Name: "WindowsVolumeMixerControl",
+                        Func: "setApplicationVolume",
+                        Params: document.getElementById("testslider" + i).value/100.0,
+                        ProcessId: (pId[i-2])
+                    }, function(data) {
+                        console.log(data)
+                    });
+                    return false;
+                });
+            });
+        });
+        
+        
     </script>
     <script src="index.js"></script>
   </body>

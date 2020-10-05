@@ -23,7 +23,7 @@ def listen(ser):
         try:
             response = ser.readline().decode(errors="replace")
             response = json.loads(response)
-            #print(response)
+            print(response)
             JsonHandler.callFunctions(response)
         except Exception as e:
             pass

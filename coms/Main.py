@@ -1,9 +1,14 @@
 import PortsHandler
 import SerialHandler
-import time 
+import time
+from Apps import WindowsVolumeMixerControl
+
 
 def main():
     running = True
+    processes = WindowsVolumeMixerControl.getAllSoundDevices()
+    for p in processes:
+        print(p.ProcessId)
     while(running):
         print("Device Not Found")
         port = None

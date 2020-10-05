@@ -30,7 +30,6 @@ def unmuteApplicationVolume(session):
 
 # param: application session, and new level from 0.0 to 1.0
 def setApplicationVolume(session, newVolume):
-    print(newVolume, session)
     session.SimpleAudioVolume.SetMasterVolume(float(newVolume), None)
 
 def getAllSoundDevices():
