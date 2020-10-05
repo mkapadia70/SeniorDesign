@@ -1,22 +1,15 @@
-#!/user/bin/env python
+import sys
+from flask import Flask, jsonify, request
+from flask_cors import cross_origin
 import time
 import serial
 import json
-from sys import argv
 
-ser = serial.Serial(
-    port='COM5', # for emulation insert your COMX port here
-    #port='/dev/ttys0',
-    baudrate = 100000,
-    parity=serial.PARITY_NONE,
-    stopbits=serial.STOPBITS_ONE,
-    bytesize=serial.EIGHTBITS,
-    timeout=1
-)
+app = Flask(__name__)
 
-def Testing(params):
-    
-    funcName = params[0]
+
+def testing(params):
+    funcName = "updateAudio"
     try:
         jason = ""
         if funcName == "muteUnmute":
@@ -26,18 +19,31 @@ def Testing(params):
             elif muted == "true":
                 jason = [{"Name": "WindowsVolumeMixerControl","Funcs":[{"Name":"unmuteMasterVolume"}]}]
         elif funcName == "updateAudio":
-            volume = float(params[1])/100.0
+            volume = float(params)/100.0
             jason = [{"Name": "WindowsVolumeMixerControl","Funcs":[{"Name":"setMasterVolume", "Params": [volume]}]}]
         output = (json.dumps(jason) + '\n').encode()
         ser.write(output)
-
         return output
-
-
     except Exception as e:
         print(e)
         return "a"
 
-if __name__ == '__main__':
-    Testing(argv[1].split(','))
+@app.route("/data")
+def data():
+    
+    arg1 = request.args.get('volume', 0, type=int)
+    testing(arg1)
+    return jsonify(result=arg1)
 
+if __name__ == "__main__":
+    print('starting server')
+    ser = serial.Serial(
+        port='COM5', # for emulation insert your COMX port here
+        #port='/dev/ttys0',
+        baudrate = 100000,
+        parity=serial.PARITY_NONE,
+        stopbits=serial.STOPBITS_ONE,
+        bytesize=serial.EIGHTBITS,
+        timeout=1
+    )
+    app.run(host='127.0.0.1', port=5001)

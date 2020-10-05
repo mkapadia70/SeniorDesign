@@ -8,7 +8,7 @@ import time
 def connectPort(port):
     return serial.Serial(
         port=port,
-        baudrate=20000,
+        baudrate=100000,
         parity=serial.PARITY_NONE,
         stopbits=serial.STOPBITS_ONE,
         bytesize=serial.EIGHTBITS,

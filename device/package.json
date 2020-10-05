@@ -9,5 +9,10 @@
   "license": "ISC",
   "devDependencies": {
     "electron": "^10.1.2"
+  },
+  "dependencies": {
+    "jquery": "^3.5.1",
+    "jsdom": "^16.4.0",
+    "python-shell": "^2.0.2"
   }
 }

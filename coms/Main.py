@@ -14,7 +14,7 @@ def main():
         print("Device has been found on port", port)
         s = SerialHandler.connectPort(port)
 
-        while(PortsHandler.checkConnected(port)):
+        while(1):
             SerialHandler.listen(s)
 
 if __name__ == '__main__':    
