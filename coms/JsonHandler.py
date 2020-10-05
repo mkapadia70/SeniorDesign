@@ -1,7 +1,5 @@
 from Apps import WindowsVolumeMixerControl
 
-#w = WindowsVolumeMixerControl
-
 # WindowsVolumeMixerControl
 def WindowsVolumeMixer(funcs):
     for i in funcs:
@@ -34,3 +32,13 @@ def callFunctions(json):
     for i in json:
         if(i["Name"] == "WindowsVolumeMixerControl"):
             WindowsVolumeMixer(i["Funcs"])
+
+
+def getProcsAsJson():
+    procs = WindowsVolumeMixerControl.getAllSoundDevices()
+    procsJSONlist = []
+    for p in procs:
+        addition = {"Name": p.DisplayName, "Id": p.ProcessId}
+        procsJSONlist.append(addition)
+    return procsJSONlist
+   
