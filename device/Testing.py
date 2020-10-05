@@ -14,25 +14,30 @@ ser = serial.Serial(
     timeout=1
 )
 
-def Testing(tfval):
-	
+def Testing(params):
+    funcName = params[0]
     try:
-        
-        test = ""
-
-        if tfval == "false":
-            test = [{"Name": "WindowsVolumeMixerControl","Funcs":[{"Name":"muteMasterVolume"}]}]
-        elif tfval == "true":
-            test = [{"Name": "WindowsVolumeMixerControl","Funcs":[{"Name":"unmuteMasterVolume"}]}]
-           
-        output = (json.dumps(test) + '\n').encode()
+        jason = ""
+        print(funcName)
+        if funcName == "muteUnmute":
+            muted = params[1]
+            if muted == "false":
+                jason = [{"Name": "WindowsVolumeMixerControl","Funcs":[{"Name":"muteMasterVolume"}]}]
+            elif muted == "true":
+                jason = [{"Name": "WindowsVolumeMixerControl","Funcs":[{"Name":"unmuteMasterVolume"}]}]
+        elif funcName == "updateAudio":
+            volume = float(str(params[1]))/100.0
+            jason = [{"Name": "WindowsVolumeMixerControl","Funcs":[{"Name":"setMasterVolume", "Params": [volume]}]}]
+        output = (json.dumps(jason) + '\n').encode()
         ser.write(output)
         return output
+
 
     except Exception as e:
         print(e)
         return "a"
 
 if __name__ == '__main__':
-    print(Testing(argv[1]))
+    params = argv[1].split(',')
+    print(Testing(params))
 

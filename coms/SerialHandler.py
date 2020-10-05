@@ -4,7 +4,6 @@ import JsonHandler
 import time
 #clean this up at some point
 
-s = None
 
 def connectPort(port):
     return serial.Serial(
@@ -14,11 +13,10 @@ def connectPort(port):
         stopbits=serial.STOPBITS_ONE,
         bytesize=serial.EIGHTBITS,
         timeout=1)
-    return s
 
-def sendData(data):
+def sendData(ser, data):
     data = (json.dumps(data) + '\n').encode()
-    s.write(data)
+    ser.write(data)
 
 def listen(ser):
     while 1:
