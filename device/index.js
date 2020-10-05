@@ -31,7 +31,7 @@ function turnBack()
 
 //changes color and text of button, also runs python code to mute/unmute audio
 function muteUnmute() {
-  startPythonPersistent()
+  
   pressed = !pressed;
   vars = ["muteUnmute", pressed]
   //toPython(vars)
@@ -75,7 +75,7 @@ function startPythonPersistent() {
 }
 
 function createWindow () {
-  
+  startPythonPersistent()
   // Create the browser window.
   const win = new BrowserWindow({
     width: 800,
