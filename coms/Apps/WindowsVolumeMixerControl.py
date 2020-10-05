@@ -6,6 +6,7 @@ from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
 devices = AudioUtilities.GetSpeakers()
 interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
 volume = cast(interface, POINTER(IAudioEndpointVolume))
+apps = AudioUtilities.GetAllSessions() # maybe need to make this a dict at some point with processID as key
 
 # Master Volume
 def muteMasterVolume():
@@ -16,7 +17,7 @@ def unmuteMasterVolume():
 
 # param: new level of volume from 0.0 to 1.0
 def setMasterVolume(newVolume):
-    volume.SetMasterVolumeLevelScalar(newVolume, None)
+    volume.SetMasterVolumeLevelScalar(float(newVolume), None)
 
 # Application Volume
 # param: application session
@@ -29,7 +30,8 @@ def unmuteApplicationVolume(session):
 
 # param: application session, and new level from 0.0 to 1.0
 def setApplicationVolume(session, newVolume):
-    session.SimpleAudioVolume.SetMasterVolume(newVolume, None)
+    print(newVolume, session)
+    session.SimpleAudioVolume.SetMasterVolume(float(newVolume), None)
 
 def getAllSoundDevices():
     return AudioUtilities.GetAllSessions()

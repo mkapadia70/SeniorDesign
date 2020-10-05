@@ -1,5 +1,7 @@
 from Apps import WindowsVolumeMixerControl
 
+#w = WindowsVolumeMixerControl
+
 # WindowsVolumeMixerControl
 def WindowsVolumeMixer(funcs):
     for i in funcs:
@@ -14,8 +16,14 @@ def WindowsVolumeMixer(funcs):
         elif(i["Name"] == "unmuteApplicationVolume"):
             WindowsVolumeMixerControl.unmuteApplicationVolume(i["Params"][0])
         elif(i["Name"] == "setApplicationVolume"):
-            WindowsVolumeMixerControl.setApplicationVolume(i["Params"][0], i["Params"][1])
+            processes = WindowsVolumeMixerControl.getAllSoundDevices()
+            for process in processes:
+                if str(process.ProcessId) == i["Params"][1]:
+                    WindowsVolumeMixerControl.setApplicationVolume(process, i["Params"][0])
+                    break
 
 def callFunctions(json):
+
     for i in json:
-        if(i["Name"] == "WindowsVolumeMixerControl"): WindowsVolumeMixer(i["Funcs"])
+        if(i["Name"] == "WindowsVolumeMixerControl"):
+            WindowsVolumeMixer(i["Funcs"])

@@ -1,6 +1,7 @@
 import sys
 from flask import Flask, jsonify, request
 from flask_cors import cross_origin
+from urllib.parse import urlparse
 import time
 import serial
 import json
@@ -31,9 +32,17 @@ def testing(params):
 @app.route("/data")
 def data():
     
-    arg1 = request.args.get('volume', 0, type=int)
-    testing(arg1)
-    return jsonify(result=arg1)
+    content = request.args
+    name = request.args.get('Name')
+    funcs = request.args.get('Func')
+    params = request.args.get("Params")
+    processId = request.args.get("ProcessId")
+    #funcs = [{"Name":"setMasterVolume", "Params": [volume]}]
+    jason = [{"Name": name,"Funcs":[{"Name":funcs, "Params":[params, processId]}]}]
+    #jason = [{'Name' : name, 'Funcs' : funcs}]
+    output = (json.dumps(jason) + '\n').encode()
+    ser.write(output)
+    return jsonify(request.args)
 
 if __name__ == "__main__":
     print('starting server')

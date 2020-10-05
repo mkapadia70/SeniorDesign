@@ -57,7 +57,7 @@ function updateAudio() {
 }
 
 function startPythonPersistent() {
-  console.log("python")
+  console.log("python start")
   var python = require('child_process').spawn('python', ['./server.py']);
   python.stdout.on('data', function (data) {
     console.log("Python response: ", data.toString('utf8'));
@@ -65,7 +65,7 @@ function startPythonPersistent() {
   });
 
   python.stderr.on('data', (data) => {
-    
+    console.log("Python response: ", data.toString('utf8'));
   });
 
   python.on('close', (code) => {
@@ -75,7 +75,7 @@ function startPythonPersistent() {
 }
 
 function createWindow () {
-  startPythonPersistent()
+  
   // Create the browser window.
   const win = new BrowserWindow({
     width: 800,
@@ -109,4 +109,4 @@ app.on('activate', () => {
 })
 
 
-
+startPythonPersistent()
