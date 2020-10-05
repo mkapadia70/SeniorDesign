@@ -93,6 +93,20 @@
             </div>
         </div>
     </div>
+    <input type="range" id="testSlider" >
+    <script>
+      $(function() {
+        $('#testSlider').bind('input', function() {
+            $.getJSON("http://127.0.0.1:5001" + '/data', {
+                volume: document.getElementById("testSlider").value
+            }, function(data) {
+                $("#result").text(data.result);
+            });
+            console.log("why")
+            return false;
+        });
+      });
+    </script>
     <script src="index.js"></script>
   </body>
 </html>
