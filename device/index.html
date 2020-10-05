@@ -1,16 +1,98 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8">
-    <title>Hello World!</title>
-    
-  </head>
-  <body>
-    <h1>Hello World!</h1>
+<html lang="en">
+<head>
+    <title>Windows Volume Mixer Controller</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <style>
+        html {
+            overflow:scroll;
+        }
+        ::-webkit-scrollbar {
+            width:0px;
+            background:transparent; /* make scrollbar transparent */
+        }
+        .horizontal-scrollable > .row {
+            width:90vw;
+            padding-top:10vh;
+            margin:0px auto;
+            overflow-x:auto;
+            white-space:nowrap;
+        }
+        .horizontal-scrollable > .row h3{
+            white-space:normal;
+        }
 
-    <button id="btn" onClick="sendToPython();">push me</button>
+        .horizontal-scrollable > .row > .col-xs-3 {
+            display:inline-block;
+            float:none;
+            vertical-align:top;
+        }
 
+        .slider {
+            -webkit-appearance:none;
+            width:50vh!important;
+            height:25px;
+            margin:25vh -25vh;
+            background:#d3d3d3;
+            outline:none;
+            transform:rotate(-90deg);
+            display:inline-block!important;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance:none;
+            appearance:none;
+            width:25px;
+            height:25px;
+            background:#4CAF50;
+            cursor:pointer;
+        }
+
+        .slider::-moz-range-thumb {
+            width:25px;
+            height:25px;
+            background:#4CAF50;
+            cursor:pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container-fluid">
+        <h1 class="text-center">Windows Volume Mixer Controller</h1>
+        <div class="container-fluid horizontal-scrollable">
+            <div class="row text-center">
+                <div class="col-xs-3">
+                    <input type="range" min="0" max="100" class="slider">
+                    <h3 class="text-center">Testing</h3>
+                </div>
+                <div class="col-xs-3">
+                    <input type="range" min="0" max="100" class="slider">
+                    <h3 class="text-center">Testing</h3>
+                </div>
+                <div class="col-xs-3">
+                    <input type="range" min="0" max="100" class="slider">
+                    <h3 class="text-center">Testing</h3>
+                </div>
+                <div class="col-xs-3">
+                    <input type="range" min="0" max="100" class="slider">
+                    <h3 class="text-center">Testing</h3>
+                </div>
+                <div class="col-xs-3">
+                    <input type="range" min="0" max="100" class="slider">
+                    <h3 class="text-center">Testing</h3>
+                </div>
+                <div class="col-xs-3">
+                    <input type="range" min="0" max="100" class="slider">
+                    <h3 class="text-center">Testing</h3>
+                </div>
+            </div>
+        </div>
+    </div>
     <script src="index.js"></script>
-    
   </body>
 </html>
