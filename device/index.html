@@ -146,15 +146,15 @@
         });
         //program volumes
         $(function() {
-            var sliderNumbers = [2, 3, 4, 5, 6, 7, 8]; //why do we need 7 and 8 here???, it wont work otherwise
+            var sliderNumbers = [2, 3, 4, 5, 6]; //why do we need 7 and 8 here???, it wont work otherwise
             var pId = [0, 7024, 10744, 8724, 6212];
-            $.each(sliderNumbers, function(i) { 
-                $("#testslider" + i).bind('input', function() {
+            $.each(sliderNumbers, function(i, v) { 
+                $("#testslider" + v).bind('input', function() {
                     $.getJSON("http://127.0.0.1:5001" + '/data', {
                         Name: "WindowsVolumeMixerControl",
                         Func: "setApplicationVolume",
-                        Params: document.getElementById("testslider" + i).value/100.0,
-                        ProcessId: (pId[i-2])
+                        Params: document.getElementById("testslider" + v).value/100.0,
+                        ProcessId: (pId[v-2])
                     }, function(data) {
                         console.log(data)
                     });
