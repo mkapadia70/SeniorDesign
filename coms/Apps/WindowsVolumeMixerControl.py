@@ -4,8 +4,8 @@ from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
 import re
 import json
 
-devices = AudioUtilities.GetSpeakers()
-interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
+speakers = AudioUtilities.GetSpeakers()
+interface = speakers.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
 volume = cast(interface, POINTER(IAudioEndpointVolume))
 
 # Master Volume
@@ -22,18 +22,15 @@ def setMasterVolume(newVolume):
 # Application Volume
 # param: application session
 def muteApplicationVolume(pid):
-    soundDevices = getAllSoundDevices()
-    soundDevices[pid]["session"].SimpleAudioVolume.SetMute(1, None)
+    devices[pid]["session"].SimpleAudioVolume.SetMute(1, None)
 
 # param: application session
 def unmuteApplicationVolume(pid):
-    soundDevices = getAllSoundDevices()
-    soundDevices[pid]["session"].SimpleAudioVolume.SetMute(0, None)
+    devices[strpid]["session"].SimpleAudioVolume.SetMute(0, None)
 
 # param: application session, and new level from 0.0 to 1.0
 def setApplicationVolume(pid, newVolume):
-    soundDevices = getAllSoundDevices()
-    soundDevices[pid]["session"].SimpleAudioVolume.SetMasterVolume(float(newVolume), None)
+    devices[int(pid)]["session"].SimpleAudioVolume.SetMasterVolume(float(newVolume), None)
 
 def getAllSoundDeviceData():
     allSoundDevices = []
@@ -51,6 +48,9 @@ def getAllSoundDeviceData():
             pass
     return allSoundDevices
 
+def updateDeviceData():
+    global deviceData
+    deviceData = getAllSoundDeviceData()
 
 def getAllSoundDevices():
     allSoundDevices = {}
@@ -67,3 +67,7 @@ def getAllSoundDevices():
         except:
             pass
     return allSoundDevices
+
+def updateDevices():
+    global devices
+    devices = getAllSoundDevices()
