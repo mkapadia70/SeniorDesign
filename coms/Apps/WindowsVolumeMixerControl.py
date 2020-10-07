@@ -1,12 +1,12 @@
 from ctypes import POINTER, cast
 from comtypes import CLSCTX_ALL
 from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
-
+import re
+import json
 
 devices = AudioUtilities.GetSpeakers()
 interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
 volume = cast(interface, POINTER(IAudioEndpointVolume))
-apps = AudioUtilities.GetAllSessions() # maybe need to make this a dict at some point with processID as key
 
 # Master Volume
 def muteMasterVolume():
@@ -21,16 +21,49 @@ def setMasterVolume(newVolume):
 
 # Application Volume
 # param: application session
-def muteApplicationVolume(session):
-    session.SimpleAudioVolume.SetMute(1, None)
+def muteApplicationVolume(pid):
+    soundDevices = getAllSoundDevices()
+    soundDevices[pid]["session"].SimpleAudioVolume.SetMute(1, None)
 
 # param: application session
-def unmuteApplicationVolume(session):
-    session.SimpleAudioVolume.SetMute(0, None)
+def unmuteApplicationVolume(pid):
+    soundDevices = getAllSoundDevices()
+    soundDevices[pid]["session"].SimpleAudioVolume.SetMute(0, None)
 
 # param: application session, and new level from 0.0 to 1.0
-def setApplicationVolume(session, newVolume):
-    session.SimpleAudioVolume.SetMasterVolume(float(newVolume), None)
+def setApplicationVolume(pid, newVolume):
+    soundDevices = getAllSoundDevices()
+    soundDevices[pid]["session"].SimpleAudioVolume.SetMasterVolume(float(newVolume), None)
+
+def getAllSoundDeviceData():
+    allSoundDevices = []
+
+    procs = AudioUtilities.GetAllSessions()
+    for p in procs:
+        try:
+            tempObject = {
+                "pid": p.ProcessId,
+                "name": re.split('[-.]', p.Process.name())[0].title(),
+                "currentVolume": p.SimpleAudioVolume.GetMasterVolume()
+            }
+            allSoundDevices.append(tempObject)
+        except:
+            pass
+    return allSoundDevices
+
 
 def getAllSoundDevices():
-    return AudioUtilities.GetAllSessions()
+    allSoundDevices = {}
+
+    procs = AudioUtilities.GetAllSessions()
+    for p in procs:
+        try:
+            tempObject = {
+                "name": re.split('[-.]', p.Process.name())[0].title(),
+                "currentVolume": p.SimpleAudioVolume.GetMasterVolume(),
+                "session": p
+            }
+            allSoundDevices.update({p.ProcessId: tempObject})
+        except:
+            pass
+    return allSoundDevices
