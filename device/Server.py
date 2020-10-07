@@ -73,7 +73,3 @@ if __name__ == "__main__":
     Thread(target = startServer).start()
     Thread(target = echo).start()
     
-
-
-
-    
