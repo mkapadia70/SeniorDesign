@@ -15,8 +15,8 @@ def connectPort(port):
         timeout=1)
 
 def sendData(ser, data):
-    print("sending data")
     ser.flush() # flush buffer
+
 
     # comment out this whole block when using the RPi
     # ser2 = serial.Serial(
