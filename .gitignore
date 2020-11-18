@@ -1,5 +1,7 @@
 __pycache__/
 node_modules/
 device/node_modules/
+venv/
+.idea/
 package-lock.json
 .DS_Store
