@@ -16,8 +16,6 @@ def connectPort(port):
 
 def sendData(ser, data):
     ser.flush() # flush buffer
-
-
     # comment out this whole block when using the RPi
     # ser2 = serial.Serial(
     #     port='COM3',

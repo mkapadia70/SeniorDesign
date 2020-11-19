@@ -64,7 +64,6 @@ if __name__ == "__main__":
         # port='COM5',  # for emulation insert your COMX port here
         port='/dev/ttys0', # for use on the pi
         baudrate=115200,
-
         parity=serial.PARITY_NONE,
         stopbits=serial.STOPBITS_ONE,
         bytesize=serial.EIGHTBITS,
