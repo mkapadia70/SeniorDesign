@@ -210,25 +210,22 @@
 
             // mute/unmute individual app
             $(input_checkbox).bind("change", function() {
-                console.log($("#muteUnmuteApp"+index).is(':checked'));
+                var pressedApp = $("#muteUnmuteApp"+index).is(':checked');
                 $.getJSON("http://127.0.0.1:5001" + '/data', {
                 Name: "WindowsVolumeMixerControl",
-                Func: ($("#muteUnmuteApp"+index).is(':checked') ? "muteApplicationVolume" : "unmuteApplicationVolume"),
+                Func: (pressedApp ? "muteApplicationVolume" : "unmuteApplicationVolume"),
                 Params: 0,
                 ProcessId: value.pid
                 }, function(data) {
-                    if($("#muteUnmuteApp"+index).is(':checked')){
-                        console.log(index)
-                        console.log(img_mute)
+                    if(pressedApp){
                         $("#mute"+index).css("display", "initial");
                         $("#speaker"+index).css("display", "none");
                     }
                     else{
-                        console.log("unmute")
-                        console.log(index)
                         $("#mute"+index).css("display", "none");
                         $("#speaker"+index).css("display", "initial");
                     }
+                    pressedApp = !pressedApp
                 });
                 return false;
             });
