@@ -161,6 +161,7 @@
             input_checkbox = document.createElement("input")
             input_checkbox.type = "checkbox"
             input_checkbox.id = "muteUnmuteApp" + index
+            input_checkbox.style.display = "none"
 
             label_unmute = document.createElement("label")
             label_unmute.htmlFor = input_checkbox.id
@@ -171,16 +172,18 @@
             img_mute.title = "Mute icon"
             img_mute.style.width = "20%"
             img_mute.style.height = "20%"
+            img_mute.style.display = "none"
 
             label_mute = document.createElement("label")
             label_mute.htmlFor = input_checkbox.id
-
+            label_mute.className = "mute"
 
             img_speaker = document.createElement("img")
             img_speaker.src = "../device/images/speaker.png"
             img_speaker.title = "Speaker icon"
             img_speaker.style.width = "20%"
             img_speaker.style.height = "20%"
+            img_speaker.style.display = "initial"
 
             outerdiv.append(input)
             outerdiv.append(h3)
@@ -212,10 +215,21 @@
                 Params: 0,
                 ProcessId: value.pid
                 }, function(data) {
+                    if(pressed_app){
+                        console.log("unmute")
+                        console.log(index)
+                        img_mute.style.display = "none"
+                        img_speaker.style.display = "initial"
+                    }
+                    else{
+                        console.log("mute")
+                        console.log(index)
+                        img_mute.style.display = "initial"
+                        img_speaker.style.display = "none"
+                    }
                     pressed_app = !pressed_app
                 });
                 return false;
-
             });
         }
 
