@@ -15,6 +15,9 @@ def muteMasterVolume():
 def unmuteMasterVolume():
     volume.SetMute(0,None)
 
+def getMasterVolume():
+    return volume.GetMasterVolumeLevelScalar()
+
 # param: new level of volume from 0.0 to 1.0
 def setMasterVolume(newVolume):
     volume.SetMasterVolumeLevelScalar(float(newVolume), None)
