@@ -3,47 +3,7 @@ const querystring = require('querystring');
 let { PythonShell } = require('python-shell');
 let process = require('child_process')
 
-let pressed = true
-
-function turnColor()
-{
-    if(document.getElementById("btn").innerHTML === "Unmute")
-    {
-        document.getElementById("btn").style.backgroundColor = "green";       
-        document.getElementById("btn").style.color = "white"; 
-    }
-    else
-    {
-        document.getElementById("btn").style.backgroundColor = "red";       
-        document.getElementById("btn").style.color = "white";       
-
-    }
-}
-
-function turnBack()
-{
-  document.getElementById("btn").style.backgroundColor = "white"; 
-  document.getElementById("btn").style.color = "black"; 
-}
-
-
-//changes color and text of button
-function muteUnmute() {
-  if(!pressed)
-    {
-        document.getElementById("btn").innerHTML = "Unmute"
-        document.getElementById("btn").style.backgroundColor = "green";       
-        document.getElementById("btn").style.color = "white"; 
-    }
-    else
-    {
-        document.getElementById("btn").innerHTML = "Mute"
-        document.getElementById("btn").style.backgroundColor = "red";       
-        document.getElementById("btn").style.color = "white";       
-    }
-}
-
-function startPythonPersistent() {
+function startPythonPersistent(){
   console.log("python start")
   var python = require('child_process').spawn('python', ['./server.py']);
   python.stdout.on('data', function (data) {
@@ -62,19 +22,17 @@ function startPythonPersistent() {
 }
 
 function createWindow () {
-  
   // Create the browser window.
   const win = new BrowserWindow({
     width: 800,
-    height: 400,
+    height: 400,   
+    //fullscreen: true, //uncomment in the final code
     webPreferences: {
       nodeIntegration: true
     }
   })
   //win.removeMenu() //uncomment in the final code
-
   win.loadFile('index.html')
-
 }
 
 app.whenReady().then(createWindow)

@@ -9,67 +9,13 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-    <style>
-        html {
-            height: 100%;
-            overflow:scroll;
-        }
-        ::-webkit-scrollbar {
-            width:0px;
-            background:transparent; /* make scrollbar transparent */
-        }
-        .horizontal-scrollable > .row {
-            width:70vw;
-            padding-top:5vh;
-            margin:0px auto;
-            overflow-x:auto;
-            white-space:nowrap;
-        }
-        .horizontal-scrollable > .row h3{
-            white-space:normal;
-        }
-
-        .horizontal-scrollable > .row > .col-xs-3 {
-            display:inline-block;
-            float:none;
-            vertical-align:top;
-        }
-
-        .slider {
-            -webkit-appearance:none;
-            width:50vh!important;
-            height:60px;
-            margin:25vh -25vh;
-            background:#d3d3d3;
-            outline:none;
-            transform:rotate(-90deg);
-            display:inline-block!important;
-        }
-
-        .slider::-webkit-slider-thumb {
-            -webkit-appearance:none;
-            appearance:none;
-            width:30px;
-            height:70px;
-            background:#4CAF50;
-            cursor:pointer;
-        }
-
-        .slider::-moz-range-thumb {
-            width:25px;
-            height:25px;
-            background:#4CAF50;
-            cursor:pointer;
-        }
-    </style>
 </head>
 
-<body style="background-color:#252525; color:white" onload="myOnload()" >
-    <button class="button buttonRed" id="muteUnmute">Mute</button>
-    <div class="container-fluid">
-        <h1 class="text-center">Windows Volume Mixer Controller</h1>
+<body style="background-color:#252525; color:white; height:100vh" onload="myOnload()">
+    <div class="container-fluid vertically-center" style="margin:auto 0px;">
+        <h1 class="text-center p-0">Volume Control</h1>
         <div class="container-fluid horizontal-scrollable">
-            <div class="row text-center" id="sliderContainer">
+            <div class="row text-center col-10 offset-1" id="sliderContainer">
                 <div class="col-xs-3">
                     <input id="masterVolume" type="range" min="0" max="100" class="slider">
                     <h3 class="text-center" id="testslider1name">Master</h3>
@@ -85,37 +31,6 @@
         </div>
     </div>
     <script>
-        var pressed = false
-        //changes color and text of button
-        function muteUnmute() {
-        if(!pressed)
-            {
-                document.getElementById("muteUnmute").innerHTML = "Unmute"
-                document.getElementById("muteUnmute").style.backgroundColor = "green";
-                document.getElementById("muteUnmute").style.color = "white";
-            }
-            else
-            {
-                document.getElementById("muteUnmute").innerHTML = "Mute"
-                document.getElementById("muteUnmute").style.backgroundColor = "red";
-                document.getElementById("muteUnmute").style.color = "white";
-            }
-        }
-        //mute/unmute button
-        $(function() {
-            $('#muteUnmute').bind('click', function() {
-                $.getJSON("http://127.0.0.1:5001" + '/data', {
-                    Name: "WindowsVolumeMixerControl",
-                    Func: (pressed ? "unmuteMasterVolume" : "muteMasterVolume"),
-                    Params: 0,
-                    ProcessId: -1 //whatever 
-                }, function(data) {
-                    muteUnmute()
-                    pressed = !pressed
-                });
-                return false;
-            });
-        });
         //master volume
         $(function() {
             //binds the master volume slider
@@ -123,7 +38,7 @@
                 $.getJSON("http://127.0.0.1:5001" + '/data', {
                     Name: "WindowsVolumeMixerControl",
                     Func: "setMasterVolume",
-                    Params: document.getElementById("masterVolume").value/100.0,
+                    Params: $("#masterVolume").val()/100.0,
                     ProcessId: -1 //whatever 
                 }, function(data) {
                 });
@@ -140,68 +55,29 @@
         }
         
         function changeSliderData(value, index){
-            
             //This function add the relative sliders for the data to the html
-            //also binds the sliders to send back updates on volume to windows
-            outerdiv = document.createElement("div")
-            outerdiv.className = "col-xs-3"
+            //also binds the sliders to send back updates on volume to windows       
+            sliderHTML = ' \
+                <div class="col-xs-3"> \
+                    <input type="range" min="0" max="100" value="' + (value.currentVolume*100) + '" class="slider" id="' + index + '"> \
+                    <h3 class="text-center">' + value.name + '</h3> \
+                    <input type="checkbox" id="muteUnmuteApp' + index + '" style="display: none;"> \
+                    <label for="muteUnmuteApp' + index + '" class="unmute"> \
+                        <img src="../device/images/mute.png" title="Mute icon" id="mute' + index + '" style="width: 20%; height: 20%; display: none;"> \
+                    </label> \
+                    <label for="muteUnmuteApp' + index + '" class="mute"> \
+                        <img src="../device/images/speaker.png" title="Speaker icon" id="speaker' + index + '" style="width: 20%; height: 20%; display: initial;"> \
+                    </label> \
+                </div>'
 
-            input = document.createElement("input")
-            input.type = "range"
-            input.min = "0"
-            input.max = "100"
-            input.className = "slider"
-            input.value = value.currentVolume*100
-            input.id = index
+            $("#sliderContainer").append(sliderHTML)
 
-            h3 = document.createElement("h3")
-            h3.className = "text-center"
-            h3.innerHTML = value.name
-
-            input_checkbox = document.createElement("input")
-            input_checkbox.type = "checkbox"
-            input_checkbox.id = "muteUnmuteApp" + index
-            input_checkbox.style.display = "none"
-
-            label_unmute = document.createElement("label")
-            label_unmute.htmlFor = input_checkbox.id
-            label_unmute.className = "unmute"
-
-            img_mute = document.createElement("img")
-            img_mute.src = "../device/images/mute.png"
-            img_mute.title = "Mute icon"
-            img_mute.style.width = "20%"
-            img_mute.style.height = "20%"
-            img_mute.style.display = "none"
-            img_mute.id = "mute" + index
-
-            label_mute = document.createElement("label")
-            label_mute.htmlFor = input_checkbox.id
-            label_mute.className = "mute"
-
-            img_speaker = document.createElement("img")
-            img_speaker.src = "../device/images/speaker.png"
-            img_speaker.title = "Speaker icon"
-            img_speaker.style.width = "20%"
-            img_speaker.style.height = "20%"
-            img_speaker.style.display = "initial"
-            img_speaker.id = "speaker" + index
-
-            outerdiv.append(input)
-            outerdiv.append(h3)
-            outerdiv.append(input_checkbox)
-            label_unmute.append(img_mute)
-            outerdiv.append(label_unmute)
-            label_mute.append(img_speaker)
-            outerdiv.append(label_mute)
-
-            document.getElementById("sliderContainer").append(outerdiv)
-
-            $(input).bind('input', function() {
+            $("#"+index).bind('input', function() {
+                console.log("Button: " + index + ", Volume: " + $("#"+index).val() + ", PID:" + value.pid)
                 $.getJSON("http://127.0.0.1:5001" + '/data', {
                     Name: "WindowsVolumeMixerControl",
                     Func: "setApplicationVolume",
-                    Params: document.getElementById(index).value/100.0,
+                    Params: $("#"+index).val()/100.0,
                     ProcessId: value.pid
                 }, function(data) {
                 });
@@ -209,26 +85,21 @@
             });
 
             // mute/unmute individual app
-            $(input_checkbox).bind("change", function() {
-                console.log($("#muteUnmuteApp"+index).is(':checked'));
+            $("#muteUnmuteApp"+index).bind("change", function() {
                 $.getJSON("http://127.0.0.1:5001" + '/data', {
-                Name: "WindowsVolumeMixerControl",
-                Func: ($("#muteUnmuteApp"+index).is(':checked') ? "muteApplicationVolume" : "unmuteApplicationVolume"),
-                Params: 0,
-                ProcessId: value.pid
-                }, function(data) {
-                    if($("#muteUnmuteApp"+index).is(':checked')){
-                        console.log(index)
-                        console.log(img_mute)
-                        $("#mute"+index).css("display", "initial");
-                        $("#speaker"+index).css("display", "none");
-                    }
-                    else{
-                        console.log("unmute")
-                        console.log(index)
-                        $("#mute"+index).css("display", "none");
-                        $("#speaker"+index).css("display", "initial");
-                    }
+                    Name: "WindowsVolumeMixerControl",
+                    Func: ($("#muteUnmuteApp"+index).is(':checked') ? "muteApplicationVolume" : "unmuteApplicationVolume"),
+                    Params: 0,
+                    ProcessId: value.pid
+                    }, function(data) {
+                        if($("#muteUnmuteApp"+index).is(':checked')){
+                            $("#mute"+index).css("display", "initial");
+                            $("#speaker"+index).css("display", "none");
+                        }
+                        else{
+                            $("#mute"+index).css("display", "none");
+                            $("#speaker"+index).css("display", "initial");
+                        }
                 });
                 return false;
             });
