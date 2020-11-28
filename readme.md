@@ -46,6 +46,8 @@ To install all imports
 
 `pip3 install -r requirements.txt`
 
+Also note that Microsoft Visual C++ 14.0 is required for pycaw (can be installed by searching online)
+
 **Diagram**
 ![alt text](https://github.com/EECSisFUN/SeniorDesign/blob/master/image.png)
 

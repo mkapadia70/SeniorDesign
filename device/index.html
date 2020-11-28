@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <title>Windows Volume Mixer Controller</title>
     <meta charset="utf-8">
@@ -32,15 +33,15 @@
     </div>
     <script>
         //master volume
-        $(function() {
+        $(function () {
             //binds the master volume slider
-            $('#masterVolume').bind('input', function() {
+            $('#masterVolume').bind('input', function () {
                 $.getJSON("http://127.0.0.1:5001" + '/data', {
                     Name: "WindowsVolumeMixerControl",
                     Func: "setMasterVolume",
-                    Params: $("#masterVolume").val()/100.0,
+                    Params: $("#masterVolume").val() / 100.0,
                     ProcessId: -1 //whatever 
-                }, function(data) {
+                }, function (data) {
                 });
                 return false;
             });
@@ -49,17 +50,17 @@
         function myOnload() {
             //requests program data from python which requests it from windows
             $.getJSON("http://127.0.0.1:5001" + '/data2', {
-                }, function(data) {
-                    data.forEach(changeSliderData);
-                });
+            }, function (data) {
+                data.forEach(changeSliderData);
+            });
         }
-        
-        function changeSliderData(value, index){
+
+        function changeSliderData(value, index) {
             //This function add the relative sliders for the data to the html
             //also binds the sliders to send back updates on volume to windows       
             sliderHTML = ' \
                 <div class="col-xs-3"> \
-                    <input type="range" min="0" max="100" value="' + (value.currentVolume*100) + '" class="slider" id="' + index + '"> \
+                    <input type="range" min="0" max="100" value="' + (value.currentVolume * 100) + '" class="slider" id="' + index + '"> \
                     <h3 class="text-center">' + value.name + '</h3> \
                     <input type="checkbox" id="muteUnmuteApp' + index + '" style="display: none;"> \
                     <label for="muteUnmuteApp' + index + '" class="unmute"> \
@@ -72,34 +73,34 @@
 
             $("#sliderContainer").append(sliderHTML)
 
-            $("#"+index).bind('input', function() {
-                console.log("Button: " + index + ", Volume: " + $("#"+index).val() + ", PID:" + value.pid)
+            $("#" + index).bind('input', function () {
+                console.log("Button: " + index + ", Volume: " + $("#" + index).val() + ", PID:" + value.pid)
                 $.getJSON("http://127.0.0.1:5001" + '/data', {
                     Name: "WindowsVolumeMixerControl",
                     Func: "setApplicationVolume",
-                    Params: $("#"+index).val()/100.0,
+                    Params: $("#" + index).val() / 100.0,
                     ProcessId: value.pid
-                }, function(data) {
+                }, function (data) {
                 });
                 return false;
             });
 
             // mute/unmute individual app
-            $("#muteUnmuteApp"+index).bind("change", function() {
+            $("#muteUnmuteApp" + index).bind("change", function () {
                 $.getJSON("http://127.0.0.1:5001" + '/data', {
                     Name: "WindowsVolumeMixerControl",
-                    Func: ($("#muteUnmuteApp"+index).is(':checked') ? "muteApplicationVolume" : "unmuteApplicationVolume"),
+                    Func: ($("#muteUnmuteApp" + index).is(':checked') ? "muteApplicationVolume" : "unmuteApplicationVolume"),
                     Params: 0,
                     ProcessId: value.pid
-                    }, function(data) {
-                        if($("#muteUnmuteApp"+index).is(':checked')){
-                            $("#mute"+index).css("display", "initial");
-                            $("#speaker"+index).css("display", "none");
-                        }
-                        else{
-                            $("#mute"+index).css("display", "none");
-                            $("#speaker"+index).css("display", "initial");
-                        }
+                }, function (data) {
+                    if ($("#muteUnmuteApp" + index).is(':checked')) {
+                        $("#mute" + index).css("display", "initial");
+                        $("#speaker" + index).css("display", "none");
+                    }
+                    else {
+                        $("#mute" + index).css("display", "none");
+                        $("#speaker" + index).css("display", "initial");
+                    }
                 });
                 return false;
             });
@@ -107,14 +108,14 @@
 
         var pressedApp = false;
         // mute/unmute master
-        $(function() {
-            $('#muteUnmuteApp').bind("change", function() {
+        $(function () {
+            $('#muteUnmuteApp').bind("change", function () {
                 $.getJSON("http://127.0.0.1:5001" + '/data', {
-                Name: "WindowsVolumeMixerControl",
-                Func: (pressedApp ? "unmuteMasterVolume" : "muteMasterVolume"),
-                Params: 0,
-                ProcessId: -1 //whatever
-                }, function(data) {
+                    Name: "WindowsVolumeMixerControl",
+                    Func: (pressedApp ? "unmuteMasterVolume" : "muteMasterVolume"),
+                    Params: 0,
+                    ProcessId: -1 //whatever
+                }, function (data) {
                     pressedApp = !pressedApp
                 });
                 return false;
@@ -123,5 +124,6 @@
 
     </script>
     <script src="index.js"></script>
-  </body>
+</body>
+
 </html>

@@ -9,31 +9,45 @@ interface = speakers.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
 volume = cast(interface, POINTER(IAudioEndpointVolume))
 
 # Master Volume
+
+
 def muteMasterVolume():
-    volume.SetMute(1,None)
+    volume.SetMute(1, None)
+
 
 def unmuteMasterVolume():
-    volume.SetMute(0,None)
+    volume.SetMute(0, None)
+
 
 def getMasterVolume():
     return volume.GetMasterVolumeLevelScalar()
 
 # param: new level of volume from 0.0 to 1.0
+
+
 def setMasterVolume(newVolume):
     volume.SetMasterVolumeLevelScalar(float(newVolume), None)
 
 # Application Volume
 # param: application session
+
+
 def muteApplicationVolume(pid):
     devices[int(pid)]["session"].SimpleAudioVolume.SetMute(1, None)
 
 # param: application session
+
+
 def unmuteApplicationVolume(pid):
     devices[int(pid)]["session"].SimpleAudioVolume.SetMute(0, None)
 
 # param: application session, and new level from 0.0 to 1.0
+
+
 def setApplicationVolume(pid, newVolume):
-    devices[int(pid)]["session"].SimpleAudioVolume.SetMasterVolume(float(newVolume), None)
+    devices[int(pid)]["session"].SimpleAudioVolume.SetMasterVolume(
+        float(newVolume), None)
+
 
 def getAllSoundDeviceData():
     allSoundDevices = []
@@ -51,9 +65,11 @@ def getAllSoundDeviceData():
             pass
     return allSoundDevices
 
+
 def updateDeviceData():
     global deviceData
     deviceData = getAllSoundDeviceData()
+
 
 def getAllSoundDevices():
     allSoundDevices = {}
@@ -70,6 +86,7 @@ def getAllSoundDevices():
         except:
             pass
     return allSoundDevices
+
 
 def updateDevices():
     global devices

@@ -14,8 +14,9 @@ def connectPort(port):
         bytesize=serial.EIGHTBITS,
         timeout=1)
 
+
 def sendData(ser, data):
-    ser.flush() # flush buffer
+    ser.flush()  # flush buffer
     # comment out this whole block when using the RPi
     # ser2 = serial.Serial(
     #     port='COM3',
@@ -26,6 +27,7 @@ def sendData(ser, data):
     #     timeout=1)
     data = (json.dumps(data) + '\n').encode()
     ser.write(data)
+
 
 def listen(ser):
     JsonHandler.updateDevices()
