@@ -5,7 +5,6 @@ from urllib.parse import urlparse
 import time
 import serial
 import json
-import SerialHandler
 from threading import Thread
 
 app = Flask(__name__)

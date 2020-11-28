@@ -1,13 +1,14 @@
 ideas
 
-windows audio mix
-spotify integration
+windows audio mix -- done
+overworld to switch between apps -- starting
+spotify integration -- starting
 movie mode/plex integration
 drawing pad / touch mouse pad (like laptop)
-uhhhh
 windows/google calendar integration with clock/date time.
 in game scoreboards, like how discord tracks stuff like that idk
 launch applications
 obs streamlabs integration
 switch desktop/windows
 zoom controls?
+ 
