@@ -8,24 +8,29 @@ emulation = True  # enable this when using emulation
 rasp = not emulation
 
 if rasp:
-    inport = 3
-    outport = 3
+    inport = "COM3"
+    outport = "COM3"
 else:
-    inport = 4  # change this according to your in and out com ports as set by com0com
-    outport = 5
+    inport = "COM4"  # change this according to your in and out com ports as set by com0com
+    outport = "COM5"
 
 
 def main():
-    port = PortsHandler.checkConnected(inport)
-    while port is None:
+    while (not PortsHandler.checkConnected(inport) or not PortsHandler.checkConnected(outport)):
         print("Device Not Found")
-        port = PortsHandler.findPort()
-        time.sleep(10)
-    print("Device has been found on port", port)
-    s = SerialHandler.connectPort(port)
+        time.sleep(5)
+
+    print("In device has been found on port", inport)
+    print("Out device has been found on port", outport)
+
+    ser1 = SerialHandler.connectPort(inport)
+    if rasp:
+        ser2 = ser1
+    else:
+        ser2 = SerialHandler.connectPort(outport)
 
     # The listen will infinite loop in the handler
-    SerialHandler.listen(s)
+    SerialHandler.listen(ser1, ser2)
 
 
 if __name__ == '__main__':

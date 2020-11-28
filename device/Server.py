@@ -6,6 +6,17 @@ import time
 import serial
 import json
 from threading import Thread
+import PortsHandler
+
+emulation = True  # enable this when using emulation
+rasp = not emulation
+
+if rasp:
+    inport = "/dev/ttys0"
+    outport = "/dev/ttys0"
+else:
+    inport = "COM4"  # change this according to your in and out com ports as set by com0com
+    outport = "COM5"
 
 app = Flask(__name__)
 
@@ -59,25 +70,18 @@ def data():
 
 if __name__ == "__main__":
     print('starting server')
-    ser1 = serial.Serial(
-        # port='COM5',  # for emulation insert your COMX port here
-        port='/dev/ttys0',  # for use on the pi
-        baudrate=115200,
-        parity=serial.PARITY_NONE,
-        stopbits=serial.STOPBITS_ONE,
-        bytesize=serial.EIGHTBITS,
-        timeout=1
-    )
+    while (not PortsHandler.checkConnected(inport) or not PortsHandler.checkConnected(outport)):
+        print("Device Not Found")
+        time.sleep(5)
 
-    # comment this out when running on the pi
-    # ser2 = serial.Serial(
-    #     port='COM7',
-    #     baudrate=115200,
-    #     parity=serial.PARITY_NONE,
-    #     stopbits=serial.STOPBITS_ONE,
-    #     bytesize=serial.EIGHTBITS,
-    #     timeout=1
-    # )
-    # Thread(target = listen).start() # do not uncomment this bruh
+    print("In device has been found on port", inport)
+    print("Out device has been found on port", outport)
+
+    ser1 = SerialHandler.connectPort(inport)
+    if rasp:
+        ser2 = ser1
+    else:
+        ser2 = SerialHandler.connectPort(outport)
+
     Thread(target=startServer).start()
     Thread(target=echo).start()
