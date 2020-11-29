@@ -1,6 +1,7 @@
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 import time
+import SpotifyAuth
 
 # MAX PLZ HELP ME FIGURE THIS SHIT OUT
 # https://github.com/plamere/spotipy/issues/287
@@ -9,11 +10,7 @@ import time
 #https://developer.spotify.com/documentation/general/guides/scopes/#app-remote-control
 scope = "user-modify-playback-state user-read-currently-playing"
 
-auth_manager = SpotifyOAuth(
-    scope=scope,
-    client_id='ef85a083f29141a680973200b6d32f60', 
-    client_secret='49fe412573a24644a33c935d3bf9fb6b', 
-    redirect_uri='http://localhost:4444/callback')
+auth_manager = SpotifyAuth.auth_manager # make sure to update your credentials in SpotifyAuth.py
 
 sp = spotipy.Spotify(auth_manager=auth_manager)
 
