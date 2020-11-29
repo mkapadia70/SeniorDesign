@@ -11,6 +11,7 @@
     "electron": "^10.1.6"
   },
   "dependencies": {
+    "bootstrap": "^4.5.3",
     "jquery": "^3.5.1",
     "jsdom": "^16.4.0",
     "python-shell": "^2.0.2"

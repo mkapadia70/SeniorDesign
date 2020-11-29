@@ -30,36 +30,54 @@ function minSecToMS(minSec) {
     return 0
 }
 
-var startedTimeUpdate = false
 
 function loadSpotifyInfo(data) {
     
     document.getElementById("title").innerHTML = data.item.name
     document.getElementById("artist").innerHTML = data.item.artists[0].name
     document.getElementById("spotimage").src = data.item.album.images[0].url
-    document.getElementById("seek").value = 100.0 * ((data.progress_ms) / (data.item.duration_ms))
     document.getElementById("leftTime").innerHTML = msToMinSec(data.progress_ms-780)
     document.getElementById("rightTime").innerHTML = msToMinSec(data.item.duration_ms)
+    document.getElementById("seek").value = 100.0 * ((minSecToMS(document.getElementById("leftTime").innerHTML)) / (minSecToMS(document.getElementById("rightTime").innerHTML))) //yes
 
-    if ("false" == data.is_playing) {
+    console.log(data.is_playing)
+    if (false == data.is_playing) {
         document.getElementById("pauseUnpause").src = "images/play.png"
         pressedApp = true
     }
     else {
         document.getElementById("pauseUnpause").src = "images/pause.png"
         pressedApp = false
+        startTimer()
     }
 
+}
+
+var startedTimeUpdate = false
+
+
+function startTimer() {
     if (startedTimeUpdate == false) {
         // this updates the seek every second
         window.setInterval(function(){
             if(pressedApp == false) {
                 document.getElementById("leftTime").innerHTML = msToMinSec(minSecToMS(document.getElementById("leftTime").innerHTML) + 1000)
+                document.getElementById("seek").value = 100.0 * ((minSecToMS(document.getElementById("leftTime").innerHTML)) / (minSecToMS(document.getElementById("rightTime").innerHTML)))
+            }
+            if (((minSecToMS(document.getElementById("leftTime").innerHTML)) >= ((minSecToMS(document.getElementById("rightTime").innerHTML))))) {
+                $.getJSON("http://127.0.0.1:5001" + '/data', {
+                    Name: "SpotifyControl",
+                    Func: "getCurrentData",
+                    Params: 0, // bs numbers
+                    ProcessId: -1, // bs numbers
+                    ExpectReturn: true
+                }, function (data) {
+                    loadSpotifyInfo(data)
+                });
             }
         }, 1000);
         startedTimeUpdate = true
     }
-
 }
 
 $(function () {
@@ -106,6 +124,7 @@ $(function () {
             pressedApp = !pressedApp
             if (pressedApp) {
                 document.getElementById("pauseUnpause").src = "images/play.png"
+                startTimer()
             }
             else {
                 document.getElementById("pauseUnpause").src = "images/pause.png"
