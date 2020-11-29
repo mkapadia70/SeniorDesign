@@ -6,3 +6,4 @@ venv/
 package-lock.json
 .DS_Store
 .cache
+SpotifyAuth.py
