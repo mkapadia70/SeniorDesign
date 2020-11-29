@@ -7,6 +7,7 @@ import serial
 import json
 from threading import Thread
 import PortsHandler
+import SerialHandler
 
 emulation = True  # enable this when using emulation
 rasp = not emulation
@@ -15,8 +16,8 @@ if rasp:
     inport = "/dev/ttys0"
     outport = "/dev/ttys0"
 else:
-    inport = "COM4"  # change this according to your in and out com ports as set by com0com
-    outport = "COM5"
+    inport = "COM5"  # change this according to your in and out com ports as set by com0com
+    outport = "COM7"
 
 app = Flask(__name__)
 
@@ -30,7 +31,6 @@ def listen():
         try:
             start = time.time()
             response = ser2.readline().decode(errors="replace")
-            # response = ser1.readline().decode(errors="replace") # use this for running on pi
             programData = json.loads(response)
             return programData
         except Exception as e:
