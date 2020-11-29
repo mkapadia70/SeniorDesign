@@ -15,6 +15,7 @@ function loadSpotifyInfo(data) {
     console.log(data)
     document.getElementById("dataspot").innerHTML = data.item.name
     document.getElementById("spotimage").src = data.item.album.images[0].url
+    document.getElementById("seek").value = (data.duration_ms)
 }
 
 $(function () {
@@ -65,6 +66,21 @@ $(function () {
             else {
                 document.getElementById("pauseUnpause").innerHTML = "Pause"
             }
+        });
+        return false;
+    });
+});
+
+$(function () {
+    //binds the master volume slider
+    $('#seek').on('input', function () {
+        $.getJSON("http://127.0.0.1:5001" + '/data', {
+            Name: "SpotifyControl",
+            Func: "seek",
+            Params: $("#masterVolume").val() / 100.0,
+            ProcessId: -1, //whatever
+            ExpectReturn: false
+        }, function (data) {
         });
         return false;
     });

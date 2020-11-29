@@ -51,8 +51,6 @@ def previousSong():
 #   "track" - repeat the current track
 #   "context" - repeat the current context (NO IDEA WHAT THIS MEANS) ***update: this means to loop the entire album/playlist***
 #   "off" - no repeat
-
-
 def setRepeatStatus(repeatState):
     global sp
     sp.repeat(repeatState)
@@ -66,3 +64,8 @@ def getCurrentlyPlaying():
 def getPlaybackStatus():
     global sp
     return sp.currently_playing()['is_playing']
+
+def seek(pos):
+    # seek to position in ms
+    global sp
+    sp.seek_track(pos)

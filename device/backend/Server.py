@@ -48,7 +48,7 @@ def packageAndSend(name, funcs, params, processId):
     jason = [{"Name": name, "Funcs": [
         {"Name": funcs, "Params": [params, processId]}]}]
 
-    SerialHandler.sendData(ser1, output)
+    SerialHandler.sendData(ser1, jason)
 
 
 if __name__ == "__main__":

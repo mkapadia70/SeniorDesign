@@ -20,11 +20,11 @@ def sendData(ser, data):
 
 def listen(ser):
     start = time.time()
-        while time.time()-start < 10:
-            try:
-                start = time.time()
-                response = ser.readline().decode(errors="replace")
-                programData = json.loads(response)
-                return programData
-            except Exception as e:
-                pass
+    while time.time()-start < 10:
+        try:
+            start = time.time()
+            response = ser.readline().decode(errors="replace")
+            programData = json.loads(response)
+            return programData
+        except Exception as e:
+            pass
