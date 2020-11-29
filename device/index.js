@@ -32,8 +32,8 @@ function createWindow() {
     }
   })
   //win.removeMenu() //uncomment in the final code
-  win.loadFile('Apps/WindowsVolumeMixerControl/index.html')
-  //win.loadFile('Apps/SpotifyControl/index.html')
+  //win.loadFile('Apps/WindowsVolumeMixerControl/index.html')
+  win.loadFile('Apps/SpotifyControl/index.html')
 }
 
 app.whenReady().then(createWindow)

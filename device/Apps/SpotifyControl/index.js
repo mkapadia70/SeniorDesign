@@ -3,8 +3,8 @@ function myOnload() {
     $.getJSON("http://127.0.0.1:5001" + '/data', {
         Name: "SpotifyControl",
         Func: "getCurrentData",
-        Params: 1, // bs numbers
-        ProcessId: 2, // bs numbers
+        Params: 0, // bs numbers
+        ProcessId: -1, // bs numbers
         ExpectReturn: true
     }, function (data) {
         loadSpotifyInfo(data)
@@ -18,16 +18,54 @@ function loadSpotifyInfo(data) {
 }
 
 $(function () {
-    //binds the master volume slider
+    //binds skip song button
     $('#skipSong').bind('click', function () {
         $.getJSON("http://127.0.0.1:5001" + '/data', {
             Name: "SpotifyControl",
             Func: "skipSong",
-            Params: 1,
-            ProcessId: 2, //whatever
+            Params: 0,
+            ProcessId: -1, //whatever
             ExpectReturn: true // maybe add like a thing to confirm that the request went through
         }, function (data) {
             loadSpotifyInfo(data)
         });
+    });
+});
+
+$(function () {
+    //binds skip song button
+    $('#prevSong').bind('click', function () {
+        $.getJSON("http://127.0.0.1:5001" + '/data', {
+            Name: "SpotifyControl",
+            Func: "prevSong",
+            Params: 0,
+            ProcessId: -1, //whatever
+            ExpectReturn: true // maybe add like a thing to confirm that the request went through
+        }, function (data) {
+            loadSpotifyInfo(data)
+        });
+    });
+});
+
+var pressedApp = false;
+//pause/unpause song
+$(function () {
+    $('#pauseUnpause').bind("click", function () {
+        $.getJSON("http://127.0.0.1:5001" + '/data', {
+            Name: "SpotifyControl",
+            Func: (pressedApp ? "playSong" : "pauseSong"),
+            Params: 0,
+            ProcessId: -1, //whatever
+            ExpectReturn: false
+        }, function (data) {
+            pressedApp = !pressedApp
+            if (pressedApp) {
+                document.getElementById("pauseUnpause").innerHTML = "Play"
+            }
+            else {
+                document.getElementById("pauseUnpause").innerHTML = "Pause"
+            }
+        });
+        return false;
     });
 });
