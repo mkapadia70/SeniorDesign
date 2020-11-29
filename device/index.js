@@ -28,8 +28,8 @@ function startPythonPersistent() {
 function createWindow() {
   // Create the browser window.
   const win = new BrowserWindow({
-    width: 800,
-    height: 400,
+    width: 1280,
+    height: 800,
     //fullscreen: true, //uncomment in the final code
     webPreferences: {
       nodeIntegration: true
