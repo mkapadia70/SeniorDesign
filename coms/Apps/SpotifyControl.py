@@ -66,6 +66,7 @@ def getPlaybackStatus():
     return sp.currently_playing()['is_playing']
 
 def seek(pos):
-    # seek to position in ms
+    # seek to position in percentage of track
     global sp
-    sp.seek_track(pos)
+    pos_ms = int(float(pos) * sp.currently_playing()['item']['duration_ms'])
+    sp.seek_track(pos_ms)

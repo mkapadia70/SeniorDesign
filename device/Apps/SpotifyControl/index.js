@@ -15,7 +15,8 @@ function loadSpotifyInfo(data) {
     console.log(data)
     document.getElementById("dataspot").innerHTML = data.item.name
     document.getElementById("spotimage").src = data.item.album.images[0].url
-    document.getElementById("seek").value = (data.duration_ms)
+    document.getElementById("seek").value = 100.0 * ((data.progress_ms) / (data.item.duration_ms))
+    console.log(document.getElementById("seek").value)
 }
 
 $(function () {
@@ -77,7 +78,7 @@ $(function () {
         $.getJSON("http://127.0.0.1:5001" + '/data', {
             Name: "SpotifyControl",
             Func: "seek",
-            Params: $("#masterVolume").val() / 100.0,
+            Params: $("#seek").val() / 100.0,
             ProcessId: -1, //whatever
             ExpectReturn: false
         }, function (data) {

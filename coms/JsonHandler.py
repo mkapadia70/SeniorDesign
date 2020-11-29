@@ -52,6 +52,8 @@ def Spotify(funcs):
            SpotifyControl.pausePlayback()
         elif(i["Name"] == "playSong"):
            SpotifyControl.startPlayback()
+        elif(i["Name"] == "seek"):
+           SpotifyControl.seek(i["Params"][0])
 
 
 def callFunctions(json):
