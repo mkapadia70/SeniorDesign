@@ -37,10 +37,10 @@ function changeSliderData(value, index) {
             <h3 class="text-center">' + value.name + '</h3> \
             <input type="checkbox" id="muteUnmuteApp' + index + '" style="display: none;"> \
             <label for="muteUnmuteApp' + index + '" class="unmute"> \
-                <img src="../device/images/mute.png" title="Mute icon" id="mute' + index + '" style="width: 20%; height: 20%; display: none;"> \
+                <img src="images/mute.png" title="Mute icon" id="mute' + index + '" style="width: 20%; height: 20%; display: none;"> \
             </label> \
             <label for="muteUnmuteApp' + index + '" class="mute"> \
-                <img src="../device/images/speaker.png" title="Speaker icon" id="speaker' + index + '" style="width: 20%; height: 20%; display: initial;"> \
+                <img src="images/speaker.png" title="Speaker icon" id="speaker' + index + '" style="width: 20%; height: 20%; display: initial;"> \
             </label> \
         </div>'
 
