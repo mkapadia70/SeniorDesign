@@ -32,7 +32,8 @@ function createWindow() {
     }
   })
   //win.removeMenu() //uncomment in the final code
-  win.loadFile('index.html')
+  //win.loadFile('index.html')
+  win.loadFile("spotify.html")
 }
 
 app.whenReady().then(createWindow)

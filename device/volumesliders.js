@@ -7,7 +7,8 @@ $(function () {
             Name: "WindowsVolumeMixerControl",
             Func: "setMasterVolume",
             Params: $("#masterVolume").val() / 100.0,
-            ProcessId: -1 //whatever 
+            ProcessId: -1, //whatever
+            ExpectReturn: false
         }, function (data) {
         });
         return false;
@@ -16,7 +17,12 @@ $(function () {
 
 function myOnload() {
     //requests program data from python which requests it from windows
-    $.getJSON("http://127.0.0.1:5001" + '/data2', {
+    $.getJSON("http://127.0.0.1:5001" + '/data', {
+        Name: "WindowsVolumeMixerControl",
+        Func: "getAllSoundDeviceData",
+        Params: 1,
+        ProcessId: 2,
+        ExpectReturn: true
     }, function (data) {
         data.forEach(changeSliderData);
     });

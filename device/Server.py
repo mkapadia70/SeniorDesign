@@ -27,7 +27,8 @@ def startServer():
 
 
 def listen():
-    while 1:
+    start = time.time()
+    while time.time()-start < 10:
         try:
             start = time.time()
             response = ser2.readline().decode(errors="replace")
@@ -35,19 +36,6 @@ def listen():
             return programData
         except Exception as e:
             pass
-
-
-def echo():
-    # request to get program data from windows
-    jason = [{"Name": "WindowsVolumeMixerControl", "Funcs": [
-        {"Name": "getAllSoundDeviceData", "Params": ["1", "2"]}]}]
-    output = (json.dumps(jason) + '\n').encode()
-    ser1.write(output)
-
-
-@app.route('/data2')
-def hello():
-    return jsonify(listen())
 
 
 @app.route("/data")
@@ -58,14 +46,24 @@ def data():
     funcs = request.args.get('Func')
     params = request.args.get("Params")
     processId = request.args.get("ProcessId")
+    expectReturn = request.args.get("ExpectReturn")
 
+    packageAndSend(name, funcs, params, processId)
+
+    if expectReturn == "true":
+        # this is potentially dangerous, but thats how i like to live
+        return jsonify(listen())
+    else:
+        return jsonify(request.args)  # just bs value
+
+
+def packageAndSend(name, funcs, params, processId):
+    # packages up everything and sends as generic request
     jason = [{"Name": name, "Funcs": [
         {"Name": funcs, "Params": [params, processId]}]}]
 
     output = (json.dumps(jason) + '\n').encode()
     ser1.write(output)
-
-    return jsonify(request.args)
 
 
 if __name__ == "__main__":
@@ -84,4 +82,4 @@ if __name__ == "__main__":
         ser2 = SerialHandler.connectPort(outport)
 
     Thread(target=startServer).start()
-    Thread(target=echo).start()
+    # Thread(target=echo).start() # i dont think we will need this after all

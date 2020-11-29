@@ -1,5 +1,5 @@
 from Apps import WindowsVolumeMixerControl
-
+from Apps import SpotifyControl
 
 def updateDevices():
     WindowsVolumeMixerControl.updateDevices()
@@ -28,10 +28,22 @@ def WindowsVolumeMixer(funcs):
             return WindowsVolumeMixerControl.getAllSoundDeviceData()
 
 
+def Spotify(funcs):
+    for i in funcs:
+        if(i["Name"] == "getCurrentData"):
+            return SpotifyControl.getCurrentlyPlaying()
+        if(i["Name"] == "skipSong"):
+            SpotifyControl.skipSong()
+            return SpotifyControl.getCurrentlyPlaying()
+
+
 def callFunctions(json):
     for i in json:
-        if(i["Name"] == "WindowsVolumeMixerControl"):
+        name = i["Name"]
+        if(name == "WindowsVolumeMixerControl"):
             return WindowsVolumeMixer(i["Funcs"])
+        elif(name == "SpotifyControl"):
+            return Spotify(i["Funcs"])
 
 
 def getProcsAsJson():
