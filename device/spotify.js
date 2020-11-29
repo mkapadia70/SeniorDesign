@@ -29,6 +29,5 @@ $(function () {
         }, function (data) {
             loadSpotifyInfo(data)
         });
-        return false;
     });
 });

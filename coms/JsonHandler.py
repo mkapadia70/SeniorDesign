@@ -33,7 +33,12 @@ def Spotify(funcs):
         if(i["Name"] == "getCurrentData"):
             return SpotifyControl.getCurrentlyPlaying()
         if(i["Name"] == "skipSong"):
+            # mega bad
+            current = SpotifyControl.getCurrentlyPlaying()['item']['album']['images'][0]['url']
             SpotifyControl.skipSong()
+            newData = current
+            while current == newData:
+                newData = SpotifyControl.getCurrentlyPlaying()['item']['album']['images'][0]['url']
             return SpotifyControl.getCurrentlyPlaying()
 
 

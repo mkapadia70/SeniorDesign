@@ -1,15 +1,13 @@
 import sys
-from flask import Flask, jsonify, request, render_template
+from flask import Flask, jsonify, request
 from flask_cors import cross_origin
-from urllib.parse import urlparse
 import time
 import serial
 import json
-from threading import Thread
 import PortsHandler
 import SerialHandler
 
-emulation = True  # enable this when using emulation
+emulation = True  # True when using emulation, False otherwise
 rasp = not emulation
 
 if rasp:
@@ -81,5 +79,4 @@ if __name__ == "__main__":
     else:
         ser2 = SerialHandler.connectPort(outport)
 
-    Thread(target=startServer).start()
-    # Thread(target=echo).start() # i dont think we will need this after all
+    startServer()
