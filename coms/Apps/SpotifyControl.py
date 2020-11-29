@@ -1,16 +1,11 @@
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
-import time
-import SpotifyAuth
-
-# MAX PLZ HELP ME FIGURE THIS SHIT OUT
-# https://github.com/plamere/spotipy/issues/287
-# https://github.com/plamere/spotipy/issues/262
+from Apps import SpotifyAuth
 
 #https://developer.spotify.com/documentation/general/guides/scopes/#app-remote-control
 scope = "user-modify-playback-state user-read-currently-playing"
 
-auth_manager = SpotifyAuth.auth_manager # make sure to update your credentials in SpotifyAuth.py
+auth_manager = SpotifyAuth.getAuthMananger() # make sure to update your credentials in SpotifyAuth.py
 
 sp = spotipy.Spotify(auth_manager=auth_manager)
 
