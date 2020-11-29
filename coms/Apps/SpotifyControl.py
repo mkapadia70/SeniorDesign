@@ -5,7 +5,7 @@ from Apps import SpotifyAuth
 #https://developer.spotify.com/documentation/general/guides/scopes/#app-remote-control
 scope = "user-modify-playback-state user-read-currently-playing"
 
-auth_manager = SpotifyAuth.getAuthMananger() # make sure to update your credentials in SpotifyAuth.py
+auth_manager = SpotifyAuth.getAuthManager() # make sure to update your credentials in SpotifyAuth.py
 
 sp = spotipy.Spotify(auth_manager=auth_manager)
 

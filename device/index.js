@@ -5,7 +5,7 @@ let process = require('child_process')
 
 function startPythonPersistent() {
   console.log("python start")
-  var python = require('child_process').spawn('python', ['.backend/Server.py']);
+  var python = require('child_process').spawn('python', ['backend/Server.py']);
   python.stdout.on('data', function (data) {
     console.log("Python response: ", data.toString('utf8'));
 
