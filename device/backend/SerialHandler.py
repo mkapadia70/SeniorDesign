@@ -1,5 +1,6 @@
 import serial
 import json
+import time
 
 def connectPort(port):
     # the main serial connection
@@ -12,21 +13,18 @@ def connectPort(port):
         timeout=1)
 
 
-# def sendData(ser, data):
-#     ser.flush()  # flush buffer
-#     data = (json.dumps(data) + '\n').encode()
-#     ser.write(data)
+def sendData(ser, data):
+    ser.flush()  # flush buffer
+    data = (json.dumps(data) + '\n').encode()
+    ser.write(data)
 
-
-# def listen(ser1, ser2):
-#     JsonHandler.updateDevices()
-#     while 1:
-#         try:
-#             response = ser1.readline().decode()
-#             response = json.loads(response)
-#             print(response)
-#             data = JsonHandler.callFunctions(response)
-#             if data != None:
-#                 sendData(ser2, data)
-#         except Exception as e:
-#             pass
+def listen(ser):
+    start = time.time()
+        while time.time()-start < 10:
+            try:
+                start = time.time()
+                response = ser.readline().decode(errors="replace")
+                programData = json.loads(response)
+                return programData
+            except Exception as e:
+                pass

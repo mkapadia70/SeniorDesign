@@ -2,7 +2,7 @@
 //master volume
 $(function () {
     //binds the master volume slider
-    $('#masterVolume').bind('input', function () {
+    $('#masterVolume').on('input', function () {
         $.getJSON("http://127.0.0.1:5001" + '/data', {
             Name: "WindowsVolumeMixerControl",
             Func: "setMasterVolume",
@@ -46,7 +46,7 @@ function changeSliderData(value, index) {
 
     $("#sliderContainer").append(sliderHTML)
 
-    $("#" + index).bind('input', function () {
+    $("#" + index).on('input', function () {
         console.log("Button: " + index + ", Volume: " + $("#" + index).val() + ", PID:" + value.pid)
         $.getJSON("http://127.0.0.1:5001" + '/data', {
             Name: "WindowsVolumeMixerControl",
@@ -59,7 +59,7 @@ function changeSliderData(value, index) {
     });
 
     // mute/unmute individual app
-    $("#muteUnmuteApp" + index).bind("change", function () {
+    $("#muteUnmuteApp" + index).on("change", function () {
         $.getJSON("http://127.0.0.1:5001" + '/data', {
             Name: "WindowsVolumeMixerControl",
             Func: ($("#muteUnmuteApp" + index).is(':checked') ? "muteApplicationVolume" : "unmuteApplicationVolume"),
@@ -82,7 +82,7 @@ function changeSliderData(value, index) {
 var pressedApp = false;
 // mute/unmute master
 $(function () {
-    $('#muteUnmuteApp').bind("change", function () {
+    $('#muteUnmuteApp').on("change", function () {
         $.getJSON("http://127.0.0.1:5001" + '/data', {
             Name: "WindowsVolumeMixerControl",
             Func: (pressedApp ? "unmuteMasterVolume" : "muteMasterVolume"),

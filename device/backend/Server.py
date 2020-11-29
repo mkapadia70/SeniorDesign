@@ -24,18 +24,6 @@ def startServer():
     app.run(host='127.0.0.1', port=5001)
 
 
-def listen():
-    start = time.time()
-    while time.time()-start < 10:
-        try:
-            start = time.time()
-            response = ser2.readline().decode(errors="replace")
-            programData = json.loads(response)
-            return programData
-        except Exception as e:
-            pass
-
-
 @app.route("/data")
 def data():
 
@@ -50,7 +38,7 @@ def data():
 
     if expectReturn == "true":
         # this is potentially dangerous, but thats how i like to live
-        return jsonify(listen())
+        return jsonify(SerialHandler.listen(ser2))
     else:
         return jsonify(request.args)  # just bs value
 
@@ -60,8 +48,7 @@ def packageAndSend(name, funcs, params, processId):
     jason = [{"Name": name, "Funcs": [
         {"Name": funcs, "Params": [params, processId]}]}]
 
-    output = (json.dumps(jason) + '\n').encode()
-    ser1.write(output)
+    SerialHandler.sendData(ser1, output)
 
 
 if __name__ == "__main__":
@@ -79,4 +66,5 @@ if __name__ == "__main__":
     else:
         ser2 = SerialHandler.connectPort(outport)
 
+    print("starting server")
     startServer()

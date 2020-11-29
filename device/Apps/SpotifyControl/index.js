@@ -19,7 +19,7 @@ function loadSpotifyInfo(data) {
 
 $(function () {
     //binds skip song button
-    $('#skipSong').bind('click', function () {
+    $('#skipSong').on('click', function () {
         $.getJSON("http://127.0.0.1:5001" + '/data', {
             Name: "SpotifyControl",
             Func: "skipSong",
@@ -34,7 +34,7 @@ $(function () {
 
 $(function () {
     //binds skip song button
-    $('#prevSong').bind('click', function () {
+    $('#prevSong').on('click', function () {
         $.getJSON("http://127.0.0.1:5001" + '/data', {
             Name: "SpotifyControl",
             Func: "prevSong",
@@ -50,7 +50,7 @@ $(function () {
 var pressedApp = false;
 //pause/unpause song
 $(function () {
-    $('#pauseUnpause').bind("click", function () {
+    $('#pauseUnpause').on("click", function () {
         $.getJSON("http://127.0.0.1:5001" + '/data', {
             Name: "SpotifyControl",
             Func: (pressedApp ? "playSong" : "pauseSong"),

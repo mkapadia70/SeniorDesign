@@ -11,6 +11,10 @@ function startPythonPersistent() {
 
   });
 
+  python.on('message', function(data) {
+    console.log(data)
+  });
+
   python.stderr.on('data', (data) => {
     console.log("Python response: ", data.toString('utf8'));
   });
