@@ -62,14 +62,12 @@ def setRepeatStatus(repeatState):
 
 
 def getCurrentlyPlaying():
-    print("here1")
     global sp
     cp = sp.currently_playing()
     cp["volume"] = getVolume()
     ImageWriter.writeImage(cp['item']['album']['images'][1]['url']) # bad
     string = ImageWriter.imageTo64String('album.png') # bad bad
     cp['imageString'] = str(string)
-    print("here2")
     return cp
 
 def getCurrentlyPlayingSmall():
