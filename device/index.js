@@ -3,6 +3,8 @@ const querystring = require('querystring');
 let { PythonShell } = require('python-shell');
 let process = require('child_process')
 
+app.commandLine.appendSwitch ("disable-http-cache"); // disables cache
+
 function startPythonPersistent() {
   console.log("python start")
   var python = require('child_process').spawn('python', ['backend/Server.py']);

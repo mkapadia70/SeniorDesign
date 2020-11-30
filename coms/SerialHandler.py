@@ -2,6 +2,7 @@ import serial
 import json
 import JsonHandler
 import time
+import sys
 
 
 def connectPort(port):
@@ -19,7 +20,6 @@ def sendData(ser, data):
     ser.flush()  # flush buffer
     data = (json.dumps(data) + '\n').encode()
     ser.write(data)
-
 
 def listen(ser1, ser2):
     JsonHandler.updateDevices()

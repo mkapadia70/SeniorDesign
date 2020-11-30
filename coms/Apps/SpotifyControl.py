@@ -1,6 +1,7 @@
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 from Apps import SpotifyAuth
+from Apps import ImageWriter
 
 # make sure to update your credentials in SpotifyAuth.py
 auth_manager = SpotifyAuth.getAuthManager()
@@ -61,11 +62,20 @@ def setRepeatStatus(repeatState):
 
 
 def getCurrentlyPlaying():
+    print("here1")
     global sp
     cp = sp.currently_playing()
     cp["volume"] = getVolume()
+    ImageWriter.writeImage(cp['item']['album']['images'][1]['url']) # bad
+    string = ImageWriter.imageTo64String('album.png') # bad bad
+    cp['imageString'] = str(string)
+    print("here2")
     return cp
 
+def getCurrentlyPlayingSmall():
+    # small size for checking if there is a change (please god no image data)
+    global sp
+    return sp.currently_playing()
 
 def getPlaybackStatus():
     global sp
