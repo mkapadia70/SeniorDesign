@@ -37,20 +37,24 @@ def Spotify(funcs):
             return SpotifyControl.getCurrentlyPlaying()
         elif(i["Name"] == "skipSong"):
             # mega bad
+            x = 1
             current = SpotifyControl.getCurrentlyPlaying()
             SpotifyControl.skipSong()
             newData = current
-            while current == newData:
+            while current['item']['id'] == newData['item']['id'] and x < 10:
+                x += 1
                 newData = SpotifyControl.getCurrentlyPlaying()
-            return SpotifyControl.getCurrentlyPlaying()
+            return newData
         elif(i["Name"] == "prevSong"):
             # mega bad
+            x = 1
             current = SpotifyControl.getCurrentlyPlaying()
             SpotifyControl.previousSong()
             newData = current
-            while current == newData:
+            while current['item']['id'] == newData['item']['id'] and x < 10:
+                x += 1
                 newData = SpotifyControl.getCurrentlyPlaying()
-            return SpotifyControl.getCurrentlyPlaying()
+            return newData
         elif(i["Name"] == "pauseSong"):
            SpotifyControl.pausePlayback()
         elif(i["Name"] == "playSong"):
@@ -63,7 +67,6 @@ def Spotify(funcs):
            SpotifyControl.setRepeatStatus(i["Params"][0])
         elif(i["Name"] == "setVolume"):
            SpotifyControl.setVolume(i["Params"][0])
-
 
 def callFunctions(json):
     for i in json:

@@ -33,7 +33,7 @@ def setVolume(newVolume):
 
 def getVolume():
     global sp
-    return int(sp.devices()[0]["volume_percent"])
+    return sp.devices()['devices'][0]['volume_percent']
 
 # params: shuffleState - true for shuffle false for linear
 def setShuffle(shuffleState):
@@ -62,7 +62,9 @@ def setRepeatStatus(repeatState):
 
 def getCurrentlyPlaying():
     global sp
-    return sp.currently_playing()
+    cp = sp.currently_playing()
+    cp["volume"] = getVolume()
+    return cp
 
 
 def getPlaybackStatus():

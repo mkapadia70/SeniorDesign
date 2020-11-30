@@ -9,6 +9,7 @@ function myOnload() {
     }, function (data) {
         loadSpotifyInfo(data)
     });
+
 }
 
 function msToMinSec(millis) {
@@ -39,8 +40,8 @@ function loadSpotifyInfo(data) {
     document.getElementById("leftTime").innerHTML = msToMinSec(data.progress_ms-780)
     document.getElementById("rightTime").innerHTML = msToMinSec(data.item.duration_ms)
     document.getElementById("seek").value = 100.0 * ((minSecToMS(document.getElementById("leftTime").innerHTML)) / (minSecToMS(document.getElementById("rightTime").innerHTML))) //yes
+    document.getElementById("volume").value = data.volume
 
-    console.log(data.is_playing)
     if (false == data.is_playing) {
         document.getElementById("pauseUnpause").src = "images/play.png"
         pressedApp = true
@@ -53,8 +54,8 @@ function loadSpotifyInfo(data) {
 
 }
 
-var startedTimeUpdate = false
 
+var startedTimeUpdate = false
 
 function startTimer() {
     if (startedTimeUpdate == false) {
