@@ -1,13 +1,13 @@
 const fs = require('fs')
 
+jQuery.ajaxSettings.traditional = true;
+
 
 function myOnload() {
     //requests program data from python which requests it from windows
     $.getJSON("http://127.0.0.1:5001" + '/data', {
         Name: "SpotifyControl",
-        Func: "getCurrentData",
-        Params: 0, // bs numbers
-        ProcessId: -1, // bs numbers
+        Func: "getCurrentlyPlaying",
         ExpectReturn: true
     }, function (data) {
         loadSpotifyInfo(data)
@@ -73,8 +73,6 @@ function startTimer() {
                 $.getJSON("http://127.0.0.1:5001" + '/data', {
                     Name: "SpotifyControl",
                     Func: "getCurrentData",
-                    Params: 0, // bs numbers
-                    ProcessId: -1, // bs numbers
                     ExpectReturn: true
                 }, function (data) {
                     loadSpotifyInfo(data)
@@ -91,8 +89,6 @@ $(function () {
         $.getJSON("http://127.0.0.1:5001" + '/data', {
             Name: "SpotifyControl",
             Func: "skipSong",
-            Params: 0,
-            ProcessId: -1, //whatever
             ExpectReturn: true // maybe add like a thing to confirm that the request went through
         }, function (data) {
             loadSpotifyInfo(data)
@@ -105,9 +101,7 @@ $(function () {
     $('#prevSong').on('click', function () {
         $.getJSON("http://127.0.0.1:5001" + '/data', {
             Name: "SpotifyControl",
-            Func: "prevSong",
-            Params: 0,
-            ProcessId: -1, //whatever
+            Func: "previousSong",
             ExpectReturn: true // maybe add like a thing to confirm that the request went through
         }, function (data) {
             loadSpotifyInfo(data)
@@ -121,9 +115,7 @@ $(function () {
     $('#pauseUnpause').on("click", function () {
         $.getJSON("http://127.0.0.1:5001" + '/data', {
             Name: "SpotifyControl",
-            Func: (pressedApp ? "playSong" : "pauseSong"),
-            Params: 0,
-            ProcessId: -1, //whatever
+            Func: (pressedApp ? "startPlayback" : "pausePlayback"),
             ExpectReturn: false
         }, function (data) {
             pressedApp = !pressedApp
@@ -146,8 +138,7 @@ $(function () {
         $.getJSON("http://127.0.0.1:5001" + '/data', {
             Name: "SpotifyControl",
             Func: "setShuffle",
-            Params: !shuffleBool,
-            ProcessId: -1, //whatever
+            Params: [!shuffleBool],
             ExpectReturn: false
         }, function (data) {
             shuffleBool = !shuffleBool
@@ -170,8 +161,7 @@ $(function () {
         $.getJSON("http://127.0.0.1:5001" + '/data', {
             Name: "SpotifyControl",
             Func: "setRepeatStatus",
-            Params: repeatStruct[(repeatTrinary++)%3],
-            ProcessId: -1, //whatever
+            Params: [repeatStruct[(repeatTrinary++)%3]],
             ExpectReturn: false
         }, function (data) {
             if (repeatTrinary%3 == 1) {
@@ -194,8 +184,7 @@ $(function () {
         $.getJSON("http://127.0.0.1:5001" + '/data', {
             Name: "SpotifyControl",
             Func: "seek",
-            Params: $("#seek").val() / 100.0,
-            ProcessId: -1, //whatever
+            Params: [$("#seek").val() / 100.0],
             ExpectReturn: false
         }, function (data) {
         });
@@ -212,8 +201,7 @@ $(function () {
         $.getJSON("http://127.0.0.1:5001" + '/data', {
             Name: "SpotifyControl",
             Func: "setVolume",
-            Params: $("#volume").val(),
-            ProcessId: -1, //whatever
+            Params: [$("#volume").val()],
             ExpectReturn: false
         }, function (data) {
         });

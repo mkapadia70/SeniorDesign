@@ -34,29 +34,8 @@ def WindowsVolumeMixer(funcs):
 
 def Spotify(funcs):
     for i in funcs:
-        if(i["Name"] == "getCurrentData"):
-            return SpotifyControl.getCurrentlyPlaying()
-        elif(i["Name"] == "skipSong"):
-             # mega bad
-            SpotifyControl.skipSong()
-            return SpotifyControl.getUpdatedData()
-        elif(i["Name"] == "prevSong"):
-            # mega bad
-            SpotifyControl.previousSong()
-            return SpotifyControl.getUpdatedData()
-        elif(i["Name"] == "pauseSong"):
-           SpotifyControl.pausePlayback()
-           print(SpotifyControl.getTopArtists())
-        elif(i["Name"] == "playSong"):
-           SpotifyControl.startPlayback()
-        elif(i["Name"] == "seek"):
-           SpotifyControl.seek(i["Params"][0])
-        elif(i["Name"] == "setShuffle"):
-           SpotifyControl.setShuffle(i["Params"][0])
-        elif(i["Name"] == "setRepeatStatus"):
-           SpotifyControl.setRepeatStatus(i["Params"][0])
-        elif(i["Name"] == "setVolume"):
-           SpotifyControl.setVolume(i["Params"][0])
+        return SpotifyControl.functionDict.get(i["Name"], lambda: 'Invalid')(*i["Params"])
+      
 
 def callFunctions(json):
     for i in json:

@@ -47,11 +47,13 @@ def setShuffle(shuffleState):
 def skipSong():
     global sp
     sp.next_track()
+    return getUpdatedData() # yes
 
 
 def previousSong():
     global sp
     sp.previous_track()
+    return getUpdatedData() # yes
 
 # params:
 # repeatState - the new state for repeat
@@ -97,3 +99,22 @@ def seek(pos):
     global sp
     pos_ms = int(float(pos) * sp.currently_playing()['item']['duration_ms'])
     sp.seek_track(pos_ms)
+
+# dict of out functions for easy calling in the json handler
+functionDict = {
+    "setup": setup,
+    "pausePlayback": pausePlayback,
+    "startPlayback": startPlayback,
+    "setVolume": setVolume,
+    "getVolume": getVolume,
+    "setShuffle": setShuffle,
+    "skipSong": skipSong,
+    "previousSong": previousSong,
+    "setRepeatStatus": setRepeatStatus,
+    "getCurrentlyPlaying": getCurrentlyPlaying,
+    "getCurrentlyPlayingSmall": getCurrentlyPlayingSmall,
+    "getCachedPlaying": getCachedPlaying,
+    "getUpdatedData": getUpdatedData,
+    "getTopArtists": getTopArtists,
+    "seek": seek
+}

@@ -30,7 +30,7 @@ def data():
     content = request.args
     name = request.args.get('Name')
     funcs = request.args.get('Func')
-    params = request.args.get("Params")
+    params = request.args.getlist("Params")
     processId = request.args.get("ProcessId")
     expectReturn = request.args.get("ExpectReturn")
 
@@ -44,9 +44,10 @@ def data():
 
 
 def packageAndSend(name, funcs, params, processId):
+   
     # packages up everything and sends as generic request
     jason = [{"Name": name, "Funcs": [
-        {"Name": funcs, "Params": [params, processId]}]}]
+        {"Name": funcs, "Params": params}]}]
 
     SerialHandler.sendData(ser1, jason)
 
