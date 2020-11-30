@@ -57,7 +57,7 @@ input#muteUnmuteApp:checked ~ .mute img {
     background:transparent; /* make scrollbar transparent */
 }
 .horizontal-scrollable > .row {
-    width:70vw;
+    width:100vw;
     padding-top:5vh;
     margin:0px auto;
     overflow-x:auto;

@@ -31,10 +31,9 @@ def data():
     name = request.args.get('Name')
     funcs = request.args.get('Func')
     params = request.args.getlist("Params")
-    processId = request.args.get("ProcessId")
     expectReturn = request.args.get("ExpectReturn")
 
-    packageAndSend(name, funcs, params, processId)
+    packageAndSend(name, funcs, params)
 
     if expectReturn == "true":
         # this is potentially dangerous, but thats how i like to live
@@ -43,7 +42,7 @@ def data():
         return jsonify(request.args)  # just bs value
 
 
-def packageAndSend(name, funcs, params, processId):
+def packageAndSend(name, funcs, params):
    
     # packages up everything and sends as generic request
     jason = [{"Name": name, "Funcs": [

@@ -1,3 +1,5 @@
+jQuery.ajaxSettings.traditional = true;
+
 //this will hold all of our dynamic jquery stuff for the windows volume mixer
 //master volume
 $(function () {
@@ -6,8 +8,7 @@ $(function () {
         $.getJSON("http://127.0.0.1:5001" + '/data', {
             Name: "WindowsVolumeMixerControl",
             Func: "setMasterVolume",
-            Params: $("#masterVolume").val() / 100.0,
-            ProcessId: -1, //whatever
+            Params: [$("#masterVolume").val() / 100.0],
             ExpectReturn: false
         }, function (data) {
         });
@@ -20,8 +21,6 @@ function myOnload() {
     $.getJSON("http://127.0.0.1:5001" + '/data', {
         Name: "WindowsVolumeMixerControl",
         Func: "getAllSoundDeviceData",
-        Params: 1,
-        ProcessId: 2,
         ExpectReturn: true
     }, function (data) {
         data.forEach(changeSliderData);
@@ -32,7 +31,7 @@ function changeSliderData(value, index) {
     //This function add the relative sliders for the data to the html
     //also binds the sliders to send back updates on volume to windows       
     sliderHTML = ' \
-        <div class="col-xs-3"> \
+        <div class="col-sm-3"> \
             <input type="range" min="0" max="100" value="' + (value.currentVolume * 100) + '" class="slider" id="' + index + '"> \
             <h3 class="text-center">' + value.name + '</h3> \
             <input type="checkbox" id="muteUnmuteApp' + index + '" style="display: none;"> \
@@ -51,8 +50,7 @@ function changeSliderData(value, index) {
         $.getJSON("http://127.0.0.1:5001" + '/data', {
             Name: "WindowsVolumeMixerControl",
             Func: "setApplicationVolume",
-            Params: $("#" + index).val() / 100.0,
-            ProcessId: value.pid
+            Params: [$("#" + index).val() / 100.0, value.pid],
         }, function (data) {
         });
         return false;
@@ -63,8 +61,8 @@ function changeSliderData(value, index) {
         $.getJSON("http://127.0.0.1:5001" + '/data', {
             Name: "WindowsVolumeMixerControl",
             Func: ($("#muteUnmuteApp" + index).is(':checked') ? "muteApplicationVolume" : "unmuteApplicationVolume"),
-            Params: 0,
-            ProcessId: value.pid
+            Params: [value.pid],
+            ExpectReturn: false
         }, function (data) {
             if ($("#muteUnmuteApp" + index).is(':checked')) {
                 $("#mute" + index).css("display", "initial");
@@ -86,8 +84,6 @@ $(function () {
         $.getJSON("http://127.0.0.1:5001" + '/data', {
             Name: "WindowsVolumeMixerControl",
             Func: (pressedApp ? "unmuteMasterVolume" : "muteMasterVolume"),
-            Params: 0,
-            ProcessId: -1 //whatever
         }, function (data) {
             pressedApp = !pressedApp
         });

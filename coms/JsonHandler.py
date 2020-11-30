@@ -2,6 +2,12 @@ from Apps import WindowsVolumeMixerControl
 from Apps import SpotifyControl
 import time
 
+# probably bad but looks super clean
+appDict = {
+    "SpotifyControl": SpotifyControl,
+    "WindowsVolumeMixerControl": WindowsVolumeMixerControl
+}
+
 def updateDevices():
     WindowsVolumeMixerControl.updateDevices()
 
@@ -11,39 +17,10 @@ def setupApps():
     SpotifyControl.setup()
 
 
-def WindowsVolumeMixer(funcs):
-    for i in funcs:
-        if(i["Name"] == "muteMasterVolume"):
-            WindowsVolumeMixerControl.muteMasterVolume()
-        elif(i["Name"] == "unmuteMasterVolume"):
-            WindowsVolumeMixerControl.unmuteMasterVolume()
-        elif(i["Name"] == "setMasterVolume"):
-            WindowsVolumeMixerControl.setMasterVolume(i["Params"][0])
-        elif(i["Name"] == "getMasterVolume"):
-            return WindowsVolumeMixerControl.getMasterVolume()
-        elif(i["Name"] == "muteApplicationVolume"):
-            WindowsVolumeMixerControl.muteApplicationVolume(i["Params"][1])
-        elif(i["Name"] == "unmuteApplicationVolume"):
-            WindowsVolumeMixerControl.unmuteApplicationVolume(i["Params"][1])
-        elif(i["Name"] == "setApplicationVolume"):
-            WindowsVolumeMixerControl.setApplicationVolume(
-                i["Params"][1], i["Params"][0])
-        elif(i["Name"] == "getAllSoundDeviceData"):
-            return WindowsVolumeMixerControl.getAllSoundDeviceData()
-
-
-def Spotify(funcs):
-    for i in funcs:
-        return SpotifyControl.functionDict.get(i["Name"], lambda: 'Invalid')(*i["Params"])
-      
-
 def callFunctions(json):
     for i in json:
-        name = i["Name"]
-        if(name == "WindowsVolumeMixerControl"):
-            return WindowsVolumeMixer(i["Funcs"])
-        elif(name == "SpotifyControl"):
-            return Spotify(i["Funcs"])
+        for f in i["Funcs"]:
+            return appDict[i["Name"]].functionDict.get(f["Name"], lambda: 'Invalid')(*f["Params"])
 
 
 def getProcsAsJson():

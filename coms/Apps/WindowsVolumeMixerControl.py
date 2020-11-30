@@ -44,7 +44,7 @@ def unmuteApplicationVolume(pid):
 # param: application session, and new level from 0.0 to 1.0
 
 
-def setApplicationVolume(pid, newVolume):
+def setApplicationVolume(newVolume, pid):
     devices[int(pid)]["session"].SimpleAudioVolume.SetMasterVolume(
         float(newVolume), None)
 
@@ -91,3 +91,18 @@ def getAllSoundDevices():
 def updateDevices():
     global devices
     devices = getAllSoundDevices()
+
+# dict of out functions for easy calling in the json handler
+functionDict = {
+    "muteMasterVolume": muteMasterVolume,
+    "unmuteMasterVolume": unmuteMasterVolume,
+    "getMasterVolume": getMasterVolume,
+    "setMasterVolume": setMasterVolume,
+    "muteApplicationVolume": muteApplicationVolume,
+    "unmuteApplicationVolume": unmuteApplicationVolume,
+    "setApplicationVolume": setApplicationVolume,
+    "getAllSoundDeviceData": getAllSoundDeviceData,
+    "updateDeviceData": updateDeviceData,
+    "getAllSoundDevices": getAllSoundDevices,
+    "updateDevices": updateDevices
+}
