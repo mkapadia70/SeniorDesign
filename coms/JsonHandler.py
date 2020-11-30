@@ -1,5 +1,6 @@
 from Apps import WindowsVolumeMixerControl
 from Apps import SpotifyControl
+import time
 
 def updateDevices():
     WindowsVolumeMixerControl.updateDevices()
@@ -36,27 +37,16 @@ def Spotify(funcs):
         if(i["Name"] == "getCurrentData"):
             return SpotifyControl.getCurrentlyPlaying()
         elif(i["Name"] == "skipSong"):
-            # mega bad
-            x = 1
-            current = SpotifyControl.getCurrentlyPlayingSmall()
+             # mega bad
             SpotifyControl.skipSong()
-            newData = current
-            while current['item']['id'] == newData['item']['id'] and x < 10:
-                x += 1
-                newData = SpotifyControl.getCurrentlyPlayingSmall()
-            return SpotifyControl.getCurrentlyPlaying()
+            return SpotifyControl.getUpdatedData()
         elif(i["Name"] == "prevSong"):
             # mega bad
-            x = 1
-            current = SpotifyControl.getCurrentlyPlayingSmall()
             SpotifyControl.previousSong()
-            newData = current
-            while current['item']['id'] == newData['item']['id'] and x < 10:
-                x += 1
-                newData = SpotifyControl.getCurrentlyPlayingSmall()
-            return SpotifyControl.getCurrentlyPlaying()
+            return SpotifyControl.getUpdatedData()
         elif(i["Name"] == "pauseSong"):
            SpotifyControl.pausePlayback()
+           print(SpotifyControl.getTopArtists())
         elif(i["Name"] == "playSong"):
            SpotifyControl.startPlayback()
         elif(i["Name"] == "seek"):

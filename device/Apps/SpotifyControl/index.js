@@ -39,7 +39,7 @@ function loadSpotifyInfo(data) {
     document.getElementById("title").innerHTML = data.item.name
     document.getElementById("artist").innerHTML = data.item.artists[0].name
     // document.getElementById("spotimage").src = data.item.album.images[0].url
-    base64_decode(data.imageString, __dirname + "\\albums\\album.png") // for use later
+    base64_decode(data.imageString, __dirname + "\\albums\\album.jpg") // for use later
     document.getElementById("leftTime").innerHTML = msToMinSec(data.progress_ms-780)
     document.getElementById("rightTime").innerHTML = msToMinSec(data.item.duration_ms)
     document.getElementById("seek").value = 100.0 * ((minSecToMS(document.getElementById("leftTime").innerHTML)) / (minSecToMS(document.getElementById("rightTime").innerHTML))) //yes
@@ -229,6 +229,6 @@ function base64_decode(base64Image, file) {
     base64Image += "data:image/jpeg;base64,"
     fs.writeFile(file, Buffer.from(base64Image, 'base64'), function(err) {
         if (err) {console.log("image write error")}
-        document.getElementById("spotimage").src = 'albums/album.png?' + new Date().getTime(); // the le epic cache breaker
+        document.getElementById("spotimage").src = file + '?' + new Date().getTime(); // the le epic cache breaker
     });
 }
