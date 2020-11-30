@@ -32,7 +32,7 @@ function minSecToMS(minSec) {
 
 
 function loadSpotifyInfo(data) {
-    
+    console.log(data)
     document.getElementById("title").innerHTML = data.item.name
     document.getElementById("artist").innerHTML = data.item.artists[0].name
     document.getElementById("spotimage").src = data.item.album.images[0].url
@@ -134,8 +134,57 @@ $(function () {
     });
 });
 
+var shuffleBool = false;
+//shuffle stuff
 $(function () {
-    //binds the master volume slider
+    $('#shuffleSong').on("click", function () {
+        $.getJSON("http://127.0.0.1:5001" + '/data', {
+            Name: "SpotifyControl",
+            Func: "setShuffle",
+            Params: !shuffleBool,
+            ProcessId: -1, //whatever
+            ExpectReturn: false
+        }, function (data) {
+            shuffleBool = !shuffleBool
+            if (shuffleBool) {
+                document.getElementById("shuffleSong").src = "images/shuffleOn.png"
+            }
+            else {
+                document.getElementById("shuffleSong").src = "images/shuffleOff.png"
+            }
+        });
+        return false;
+    });
+});
+
+var repeatStruct = ["off", "context", "track"];
+var repeatTrinary = 1
+//repeat stuff
+$(function () {
+    $('#repeatSong').on("click", function () {
+        $.getJSON("http://127.0.0.1:5001" + '/data', {
+            Name: "SpotifyControl",
+            Func: "setRepeatStatus",
+            Params: repeatStruct[(repeatTrinary++)%3],
+            ProcessId: -1, //whatever
+            ExpectReturn: false
+        }, function (data) {
+            if (repeatTrinary%3 == 1) {
+                document.getElementById("repeatSong").src = "images/repeatOff.png"
+            }
+            else if (repeatTrinary%3 == 2) {
+                document.getElementById("repeatSong").src = "images/repeatContext.png"
+            }
+            else {
+                document.getElementById("repeatSong").src = "images/repeatTrack.png"
+            }
+        });
+        return false;
+    });
+});
+
+$(function () {
+    //binds seek slider
     function sendSeek() {
         $.getJSON("http://127.0.0.1:5001" + '/data', {
             Name: "SpotifyControl",
@@ -150,4 +199,21 @@ $(function () {
 
     $('#seek').on('mouseup', sendSeek);
     $('#seek').on('touchend', sendSeek);
+});
+
+$(function () {
+    //binds volume slider
+    function sendSeek() {
+        $.getJSON("http://127.0.0.1:5001" + '/data', {
+            Name: "SpotifyControl",
+            Func: "setVolume",
+            Params: $("#volume").val(),
+            ProcessId: -1, //whatever
+            ExpectReturn: false
+        }, function (data) {
+        });
+    };
+
+    $('#volume').on('mouseup', sendSeek);
+    $('#volume').on('touchend', sendSeek);
 });

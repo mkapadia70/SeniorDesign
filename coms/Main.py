@@ -29,6 +29,8 @@ def main():
     else:
         ser2 = SerialHandler.connectPort(outport)
 
+    JsonHandler.setupApps() # init various apps stuff
+
     # The listen will infinite loop in the handler
     SerialHandler.listen(ser1, ser2)
 

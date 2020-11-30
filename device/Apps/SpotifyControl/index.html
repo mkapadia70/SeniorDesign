@@ -10,13 +10,15 @@
 </head>
 
 <body style="background-color:#252525; color:white; height:100vh; overflow:hidden;" onload="myOnload()">
-    <img id="spotimage" src="images/default.PNG"  width="400" height="400" style="display:block; margin-left:auto; margin-right:auto;">
+    <img id="spotimage" src="images/default.PNG"  width="350" height="350" style="display:block; margin-left:auto; margin-right:auto;">
 </br>
     <div style="margin:auto; width:80%">
         <div style="display:flex; width:100%">
+            <input type="image" id="shuffleSong" src="images/shuffleOff.PNG" width="100" height="100" style="margin:auto; outline: none;">
             <input type="image" id="prevSong" src="images/prev.png" width="100" height="100" style="margin:auto; outline: none;">
             <input type="image" id="pauseUnpause" src="images/play.png" width="100" height="100" style="margin:auto; outline: none;">
             <input type="image" id="skipSong" src="images/skip.png" width="100" height="100" style="margin:auto; outline: none;">
+            <input type="image" id="repeatSong" src="images/repeatOff.PNG" width="100" height="100" style="margin:auto; outline: none;">
         </div>
     </br>
         <div style="display:flex; font: 2em arial; color:greenyellow">
@@ -25,12 +27,14 @@
             <div id="rightTime">0:00</div>
         </div>
     </br>
-    </br>
     <div style="text-align: center; font: 3em arial;">
         <div id="title" style="color:greenyellow">Song Title Here</div>
         <div id="artist" style="color:green">Artist Here</div>
+        <input id="volume" type="range" min="0" max="100" class="slider" step="1" style="width: 30%; outline: none;">
     </div>
     </div>
+
+    
 
     
 </body>

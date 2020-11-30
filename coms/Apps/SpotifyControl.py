@@ -7,6 +7,12 @@ auth_manager = SpotifyAuth.getAuthManager()
 
 sp = spotipy.Spotify(auth_manager=auth_manager)
 
+def setup():
+    # setup 
+    global sp
+    global auth_manager
+    sp = spotipy.Spotify(auth_manager=auth_manager)
+    auth_manager = SpotifyAuth.getAuthManager()
 
 def pausePlayback():
     global sp
@@ -22,19 +28,17 @@ def startPlayback():
 
 def setVolume(newVolume):
     global sp
-    sp.volume(newVolume)
+    sp.volume(int(newVolume))
 
 
 def getVolume():
-    # Not sure this is possible
-    return
+    global sp
+    return int(sp.devices()[0]["volume_percent"])
 
 # params: shuffleState - true for shuffle false for linear
-
-
 def setShuffle(shuffleState):
     global sp
-    sp.shuffle(shuffleState)
+    sp.shuffle(shuffleState == "true")
 
 
 def skipSong():

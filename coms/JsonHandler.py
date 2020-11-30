@@ -6,6 +6,9 @@ def updateDevices():
 
 # WindowsVolumeMixerControl
 
+def setupApps():
+    SpotifyControl.setup()
+
 
 def WindowsVolumeMixer(funcs):
     for i in funcs:
@@ -34,19 +37,19 @@ def Spotify(funcs):
             return SpotifyControl.getCurrentlyPlaying()
         elif(i["Name"] == "skipSong"):
             # mega bad
-            current = SpotifyControl.getCurrentlyPlaying()['item']['album']['images'][0]['url']
+            current = SpotifyControl.getCurrentlyPlaying()
             SpotifyControl.skipSong()
             newData = current
             while current == newData:
-                newData = SpotifyControl.getCurrentlyPlaying()['item']['album']['images'][0]['url']
+                newData = SpotifyControl.getCurrentlyPlaying()
             return SpotifyControl.getCurrentlyPlaying()
         elif(i["Name"] == "prevSong"):
             # mega bad
-            current = SpotifyControl.getCurrentlyPlaying()['item']['album']['images'][0]['url']
+            current = SpotifyControl.getCurrentlyPlaying()
             SpotifyControl.previousSong()
             newData = current
             while current == newData:
-                newData = SpotifyControl.getCurrentlyPlaying()['item']['album']['images'][0]['url']
+                newData = SpotifyControl.getCurrentlyPlaying()
             return SpotifyControl.getCurrentlyPlaying()
         elif(i["Name"] == "pauseSong"):
            SpotifyControl.pausePlayback()
@@ -54,6 +57,12 @@ def Spotify(funcs):
            SpotifyControl.startPlayback()
         elif(i["Name"] == "seek"):
            SpotifyControl.seek(i["Params"][0])
+        elif(i["Name"] == "setShuffle"):
+           SpotifyControl.setShuffle(i["Params"][0])
+        elif(i["Name"] == "setRepeatStatus"):
+           SpotifyControl.setRepeatStatus(i["Params"][0])
+        elif(i["Name"] == "setVolume"):
+           SpotifyControl.setVolume(i["Params"][0])
 
 
 def callFunctions(json):
