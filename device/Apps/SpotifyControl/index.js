@@ -72,7 +72,7 @@ function startTimer() {
             if (((minSecToMS(document.getElementById("leftTime").innerHTML)) >= ((minSecToMS(document.getElementById("rightTime").innerHTML))))) {
                 $.getJSON("http://127.0.0.1:5001" + '/data', {
                     Name: "SpotifyControl",
-                    Func: "getCurrentData",
+                    Func: "getCurrentlyPlaying",
                     ExpectReturn: true
                 }, function (data) {
                     loadSpotifyInfo(data)

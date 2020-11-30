@@ -91,18 +91,3 @@ def getAllSoundDevices():
 def updateDevices():
     global devices
     devices = getAllSoundDevices()
-
-# dict of out functions for easy calling in the json handler
-functionDict = {
-    "muteMasterVolume": muteMasterVolume,
-    "unmuteMasterVolume": unmuteMasterVolume,
-    "getMasterVolume": getMasterVolume,
-    "setMasterVolume": setMasterVolume,
-    "muteApplicationVolume": muteApplicationVolume,
-    "unmuteApplicationVolume": unmuteApplicationVolume,
-    "setApplicationVolume": setApplicationVolume,
-    "getAllSoundDeviceData": getAllSoundDeviceData,
-    "updateDeviceData": updateDeviceData,
-    "getAllSoundDevices": getAllSoundDevices,
-    "updateDevices": updateDevices
-}
