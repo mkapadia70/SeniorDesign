@@ -2,10 +2,10 @@ from Apps import WindowsVolumeMixerControl
 from Apps import SpotifyControl
 import time
 
+
 def updateDevices():
     WindowsVolumeMixerControl.updateDevices()
 
-# WindowsVolumeMixerControl
 
 def setupApps():
     SpotifyControl.setup()
@@ -14,7 +14,8 @@ def setupApps():
 def callFunctions(json):
     for i in json:
         for f in i["Funcs"]:
-            return getattr(globals()[i["Name"]], f["Name"])(*f["Params"]) # this lines finds a function in a module matching the function string given by the json and calls it
+            # this lines finds a function in a module matching the function string given by the json and calls it
+            return getattr(globals()[i["Name"]], f["Name"])(*f["Params"])
 
 
 def getProcsAsJson():

@@ -70,8 +70,8 @@ def getCurrentlyPlaying():
     global cached_currently_playing
     cp = sp.currently_playing()
     cp["volume"] = getVolume()
-    ImageWriter.writeImage(cp['item']['album']['images'][1]['url']) # bad. downloads image as local album.png
-    string = ImageWriter.imageTo64String('album.jpg') # bad bad. converts that png to a base64 encoded string to send to RaspPi using json
+    ImageWriter.writeImage(cp['item']['album']['images'][1]['url']) # bad. downloads image as local album.jpg
+    string = ImageWriter.imageTo64String('album.jpg') # bad bad. converts that jpg to a base64 encoded string to send to RaspPi using json
     cp['imageString'] = str(string)
     return cp
 
@@ -99,3 +99,12 @@ def seek(pos):
     global sp
     pos_ms = int(float(pos) * sp.currently_playing()['item']['duration_ms'])
     sp.seek_track(pos_ms)
+
+def search(query):
+    global sp
+    return sp.search(query, type="track")
+
+def playTrack(uri):
+    global sp
+    sp.start_playback(uris=[uri])
+    return getUpdatedData()

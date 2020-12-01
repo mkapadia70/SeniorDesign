@@ -211,6 +211,48 @@ $(function () {
     $('#volume').on('touchend', sendSeek);
 });
 
+$(function () {
+    $('#searchButton').on("click", function () {
+        $.getJSON("http://127.0.0.1:5001" + '/data', {
+            Name: "SpotifyControl",
+            Func: "search",
+            Params: [$("#search").val()],
+            ExpectReturn: true
+        }, function (data) {
+            while(document.getElementById("searchResults").firstChild) {
+                document.getElementById("searchResults").removeChild(document.getElementById("searchResults").firstChild);
+            }
+            data.tracks.items.forEach(searchResults)
+        });
+        return false;
+    });
+});
+
+function searchResults(value, index) {
+    
+    var id = value.uri
+    searchRes = ' \
+        <div color=white id=searchResult' + index + ' title=' + id + '> \
+            ' + value.name + ' ' + value.artists[0].name + '\
+        </div>'
+    $("#searchResults").append(searchRes)
+    console.log(id)
+
+    $("#searchResult" + index).on('click', function () {
+        $.getJSON("http://127.0.0.1:5001" + '/data', {
+            Name: "SpotifyControl",
+            Func: "playTrack",
+            Params: [$("#searchResult" + index).attr('title')],
+            ExpectReturn: true
+        }, function (data) {
+            console.log("here2")
+            loadSpotifyInfo(data)
+        });
+        return false;
+    });
+    console.log("here1")
+}
+
 // decode and store base64 strings to image, used for the album art
 function base64_decode(base64Image, file) {
     base64Image = base64Image.substring(2, base64Image.length-1)
