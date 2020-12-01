@@ -16,6 +16,7 @@ def setup():
     global auth_manager
     sp = spotipy.Spotify(auth_manager=auth_manager)
     auth_manager = SpotifyAuth.getAuthManager()
+    cached_currently_playing = sp.currently_playing()
 
 def pausePlayback():
     global sp
@@ -69,6 +70,7 @@ def getCurrentlyPlaying():
     global sp
     global cached_currently_playing
     cp = sp.currently_playing()
+    cached_currently_playing = cp
     cp["volume"] = getVolume()
     ImageWriter.writeImage(cp['item']['album']['images'][1]['url']) # bad. downloads image as local album.jpg
     string = ImageWriter.imageTo64String('album.jpg') # bad bad. converts that jpg to a base64 encoded string to send to RaspPi using json
@@ -84,9 +86,10 @@ def getCachedPlaying():
     return cached_currently_playing
 
 def getUpdatedData():
+    global cached_currently_playing
     # checks the small data for updates, then returns the big data
     newData = getCurrentlyPlayingSmall()
-    while(newData == cached_currently_playing):
+    while(newData['item']['id'] == cached_currently_playing['item']['id']):
         newData = getCurrentlyPlayingSmall()
     return getCurrentlyPlaying()
 
@@ -107,4 +110,5 @@ def search(query):
 def playTrack(uri):
     global sp
     sp.start_playback(uris=[uri])
-    return getUpdatedData()
+    updated = getUpdatedData()
+    return updated

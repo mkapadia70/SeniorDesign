@@ -35,6 +35,9 @@ function minSecToMS(minSec) {
 }
 
 function loadSpotifyInfo(data) {
+    if (data == null) {
+        myOnload()
+    }
     console.log(data)
     document.getElementById("title").innerHTML = data.item.name
     document.getElementById("artist").innerHTML = data.item.artists[0].name
@@ -236,7 +239,6 @@ function searchResults(value, index) {
             ' + value.name + ' ' + value.artists[0].name + '\
         </div>'
     $("#searchResults").append(searchRes)
-    console.log(id)
 
     $("#searchResult" + index).on('click', function () {
         $.getJSON("http://127.0.0.1:5001" + '/data', {
@@ -245,12 +247,10 @@ function searchResults(value, index) {
             Params: [$("#searchResult" + index).attr('title')],
             ExpectReturn: true
         }, function (data) {
-            console.log("here2")
             loadSpotifyInfo(data)
         });
         return false;
     });
-    console.log("here1")
 }
 
 // decode and store base64 strings to image, used for the album art

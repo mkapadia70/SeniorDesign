@@ -35,11 +35,13 @@ def data():
 
     packageAndSend(name, funcs, params)
 
-    if expectReturn == "true":
-        # this is potentially dangerous, but thats how i like to live
-        return jsonify(SerialHandler.listen(ser2))
-    else:
-        return jsonify(request.args)  # just bs value
+    # if expectReturn == "true":
+    #     # this is potentially dangerous, but thats how i like to live
+    #     return jsonify(SerialHandler.listen(ser2))
+    # else:
+    #     return jsonify(request.args)  # just bs value
+    
+    return jsonify(SerialHandler.listen(ser2))
 
 
 def packageAndSend(name, funcs, params):
