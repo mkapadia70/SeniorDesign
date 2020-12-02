@@ -19,7 +19,6 @@ else:
 
 app = Flask(__name__)
 
-
 def startServer():
     app.run(host='127.0.0.1', port=5001)
 
@@ -27,21 +26,28 @@ def startServer():
 @app.route("/data")
 def data():
 
+    
     content = request.args
     name = request.args.get('Name')
     funcs = request.args.get('Func')
     params = request.args.getlist("Params")
     expectReturn = request.args.get("ExpectReturn")
 
-    packageAndSend(name, funcs, params)
 
-    if expectReturn == "true":
-        # this is potentially dangerous, but thats how i like to live
-        return jsonify(SerialHandler.listen(ser2))
-    else:
-        return jsonify(request.args)  # just bs value
-    
-   # return jsonify(SerialHandler.listen(ser2))
+    # this is probably extremely bad
+    ret = None
+    while ret == None:
+
+        packageAndSend(name, funcs, params)
+
+        if expectReturn == "true":
+            # this is potentially dangerous, but thats how i like to live
+            ret = SerialHandler.listen(ser2)
+            print("RETURN", ret, file=sys.stderr)
+            return jsonify(ret)
+        else:
+            return jsonify(request.args)  # just bs value
+
 
 
 def packageAndSend(name, funcs, params):
@@ -68,5 +74,20 @@ if __name__ == "__main__":
     else:
         ser2 = SerialHandler.connectPort(outport)
 
-    print("starting server")
-    startServer()
+    runningLocal = False
+
+    if runningLocal:
+        # local tests so we can have python output
+        packageAndSend('SpotifyControl', 'skipSong', [])
+        packageAndSend('SpotifyControl', 'getUpdatedData', [])
+        SerialHandler.listen(ser2)
+        packageAndSend('SpotifyControl', 'getVolume', [])
+        SerialHandler.listen(ser2)
+        packageAndSend('SpotifyControl', 'getAlbumImage', [])
+        SerialHandler.listen(ser2)
+        packageAndSend('SpotifyControl', 'getVolume', [])
+        print(SerialHandler.listen(ser2))
+    else:
+        print("starting server")
+        startServer()
+

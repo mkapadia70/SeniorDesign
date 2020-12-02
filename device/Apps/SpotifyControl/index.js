@@ -4,23 +4,29 @@ const fs = require('fs')
 jQuery.ajaxSettings.traditional = true;
 
 
-function loadData() {
-    //requests program data from python which requests it from windows, general spotify datas
-    var request = $.getJSON("http://127.0.0.1:5001" + '/data', {
+//requests program data from python which requests it from windows, general spotify datas
+var loadData = function (doneFunc=null) {
+    $.getJSON("http://127.0.0.1:5001" + '/data', {
         Name: "SpotifyControl",
         Func: "getUpdatedData",
         ExpectReturn: true
     }, function (data) {
         if (data != null) {
+            console.log("data not null")
             loadSpotifyInfo(data)
+            if (doneFunc != null) {
+                doneFunc()
+            }
         }
         else {
             console.log("failed to get spotify data...trying again")
-            loadData()
+            setTimeout( function() { 
+                loadData()
+            }, 1000); // wait a second and retry
         }
-    }).done(loadVolume);
-
+    })
 }
+
 
 function msToMinSec(millis) {
     var minutes = Math.floor(millis / 60000);
@@ -54,8 +60,7 @@ function loadSpotifyInfo(data) {
     if (false == data.is_playing) {
         document.getElementById("pauseUnpause").src = "images/play.png"
         pauseButton = true
-    }
-    else {
+    } else {
         document.getElementById("pauseUnpause").src = "images/pause.png"
         pauseButton = false
         startTimer()
@@ -63,26 +68,32 @@ function loadSpotifyInfo(data) {
 
 }
 
-function loadImage() {
-    // album image request
-    var request = $.getJSON("http://127.0.0.1:5001" + '/data', {
+
+// album image request
+var loadImage = function(doneFunc=null) { 
+    $.getJSON("http://127.0.0.1:5001" + '/data', {
         Name: "SpotifyControl",
         Func: "getAlbumImage",
         ExpectReturn: true
     }, function (data) {
         if (data != null) {
-            console.log(data)
             base64_decode(data.imageString, __dirname + "\\albums\\album.jpg")
-        }
-        else {
+            if (doneFunc != null) {
+                doneFunc()
+            }
+        } else {
             console.log("failed to get album image")
+            setTimeout( function() { 
+                loadImage()
+            }, 1000); // wait a second and retry
         }
-    });
+    })
 }
 
-function loadVolume() {
-    // volume request
-    var request = $.getJSON("http://127.0.0.1:5001" + '/data', {
+
+// volume request
+var loadVolume = function(doneFunc=null) { 
+    $.getJSON("http://127.0.0.1:5001" + '/data', {
         Name: "SpotifyControl",
         Func: "getVolume",
         ExpectReturn: true
@@ -90,12 +101,18 @@ function loadVolume() {
         if (data != null) {
             document.getElementById("volume").value = data.volume
             changeVolumeImage()
-        }
-        else {
+            if (doneFunc != null) {
+                doneFunc()
+            }
+        } else {
             console.log("failed to get volume")
+            setTimeout( function() { 
+                loadVolume()
+            }, 1000); // wait a second and retry
         }
-    }).done(loadImage);
+    })
 }
+
 
 function changeVolumeImage() {
     var vol = document.getElementById("volume").value
@@ -156,13 +173,15 @@ function startTimer() {
             }
             if (((minSecToMS(document.getElementById("leftTime").innerHTML)) >= ((minSecToMS(document.getElementById("rightTime").innerHTML))))) {
                 document.getElementById("leftTime").innerHTML = "0:00"    
-                loadData()
+                loadData(function(){return loadVolume(loadImage)})
             }
         }, 1000);
         startedTimeUpdate = true
     }
 }
 
+
+var lastTime = new Date().getTime();
 $(function () {
     //binds skip song button
     $('#skipSong').on('click', function () {
@@ -171,19 +190,35 @@ $(function () {
             Func: "skipSong",
             ExpectReturn: false // maybe add like a thing to confirm that the request went through
         }, function (data) {
-        }).done(loadData);
+        }).done( function () {
+            loadData(function(){return loadVolume(loadImage)})
+        });
     });
 });
 
 $(function () {
-    //binds skip song button
+    // binds skip song button
     $('#prevSong').on('click', function () {
-        $.getJSON("http://127.0.0.1:5001" + '/data', {
-            Name: "SpotifyControl",
-            Func: "previousSong",
-            ExpectReturn: false // maybe add like a thing to confirm that the request went through
-        }, function (data) {
-        }).done(loadData);
+        // if the song is greater than 2.7 seconds, restart song, else change sond
+        // just like the pros
+        console.log(minSecToMS(document.getElementById("leftTime").innerHTML))
+        if (minSecToMS(document.getElementById("leftTime").innerHTML) < 3000) {
+            $.getJSON("http://127.0.0.1:5001" + '/data', {
+                Name: "SpotifyControl",
+                Func: "previousSong",
+                ExpectReturn: false // maybe add like a thing to confirm that the request went through
+            }, function (data) {
+            }).done(loadData(function(){return loadVolume(loadImage)}));
+        } else {
+            $.getJSON("http://127.0.0.1:5001" + '/data', {
+                Name: "SpotifyControl",
+                Func: "seek",
+                Params: [0],
+                ExpectReturn: false
+            }, function (data) {
+            });
+            document.getElementById("leftTime").innerHTML = "0:00";
+        }
     })
 });
 
@@ -200,8 +235,7 @@ $(function () {
             if (pauseButton) {
                 document.getElementById("pauseUnpause").src = "images/play.png"
                 startTimer()
-            }
-            else {
+            } else {
                 document.getElementById("pauseUnpause").src = "images/pause.png"
             }
         });
@@ -222,8 +256,7 @@ $(function () {
             shuffleBool = !shuffleBool
             if (shuffleBool) {
                 document.getElementById("shuffleSong").src = "images/shuffleOn.png"
-            }
-            else {
+            } else {
                 document.getElementById("shuffleSong").src = "images/shuffleOff.png"
             }
         });
@@ -244,11 +277,9 @@ $(function () {
         }, function (data) {
             if (repeatTrinary%3 == 1) {
                 document.getElementById("repeatSong").src = "images/repeatOff.png"
-            }
-            else if (repeatTrinary%3 == 2) {
+            } else if (repeatTrinary%3 == 2) {
                 document.getElementById("repeatSong").src = "images/repeatContext.png"
-            }
-            else {
+            } else {
                 document.getElementById("repeatSong").src = "images/repeatTrack.png"
             }
         });
@@ -323,7 +354,7 @@ function searchResults(value, index) {
             Params: [$("#searchResult" + index).attr('title')],
             ExpectReturn: true
         }, function (data) {
-            loadData()
+            loadData(function(){return loadVolume(loadImage)})
         });
         return false;
     });
@@ -336,8 +367,7 @@ function base64_decode(base64Image, file) {
     fs.writeFile(file, Buffer.from(base64Image, 'base64'), function(err) {
         if (err) {
             console.log("image write error")
-        }
-        else {
+        } else {
             document.getElementById("spotimage").src = file + '?' + new Date().getTime(); // the le epic cache breaker
         }
     });

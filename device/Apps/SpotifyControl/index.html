@@ -9,7 +9,7 @@
     <script src="index.js"></script>
 </head>
 
-<body style="background-color:#252525; color:white; height:100vh; overflow:hidden;" onload="loadData()">
+<body style="background-color:#252525; color:white; height:100vh; overflow:hidden;" onload="loadData(function(){return loadVolume(loadImage)})">
     <input type="text" id="search" placeholder="Search Song">
     <div id="searchResults"></div>
     <button id="searchButton">Search</button>
