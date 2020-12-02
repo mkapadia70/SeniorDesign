@@ -106,7 +106,8 @@ def playTrack(uri):
 def getAlbumImage():
     global sp
     cp = cached_currently_playing
-    ImageWriter.writeImage(cp['item']['album']['images'][1]['url']) # bad. downloads image as local album.jpg
-    string = ImageWriter.imageTo64String('album.jpg') # bad bad. converts that jpg to a base64 encoded string to send to RaspPi using json
+    imagepath = 'coms/images/album.jpg'
+    ImageWriter.writeImage(imagepath, cp['item']['album']['images'][1]['url']) # bad. downloads image as local album.jpg
+    string = ImageWriter.imageTo64String(imagepath) # bad bad. converts that jpg to a base64 encoded string to send to RaspPi using json
     jason = {"imageString": string} # this should be as simple a json as we can manage. Dat speed bro
     return jason 

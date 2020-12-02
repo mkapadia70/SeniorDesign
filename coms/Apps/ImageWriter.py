@@ -1,9 +1,9 @@
 import requests
 import base64
 
-def writeImage(pic_url):
+def writeImage(writepath, pic_url):
     try:
-        with open('album.jpg', 'wb') as handle:
+        with open(writepath, 'wb') as handle:
             response = requests.get(pic_url, stream=False)
             if not response.ok:
                 print(response)
