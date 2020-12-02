@@ -89,12 +89,59 @@ function loadVolume() {
     }, function (data) {
         if (data != null) {
             document.getElementById("volume").value = data.volume
+            changeVolumeImage()
         }
         else {
             console.log("failed to get volume")
         }
     }).done(loadImage);
 }
+
+function changeVolumeImage() {
+    var vol = document.getElementById("volume").value
+    console.log(vol)
+    if (vol == 0) {
+        document.getElementById("volumeImage").src = "images/volume0.PNG"
+    } else if (vol < 33) {
+        document.getElementById("volumeImage").src = "images/volume1.PNG"
+    } else if (vol < 67) {
+        document.getElementById("volumeImage").src = "images/volume2.PNG"
+    } else {
+        document.getElementById("volumeImage").src = "images/volume3.PNG"
+    } 
+}
+
+var lastVolume = 50 // stores volume to return to on unmute
+//onclick of the volume image toggles mute
+// !!! this is kind of big and can be cut down using ternary statements but im too lazy to do it (tri?) !!!
+$(function () {
+    //binds skip song button
+    $('#volumeImage').on('click', function () {
+        var vol = document.getElementById("volume").value
+        if (vol == 0) {
+            $.getJSON("http://127.0.0.1:5001" + '/data', {
+                Name: "SpotifyControl",
+                Func: "setVolume",
+                Params: [lastVolume],
+                ExpectReturn: false
+            }, function (data) {
+                changeVolumeImage()
+            });
+            document.getElementById("volume").value = lastVolume
+        } else {
+            lastVolume = vol
+            document.getElementById("volume").value = 0
+            $.getJSON("http://127.0.0.1:5001" + '/data', {
+                Name: "SpotifyControl",
+                Func: "setVolume",
+                Params: [0],
+                ExpectReturn: false
+            }, function (data) {
+                changeVolumeImage()
+            });
+        }
+    });
+});
 
 
 var startedTimeUpdate = false
@@ -235,6 +282,7 @@ $(function () {
             Params: [$("#volume").val()],
             ExpectReturn: false
         }, function (data) {
+            changeVolumeImage()
         });
     };
 
