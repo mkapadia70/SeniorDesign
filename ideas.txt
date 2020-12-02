@@ -13,4 +13,3 @@ launch applications
 obs streamlabs integration
 switch desktop/windows
 zoom controls?
- 

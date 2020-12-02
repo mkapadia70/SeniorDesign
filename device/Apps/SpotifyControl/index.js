@@ -1,17 +1,24 @@
+const { time } = require('console');
 const fs = require('fs')
 
 jQuery.ajaxSettings.traditional = true;
 
 
-function myOnload() {
-    //requests program data from python which requests it from windows
-    $.getJSON("http://127.0.0.1:5001" + '/data', {
+function loadData() {
+    //requests program data from python which requests it from windows, general spotify datas
+    var request = $.getJSON("http://127.0.0.1:5001" + '/data', {
         Name: "SpotifyControl",
         Func: "getCurrentlyPlaying",
         ExpectReturn: true
     }, function (data) {
-        loadSpotifyInfo(data)
-    });
+        if (data != null) {
+            loadSpotifyInfo(data)
+        }
+        else {
+            console.log("failed to get spotify data...trying again")
+            loadData()
+        }
+    }).done(loadVolume);
 
 }
 
@@ -35,30 +42,59 @@ function minSecToMS(minSec) {
 }
 
 function loadSpotifyInfo(data) {
-    if (data == null) {
-        myOnload()
-    }
     console.log(data)
     document.getElementById("title").innerHTML = data.item.name
     document.getElementById("artist").innerHTML = data.item.artists[0].name
-    // document.getElementById("spotimage").src = data.item.album.images[0].url
-    base64_decode(data.imageString, __dirname + "\\albums\\album.jpg") // for use later
+    document.getElementById("spotimage").src = 'images/default.png' // placeholder album image, incase request is bunk
     document.getElementById("leftTime").innerHTML = msToMinSec(data.progress_ms-780)
     document.getElementById("rightTime").innerHTML = msToMinSec(data.item.duration_ms)
     document.getElementById("seek").value = 100.0 * ((minSecToMS(document.getElementById("leftTime").innerHTML)) / (minSecToMS(document.getElementById("rightTime").innerHTML))) //yes
-    document.getElementById("volume").value = data.volume
+   
 
     if (false == data.is_playing) {
         document.getElementById("pauseUnpause").src = "images/play.png"
-        pressedApp = true
+        pauseButton = true
     }
     else {
         document.getElementById("pauseUnpause").src = "images/pause.png"
-        pressedApp = false
+        pauseButton = false
         startTimer()
     }
-    
 
+}
+
+function loadImage() {
+    // album image request
+    console.log("here1")
+    var request = $.getJSON("http://127.0.0.1:5001" + '/data', {
+        Name: "SpotifyControl",
+        Func: "getAlbumImage",
+        ExpectReturn: true
+    }, function (data) {
+        if (data != null) {
+            base64_decode(data.imageString, __dirname + "\\albums\\album.jpg")
+        }
+        else {
+            console.log("failed to get album image")
+        }
+    });
+}
+
+function loadVolume() {
+    // volume request
+    var request = $.getJSON("http://127.0.0.1:5001" + '/data', {
+        Name: "SpotifyControl",
+        Func: "getVolume",
+        ExpectReturn: true
+    }, function (data) {
+        if (data != null) {
+            console.log("here")
+            document.getElementById("volume").value = data.volume
+        }
+        else {
+            console.log("failed to get volume")
+        }
+    }).done(loadImage);
 }
 
 
@@ -68,18 +104,12 @@ function startTimer() {
     if (startedTimeUpdate == false) {
         // this updates the seek every second
         window.setInterval(function(){
-            if(pressedApp == false) {
+            if(pauseButton == false) {
                 document.getElementById("leftTime").innerHTML = msToMinSec(minSecToMS(document.getElementById("leftTime").innerHTML) + 1000)
                 document.getElementById("seek").value = 100.0 * ((minSecToMS(document.getElementById("leftTime").innerHTML)) / (minSecToMS(document.getElementById("rightTime").innerHTML)))
             }
             if (((minSecToMS(document.getElementById("leftTime").innerHTML)) >= ((minSecToMS(document.getElementById("rightTime").innerHTML))))) {
-                $.getJSON("http://127.0.0.1:5001" + '/data', {
-                    Name: "SpotifyControl",
-                    Func: "getCurrentlyPlaying",
-                    ExpectReturn: true
-                }, function (data) {
-                    loadSpotifyInfo(data)
-                });
+                loadData()
             }
         }, 1000);
         startedTimeUpdate = true
@@ -94,7 +124,7 @@ $(function () {
             Func: "skipSong",
             ExpectReturn: true // maybe add like a thing to confirm that the request went through
         }, function (data) {
-            loadSpotifyInfo(data)
+            loadData()
         });
     });
 });
@@ -107,22 +137,22 @@ $(function () {
             Func: "previousSong",
             ExpectReturn: true // maybe add like a thing to confirm that the request went through
         }, function (data) {
-            loadSpotifyInfo(data)
+            loadData()
         });
     });
 });
 
-var pressedApp = false;
+var pauseButton = false;
 //pause/unpause song
 $(function () {
     $('#pauseUnpause').on("click", function () {
         $.getJSON("http://127.0.0.1:5001" + '/data', {
             Name: "SpotifyControl",
-            Func: (pressedApp ? "startPlayback" : "pausePlayback"),
+            Func: (pauseButton ? "startPlayback" : "pausePlayback"),
             ExpectReturn: false
         }, function (data) {
-            pressedApp = !pressedApp
-            if (pressedApp) {
+            pauseButton = !pauseButton
+            if (pauseButton) {
                 document.getElementById("pauseUnpause").src = "images/play.png"
                 startTimer()
             }
@@ -247,7 +277,7 @@ function searchResults(value, index) {
             Params: [$("#searchResult" + index).attr('title')],
             ExpectReturn: true
         }, function (data) {
-            loadSpotifyInfo(data)
+            loadData()
         });
         return false;
     });
@@ -258,7 +288,11 @@ function base64_decode(base64Image, file) {
     base64Image = base64Image.substring(2, base64Image.length-1)
     base64Image += "data:image/jpeg;base64,"
     fs.writeFile(file, Buffer.from(base64Image, 'base64'), function(err) {
-        if (err) {console.log("image write error")}
-        document.getElementById("spotimage").src = file + '?' + new Date().getTime(); // the le epic cache breaker
+        if (err) {
+            console.log("image write error")
+        }
+        else {
+            document.getElementById("spotimage").src = file + '?' + new Date().getTime(); // the le epic cache breaker
+        }
     });
 }

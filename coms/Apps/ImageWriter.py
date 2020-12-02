@@ -19,7 +19,7 @@ def writeImage(pic_url):
 def imageTo64String(path):
     try:
         with open(path, "rb") as image_file:
-            return base64.b64encode(image_file.read())  
+            return str(base64.b64encode(image_file.read()))
     except Exception as e:
         print(e)
     return None

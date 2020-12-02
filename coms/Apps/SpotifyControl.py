@@ -8,7 +8,7 @@ auth_manager = SpotifyAuth.getAuthManager()
 
 sp = spotipy.Spotify(auth_manager=auth_manager)
 
-cached_currently_playing = sp.currently_playing()
+cached_currently_playing = None
 
 def setup():
     # setup 
@@ -37,7 +37,9 @@ def setVolume(newVolume):
 
 def getVolume():
     global sp
-    return sp.devices()['devices'][0]['volume_percent']
+    string = sp.devices()['devices'][0]['volume_percent']
+    jason = {"volume": string}
+    return jason
 
 # params: shuffleState - true for shuffle false for linear
 def setShuffle(shuffleState):
@@ -69,28 +71,18 @@ def setRepeatStatus(repeatState):
 def getCurrentlyPlaying():
     global sp
     global cached_currently_playing
-    cp = sp.currently_playing()
-    cached_currently_playing = cp
-    cp["volume"] = getVolume()
-    ImageWriter.writeImage(cp['item']['album']['images'][1]['url']) # bad. downloads image as local album.jpg
-    string = ImageWriter.imageTo64String('album.jpg') # bad bad. converts that jpg to a base64 encoded string to send to RaspPi using json
-    cp['imageString'] = str(string)
-    return cp
-
-def getCurrentlyPlayingSmall():
-    # small size for checking if there is a change (please god no image data)
-    global sp
-    return sp.currently_playing()
-
-def getCachedPlaying():
+    cached_currently_playing = sp.currently_playing()
     return cached_currently_playing
 
 def getUpdatedData():
+    global sp
     global cached_currently_playing
     # checks the small data for updates, then returns the big data
-    newData = getCurrentlyPlayingSmall()
-    while(newData['item']['id'] == cached_currently_playing['item']['id']):
-        newData = getCurrentlyPlayingSmall()
+    newData = sp.currently_playing()
+    attempts = 1
+    while(newData['item']['id'] == cached_currently_playing['item']['id'] and attempts < 10):
+        newData = sp.currently_playing()
+        attempts+=1
     return getCurrentlyPlaying()
 
 def getTopArtists():
@@ -112,3 +104,11 @@ def playTrack(uri):
     sp.start_playback(uris=[uri])
     updated = getUpdatedData()
     return updated
+
+def getAlbumImage():
+    global sp
+    cp = cached_currently_playing
+    ImageWriter.writeImage(cp['item']['album']['images'][1]['url']) # bad. downloads image as local album.jpg
+    string = ImageWriter.imageTo64String('album.jpg') # bad bad. converts that jpg to a base64 encoded string to send to RaspPi using json
+    jason = {"imageString": string} # this should be as simple a json as we can manage. Dat speed bro
+    return jason 
