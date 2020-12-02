@@ -50,13 +50,11 @@ def setShuffle(shuffleState):
 def skipSong():
     global sp
     sp.next_track()
-    return getUpdatedData() # yes
 
 
 def previousSong():
     global sp
     sp.previous_track()
-    return getUpdatedData() # yes
 
 # params:
 # repeatState - the new state for repeat
@@ -80,7 +78,7 @@ def getUpdatedData():
     # checks the small data for updates, then returns the big data
     newData = sp.currently_playing()
     attempts = 1
-    while(newData['item']['id'] == cached_currently_playing['item']['id'] and attempts < 10):
+    while( cached_currently_playing != None and newData['item']['id'] == cached_currently_playing['item']['id'] and attempts < 10):
         newData = sp.currently_playing()
         attempts+=1
     return getCurrentlyPlaying()

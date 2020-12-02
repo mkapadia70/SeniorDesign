@@ -8,7 +8,7 @@ function loadData() {
     //requests program data from python which requests it from windows, general spotify datas
     var request = $.getJSON("http://127.0.0.1:5001" + '/data', {
         Name: "SpotifyControl",
-        Func: "getCurrentlyPlaying",
+        Func: "getUpdatedData",
         ExpectReturn: true
     }, function (data) {
         if (data != null) {
@@ -65,13 +65,13 @@ function loadSpotifyInfo(data) {
 
 function loadImage() {
     // album image request
-    console.log("here1")
     var request = $.getJSON("http://127.0.0.1:5001" + '/data', {
         Name: "SpotifyControl",
         Func: "getAlbumImage",
         ExpectReturn: true
     }, function (data) {
         if (data != null) {
+            console.log(data)
             base64_decode(data.imageString, __dirname + "\\albums\\album.jpg")
         }
         else {
@@ -88,7 +88,6 @@ function loadVolume() {
         ExpectReturn: true
     }, function (data) {
         if (data != null) {
-            console.log("here")
             document.getElementById("volume").value = data.volume
         }
         else {
@@ -109,6 +108,7 @@ function startTimer() {
                 document.getElementById("seek").value = 100.0 * ((minSecToMS(document.getElementById("leftTime").innerHTML)) / (minSecToMS(document.getElementById("rightTime").innerHTML)))
             }
             if (((minSecToMS(document.getElementById("leftTime").innerHTML)) >= ((minSecToMS(document.getElementById("rightTime").innerHTML))))) {
+                document.getElementById("leftTime").innerHTML = "0:00"    
                 loadData()
             }
         }, 1000);
@@ -119,13 +119,12 @@ function startTimer() {
 $(function () {
     //binds skip song button
     $('#skipSong').on('click', function () {
-        $.getJSON("http://127.0.0.1:5001" + '/data', {
+        var request = $.getJSON("http://127.0.0.1:5001" + '/data', {
             Name: "SpotifyControl",
             Func: "skipSong",
-            ExpectReturn: true // maybe add like a thing to confirm that the request went through
+            ExpectReturn: false // maybe add like a thing to confirm that the request went through
         }, function (data) {
-            loadData()
-        });
+        }).done(loadData);
     });
 });
 
@@ -135,11 +134,10 @@ $(function () {
         $.getJSON("http://127.0.0.1:5001" + '/data', {
             Name: "SpotifyControl",
             Func: "previousSong",
-            ExpectReturn: true // maybe add like a thing to confirm that the request went through
+            ExpectReturn: false // maybe add like a thing to confirm that the request went through
         }, function (data) {
-            loadData()
-        });
-    });
+        }).done(loadData);
+    })
 });
 
 var pauseButton = false;
