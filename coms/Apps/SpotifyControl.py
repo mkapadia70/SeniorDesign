@@ -87,6 +87,7 @@ def getCurrentlyPlaying():
                 while len(deviceIDs) == 0:
                     deviceIDs = getDeviceIds()
             sp.transfer_playback(deviceIDs[0])
+            sp.pause_playback(device_id=deviceIDs[0])
             cached_currently_playing = sp.currently_playing()
         cached_currently_playing['volume'] = getVolume()
         return cached_currently_playing
