@@ -37,9 +37,7 @@ def setVolume(newVolume):
 
 def getVolume():
     global sp
-    string = sp.devices()['devices'][0]['volume_percent']
-    jason = {"volume": string}
-    return jason
+    return sp.devices()['devices'][0]['volume_percent']
 
 # params: shuffleState - true for shuffle false for linear
 def setShuffle(shuffleState):
@@ -70,6 +68,7 @@ def getCurrentlyPlaying():
     global sp
     global cached_currently_playing
     cached_currently_playing = sp.currently_playing()
+    cached_currently_playing['volume'] = getVolume()
     return cached_currently_playing
 
 def getUpdatedData():

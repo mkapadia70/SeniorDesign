@@ -23,7 +23,8 @@ def sendData(ser, data):
 
 def listen(ser):
     response = ""
-    while 1:
+    start = time.time()
+    while time.time() - start < 2: # 2 second manual timeout on listen bc this is dumb
         try:
             response = ser.readline()
             deocoded = response.decode(errors="ignore")
@@ -32,4 +33,8 @@ def listen(ser):
             return programData
         except Exception as e:
             print("hit listen error ", e, response, file=sys.stderr)
+            ser.reset_output_buffer() # clear buffer
+            ser.reset_input_buffer() #clear buffer
+            ser.flush()
+            ser.send_break()
             return None

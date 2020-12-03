@@ -1,7 +1,7 @@
 from Apps import WindowsVolumeMixerControl
 from Apps import SpotifyControl
 import time
-
+import SerialHandler
 
 def updateDevices():
     WindowsVolumeMixerControl.updateDevices()

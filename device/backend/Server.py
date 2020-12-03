@@ -43,7 +43,6 @@ def data():
         if expectReturn == "true":
             # this is potentially dangerous, but thats how i like to live
             ret = SerialHandler.listen(ser2)
-            print("RETURN", ret, file=sys.stderr)
             return jsonify(ret)
         else:
             return jsonify(request.args)  # just bs value

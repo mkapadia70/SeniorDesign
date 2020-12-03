@@ -4,9 +4,11 @@ import JsonHandler
 import time
 import sys
 
+ser = None
 
 def connectPort(port):
     # the main serial connection
+    global ser
     ser = serial.Serial(
         port=port,
         baudrate=115200,
@@ -18,12 +20,11 @@ def connectPort(port):
     return ser
 
 def sendData(ser, data):
-    ser.reset_output_buffer() # clear buffer
+    #ser.reset_output_buffer() # clear buffer
     jason = (json.dumps(data) + '\n') # this takes a long time
     send = jason.encode()
     ser.write(send)
-    ser.reset_output_buffer() # clear buffer, gotta flush after you poop
-    ser.flush()
+    #ser.reset_output_buffer() # clear buffer, gotta flush after you poop
 
 def listen(ser1, ser2):
     JsonHandler.updateDevices()
@@ -34,7 +35,16 @@ def listen(ser1, ser2):
             print(response)
             data = JsonHandler.callFunctions(response)
             if data != None:
-                print("here before send")
                 sendData(ser2, data)
         except Exception as e:
             pass
+
+def clearBuffer():
+    global ser
+    if (ser != None):
+        print("cleared")
+        ser.reset_output_buffer() # clear buffer
+        ser.reset_input_buffer() #clear buffer
+        ser.flush()
+    else:
+        print("none")
