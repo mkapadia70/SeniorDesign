@@ -3,11 +3,10 @@ const fs = require('fs')
 
 jQuery.ajaxSettings.traditional = true;
 
-
 function loadData() {
-    
-    var request = $.ajax( {
-        type:'get',
+
+    var request = $.ajax({
+        type: 'get',
         url: "http://127.0.0.1:5001" + '/data',
         //async: false,
         data: {
@@ -22,19 +21,17 @@ function loadData() {
         }
         else {
             console.log("failed to get spotify data...trying again")
-            // clear buffer and retry
-            clearBuffer()
-
+            
         }
     });
-    
+
 
 }
 
 
 function loadImage() {
-    var request = $.ajax( {
-        type:'get',
+    var request = $.ajax({
+        type: 'get',
         url: "http://127.0.0.1:5001" + '/data',
         //async: false,
         data: {
@@ -63,12 +60,12 @@ function loadImage() {
             $('#prevSong').trigger('click'); // swag
         }
     });
-    
+
 }
 
 function clearBuffer() {
-    var request = $.ajax( {
-        type:'get',
+    var request = $.ajax({
+        type: 'get',
         url: "http://127.0.0.1:5001" + '/data',
         //async: false,
         data: {
@@ -91,7 +88,7 @@ function msToMinSec(millis) {
 function minSecToMS(minSec) {
     var index = minSec.indexOf(":")
     var ms = minSec.substring(0, index) * 60000
-    ms += minSec.substring(index+1) * 1000
+    ms += minSec.substring(index + 1) * 1000
     if (ms > 0) {
         return ms
     }
@@ -103,12 +100,12 @@ function loadSpotifyInfo(data) {
     document.getElementById("title").innerHTML = data.item.name
     document.getElementById("artist").innerHTML = data.item.artists[0].name
     document.getElementById("spotimage").src = 'images/default.png' // placeholder album image, incase request is bunk
-    document.getElementById("leftTime").innerHTML = msToMinSec(data.progress_ms-780)
+    document.getElementById("leftTime").innerHTML = msToMinSec(data.progress_ms - 780)
     document.getElementById("rightTime").innerHTML = msToMinSec(data.item.duration_ms)
     document.getElementById("seek").value = 100.0 * ((minSecToMS(document.getElementById("leftTime").innerHTML)) / (minSecToMS(document.getElementById("rightTime").innerHTML))) //yes
     document.getElementById("volume").value = data.volume
     changeVolumeImage()
-   
+
 
     if (false == data.is_playing) {
         document.getElementById("pauseUnpause").src = "images/play.png"
@@ -134,7 +131,7 @@ function changeVolumeImage() {
         document.getElementById("volumeImage").src = "images/volume2.PNG"
     } else {
         document.getElementById("volumeImage").src = "images/volume3.PNG"
-    } 
+    }
 }
 
 var lastVolume = 50 // stores volume to return to on unmute
@@ -175,13 +172,13 @@ var startedTimeUpdate = false
 function startTimer() {
     if (startedTimeUpdate == false) {
         // this updates the seek every second
-        window.setInterval(function(){
-            if(pauseButton == false) {
+        window.setInterval(function () {
+            if (pauseButton == false) {
                 document.getElementById("leftTime").innerHTML = msToMinSec(minSecToMS(document.getElementById("leftTime").innerHTML) + 1000)
                 document.getElementById("seek").value = 100.0 * ((minSecToMS(document.getElementById("leftTime").innerHTML)) / (minSecToMS(document.getElementById("rightTime").innerHTML)))
             }
             if (((minSecToMS(document.getElementById("leftTime").innerHTML)) >= ((minSecToMS(document.getElementById("rightTime").innerHTML))))) {
-                document.getElementById("leftTime").innerHTML = "0:00"    
+                document.getElementById("leftTime").innerHTML = "0:00"
                 loadData()
             }
         }, 1000);
@@ -196,8 +193,8 @@ $(function () {
     $('#skipSong').on('click', function () {
         if (skipDone) {
             skipDone = false
-            var request = $.ajax( {
-                type:'get',
+            var request = $.ajax({
+                type: 'get',
                 url: "http://127.0.0.1:5001" + '/data',
                 //async: false,
                 data: {
@@ -206,8 +203,8 @@ $(function () {
                     ExpectReturn: false // maybe add like a thing to confirm that the request went through
                 }
             }).done(function () {
-                    loadData()
-                });
+                loadData()
+            });
         } else {
             inBetweenSkip++;
         }
@@ -224,8 +221,8 @@ $(function () {
         if (minSecToMS(document.getElementById("leftTime").innerHTML) < 3000) {
             if (prevDone) {
                 prevDone = false
-                $.ajax( {
-                    type:'get',
+                $.ajax({
+                    type: 'get',
                     url: "http://127.0.0.1:5001" + '/data',
                     //async: false,
                     data: {
@@ -233,15 +230,15 @@ $(function () {
                         Func: "previousSong",
                         ExpectReturn: false // maybe add like a thing to confirm that the request went through
                     }
-                }).done(function(){
-                        loadData()
-                    });
+                }).done(function () {
+                    loadData()
+                });
             } else {
                 inBetweenPrev++;
             }
         } else {
-            $.ajax( {
-                type:'get',
+            $.ajax({
+                type: 'get',
                 url: "http://127.0.0.1:5001" + '/data',
                 //async: false,
                 data: {
@@ -308,13 +305,13 @@ $(function () {
         $.getJSON("http://127.0.0.1:5001" + '/data', {
             Name: "SpotifyControl",
             Func: "setRepeatStatus",
-            Params: [repeatStruct[(repeatTrinary++)%3]],
+            Params: [repeatStruct[(repeatTrinary++) % 3]],
             ExpectReturn: false
         }, function (data) {
-            if (repeatTrinary%3 == 1) {
+            if (repeatTrinary % 3 == 1) {
                 document.getElementById("repeatSong").src = "images/repeatOff.png"
             }
-            else if (repeatTrinary%3 == 2) {
+            else if (repeatTrinary % 3 == 2) {
                 document.getElementById("repeatSong").src = "images/repeatContext.png"
             }
             else {
@@ -335,7 +332,7 @@ $(function () {
             ExpectReturn: false
         }, function (data) {
         });
-        document.getElementById("leftTime").innerHTML = msToMinSec(minSecToMS(document.getElementById("rightTime").innerHTML) * ($("#seek").val() / 100.0) -1000)
+        document.getElementById("leftTime").innerHTML = msToMinSec(minSecToMS(document.getElementById("rightTime").innerHTML) * ($("#seek").val() / 100.0) - 1000)
     };
 
     $('#seek').on('mouseup', sendSeek);
@@ -367,7 +364,7 @@ $(function () {
             Params: [$("#search").val()],
             ExpectReturn: true
         }, function (data) {
-            while(document.getElementById("searchResults").firstChild) {
+            while (document.getElementById("searchResults").firstChild) {
                 document.getElementById("searchResults").removeChild(document.getElementById("searchResults").firstChild);
             }
             data.tracks.items.forEach(searchResults)
@@ -377,7 +374,7 @@ $(function () {
 });
 
 function searchResults(value, index) {
-    
+
     var id = value.uri
     searchRes = ' \
         <div color=white id=searchResult' + index + ' title=' + id + '> \
@@ -400,9 +397,9 @@ function searchResults(value, index) {
 
 // decode and store base64 strings to image, used for the album art
 function base64_decode(base64Image, file) {
-    base64Image = base64Image.substring(2, base64Image.length-1)
+    base64Image = base64Image.substring(2, base64Image.length - 1)
     base64Image += "data:image/jpeg;base64,"
-    fs.writeFile(file, Buffer.from(base64Image, 'base64'), function(err) {
+    fs.writeFile(file, Buffer.from(base64Image, 'base64'), function (err) {
         if (err) {
             console.log("image write error")
         }

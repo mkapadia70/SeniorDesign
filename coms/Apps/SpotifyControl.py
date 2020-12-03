@@ -2,13 +2,24 @@ import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 from Apps import SpotifyAuth
 from Apps import ImageWriter
+from Apps import WindowsProgramControl
 
 # make sure to update your credentials in SpotifyAuth.py
 auth_manager = SpotifyAuth.getAuthManager()
 
 sp = spotipy.Spotify(auth_manager=auth_manager)
 
-cached_currently_playing = None
+cached_currently_playing = sp.currently_playing()
+
+
+def getDeviceIds():
+    devices = sp.devices()['devices']
+    ids = []
+    for device in devices:
+        ids.append(device['id'])
+    return ids
+
+deviceIDs = getDeviceIds()
 
 def setup():
     # setup 
@@ -67,9 +78,21 @@ def setRepeatStatus(repeatState):
 def getCurrentlyPlaying():
     global sp
     global cached_currently_playing
+    global deviceIDs
     cached_currently_playing = sp.currently_playing()
-    cached_currently_playing['volume'] = getVolume()
-    return cached_currently_playing
+    try:
+        while cached_currently_playing == None:
+            if len(deviceIDs) == 0:
+                WindowsProgramControl.openProgram("spotify.exe")
+                while len(deviceIDs) == 0:
+                    deviceIDs = getDeviceIds()
+            sp.transfer_playback(deviceIDs[0])
+            cached_currently_playing = sp.currently_playing()
+        cached_currently_playing['volume'] = getVolume()
+        return cached_currently_playing
+    except Exception as e:
+        print(e)
+        return None
 
 def getUpdatedData():
     global sp

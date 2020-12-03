@@ -24,7 +24,7 @@ def sendData(ser, data):
 def listen(ser):
     response = ""
     start = time.time()
-    while time.time() - start < 2: # 2 second manual timeout on listen bc this is dumb
+    while time.time() - start < 10: # 2 second manual timeout on listen bc this is dumb
         try:
             response = ser.readline()
             deocoded = response.decode(errors="ignore")
@@ -37,4 +37,5 @@ def listen(ser):
             ser.reset_input_buffer() #clear buffer
             ser.flush()
             ser.send_break()
-            return None
+            pass
+    return None
