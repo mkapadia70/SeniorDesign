@@ -40,7 +40,6 @@ function createWindow() {
   //win.loadFile('Apps/WindowsVolumeMixerControl/index.html')
   //win.loadFile('Apps/SpotifyControl/index.html')
   win.loadFile('index.html')
-  loadAppInfo()
 }
 
 app.whenReady().then(createWindow)
@@ -58,6 +57,4 @@ app.on('activate', () => {
 })
 
 startPythonPersistent()
-
-
-
+ 
