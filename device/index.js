@@ -1,5 +1,4 @@
 const { app, BrowserWindow } = require('electron');
-const querystring = require('querystring');
 let { PythonShell } = require('python-shell');
 let process = require('child_process')
 
@@ -41,6 +40,7 @@ function createWindow() {
   //win.loadFile('Apps/WindowsVolumeMixerControl/index.html')
   //win.loadFile('Apps/SpotifyControl/index.html')
   win.loadFile('index.html')
+  loadAppInfo()
 }
 
 app.whenReady().then(createWindow)
@@ -58,3 +58,6 @@ app.on('activate', () => {
 })
 
 startPythonPersistent()
+
+
+

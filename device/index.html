@@ -7,17 +7,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 
-<body style="background-color:#252525; color:white; height:100vh; overflow:hidden;">
-    <a href="Apps/SpotifyControl/index.html">
-        <input id="spotify" type="image" src="Apps/SpotifyControl/images/spotify.png" height=200 width=200>
-    </a>
-    <a href="Apps/WindowsVolumeMixerControl/index.html">
-        <input id="spotify" type="image" src="Apps/WindowsVolumeMixerControl/images/windowsvolume.PNG" height=200 width=200>
-    </a>
-    <a href="Apps/WindowsProgramControl/index.html">
-        <input id="spotify" type="image" src="Apps/WindowsProgramControl/images/programControl.PNG" height=200 width=200>
-    </a>
+<body style="background-color:#252525; color:white; height:100vh; overflow:hidden;" onload="loadAppInfo()">
+  
     
 </body>
+
+<script>
+    // The below loops through each file in the Apps folder, reads their info.json, 
+    // and creates html elements according to the data
+    // TODO: Jace find some way to jquery-ify this shi-
+
+    // https://medium.com/stackfame/get-list-of-all-files-in-a-directory-in-node-js-befd31677ec5
+    //requiring path and fs modules
+    const path = require('path');
+    const fs = require('fs');
+    //joining path of directory
+    const directoryPath = path.join(__dirname, 'Apps');
+    //passsing directoryPath and callback function
+    function loadAppInfo() {
+        fs.readdir(directoryPath, function (err, files) {
+            //handling error
+            if (err) {
+                return console.log('Unable to scan directory: ' + err);
+            } 
+            //listing all files using forEach
+            files.sort().forEach(function (file) {
+                // Do whatever you want to do with the file
+                console.log(file);
+                fs.readFile('Apps/' + file + '/info.json', (err, data) => {
+                    if (err) throw err;
+                    let info = JSON.parse(data);
+                    app = '<a href ="Apps/' + info.name + '/index.html"> \
+                    <input id=' + info.displayname + ' type="image" src="Apps/' + info.name + '/' + info.image + '" height=200 width=200>\
+                    </a>'
+                    // cheap way, it just works
+                    document.body.innerHTML = document.body.innerHTML + app
+                    console.log(info);
+                });
+            });
+        });
+    }
+</script>
 
 </html>
