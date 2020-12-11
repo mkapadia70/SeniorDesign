@@ -1,0 +1,1 @@
+python coms/main.py & npm start --prefix device
