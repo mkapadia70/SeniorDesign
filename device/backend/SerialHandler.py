@@ -2,6 +2,16 @@ import serial
 import json
 import time
 import sys
+import serial.tools.list_ports
+
+
+def checkConnected(port):
+    ports = list(serial.tools.list_ports.comports())
+    for p in ports:
+        if p.device == port:
+            return True
+    return False
+
 
 def connectPort(port):
     # the main serial connection
@@ -20,6 +30,7 @@ def sendData(ser, data):
     jason = (json.dumps(data) + '\n') # this takes a long time
     send = jason.encode()
     ser.write(send)
+
 
 def listen(ser):
     response = ""

@@ -4,9 +4,9 @@ Controller for various Windows functions via external Raspberry Pi w/ touchscree
 
 Functions including, but not limited to:
 
-* windows audio mix -- done
-* overworld to switch between apps -- mostly done
-* spotify integration -- mostly done
+* windows audio mix -- 90% done; needs polish 
+* overworld to switch between apps -- 90% done; needs polish
+* spotify integration -- 90% done; needs polish
 * movie mode/plex integration
 * drawing pad / touch mouse pad (like laptop)
 * windows/google calendar integration with clock/date time.

@@ -4,19 +4,21 @@ from Apps import WindowsProgramControl
 import time
 import SerialHandler
 
-def updateDevices():
+# JsonHandler.py
+# this file handles function calls that come from the device and their return
+
+def setupApps():
+    # some apps will require startup methods to init certain things
+    SpotifyControl.setup()
     WindowsVolumeMixerControl.updateDevices()
 
 
-def setupApps():
-    SpotifyControl.setup()
-
-
 def callFunctions(json):
+    # parses the json from the device and calls appropriate functions e.g. change master volume
     for i in json:
         for f in i["Funcs"]:
-            # this lines finds a function in a module matching the function string given by the json and calls it
             try:
+                # this lines finds a function in a module matching the function string given by the json and calls it
                 return getattr(globals()[i["Name"]], f["Name"])(*f["Params"])
             except Exception as e:
                 print(e)

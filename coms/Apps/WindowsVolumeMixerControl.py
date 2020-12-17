@@ -4,6 +4,9 @@ from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
 import re
 import json
 
+# WindowsVolumeMixerControl.py
+# this is the windows volume driver. Executes windows audio calls and hold list of devices.
+
 speakers = AudioUtilities.GetSpeakers()
 interface = speakers.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
 volume = cast(interface, POINTER(IAudioEndpointVolume))

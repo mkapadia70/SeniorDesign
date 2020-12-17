@@ -1,6 +1,10 @@
 from pywinauto.application import Application
 # https://github.com/pywinauto/pywinauto
 
+# WindowsProgramControl.py
+# this uses a very powerful library that can execute many windows api calls
+# it is not being used for much...yet
+
 app = Application()
 
 def startNotepad():

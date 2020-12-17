@@ -2,7 +2,8 @@ import PortsHandler
 import SerialHandler
 import JsonHandler
 import time
-from Apps import WindowsVolumeMixerControl
+
+# Main.py
 
 emulation = True  # enable this when using emulation
 rasp = not emulation
@@ -16,13 +17,15 @@ else:
 
 
 def main():
-    while (not PortsHandler.checkConnected(inport) or not PortsHandler.checkConnected(outport)):
+    # ensures a connected exists for both in and out ports
+    while (not SerialHandler.checkConnected(inport) or not SerialHandler.checkConnected(outport)):
         print("Device Not Found")
         time.sleep(5)
 
     print("In device has been found on port", inport)
     print("Out device has been found on port", outport)
 
+    # sets up connection objects for both in and out ports
     ser1 = SerialHandler.connectPort(inport)
     if rasp:
         ser2 = ser1

@@ -1,6 +1,10 @@
 import requests
 import base64
 
+# ImageWriter.py
+# currently this is only used by our spotify driver to store and convert album art data
+
+# this function downloads an image from a url to the path specified
 def writeImage(writepath, pic_url):
     try:
         with open(writepath, 'wb') as handle:
@@ -16,6 +20,8 @@ def writeImage(writepath, pic_url):
         print(e)
     return False
 
+# this function encodes an image using base64 encoding and return a string of the encoding
+# this is being used to send an image, as text, as a json object
 def imageTo64String(path):
     try:
         with open(path, "rb") as image_file:

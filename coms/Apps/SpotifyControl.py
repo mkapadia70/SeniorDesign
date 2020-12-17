@@ -4,6 +4,9 @@ from Apps import SpotifyAuth
 from Apps import ImageWriter
 from Apps import WindowsProgramControl
 
+# SpotifyControl.py
+# this file is the spotify driver. Executes spotify api calls.
+
 # make sure to update your credentials in SpotifyAuth.py
 auth_manager = SpotifyAuth.getAuthManager()
 

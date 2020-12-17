@@ -1,10 +1,8 @@
 ideas
 
 windows audio mix -- done
-overworld to switch between apps -- starting
-    known bugs:
-        seeking by srubbing with finger (instead of tapping once) tries to send a bunch of updates and sounds weird, should just wait until finger releases to 
-spotify integration -- starting
+overworld to switch between apps -- done
+spotify integration -- done
 movie mode/plex integration
 drawing pad / touch mouse pad (like laptop)
 windows/google calendar integration with clock/date time.
