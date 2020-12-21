@@ -4,7 +4,6 @@ from flask_cors import cross_origin
 import time
 import serial
 import json
-import PortsHandler
 import SerialHandler
 
 emulation = True  # True when using emulation, False otherwise

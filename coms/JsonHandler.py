@@ -1,5 +1,5 @@
-from Apps import WindowsVolumeMixerControl
 from Apps import SpotifyControl
+from Apps import WindowsVolumeMixerControl
 from Apps import WindowsProgramControl
 import time
 import SerialHandler
@@ -11,6 +11,7 @@ def setupApps():
     # some apps will require startup methods to init certain things
     SpotifyControl.setup()
     WindowsVolumeMixerControl.updateDevices()
+    WindowsProgramControl.setup()
 
 
 def callFunctions(json):

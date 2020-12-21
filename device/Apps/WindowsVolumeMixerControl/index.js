@@ -46,7 +46,7 @@ function changeSliderData(value, index) {
     $("#sliderContainer").append(sliderHTML)
 
     $("#" + index).on('input', function () {
-        console.log("Button: " + index + ", Volume: " + $("#" + index).val() + ", PID:" + value.pid)
+        //console.log("Button: " + index + ", Volume: " + $("#" + index).val() + ", PID:" + value.pid)
         $.getJSON("http://127.0.0.1:5001" + '/data', {
             Name: "WindowsVolumeMixerControl",
             Func: "setApplicationVolume",

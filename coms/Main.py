@@ -1,4 +1,3 @@
-import PortsHandler
 import SerialHandler
 import JsonHandler
 import time
