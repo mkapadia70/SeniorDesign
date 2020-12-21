@@ -1,5 +1,7 @@
 from pywinauto.application import Application
 from pywinauto import Desktop
+from pywinauto import warnings
+import time
 # https://github.com/pywinauto/pywinauto
 
 # WindowsProgramControl.py
@@ -17,6 +19,7 @@ def setup():
     global windows
     app = Application()
     windows = Desktop(backend="uia").windows()
+    warnings.simplefilter('ignore', category=UserWarning)  # turns off annoying 32-bit warnings
 
 def startNotepad():
     app = Application().start("notepad.exe")
@@ -27,7 +30,6 @@ def openProgram(path):
     try:
         app = app.connect(path=path)
     except Exception as e:
-        print(e)
         try:
             app = Application().start(path)
         except Exception as ex:
@@ -36,7 +38,10 @@ def openProgram(path):
 # returns a list of open windows (for alt-tabbing purposes)
 def getOpenWindows():
     global windows
-    openWindowsString = [w.window_text() for w in windows]
+    openWindowsString = []
+    for w in windows:
+        if len(w.window_text()) > 0 and not (w.window_text() == "Taskbar" or w.window_text() == "Program Manager"):
+            openWindowsString.append(w.window_text())
     # print(openWindowsString)
     # also get the icon images????
     return openWindowsString
@@ -48,5 +53,16 @@ def switchFocus(newFocus):
         app_dialog = app.window(title_re=".*%s.*" % newFocus)
         if app_dialog.exists():
             app_dialog.set_focus()
+    except Exception as e:
+        print(e)
+
+# minimizes the given program by name
+def minimizeProgByName(name):
+    try:
+        app.connect(title_re=".*%s" % name, visible_only=True, found_index=0)
+        app_dialog = app.window(title_re=".*%s.*" % name, visible_only=True, found_index=0)
+        if app_dialog.exists():
+            app_dialog.minimize()
+            return
     except Exception as e:
         print(e)

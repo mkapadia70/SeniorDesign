@@ -86,9 +86,11 @@ def getCurrentlyPlaying():
     try:
         while cached_currently_playing == None:
             if len(deviceIDs) == 0:
-                WindowsProgramControl.openProgram("spotify.exe")
-                while len(deviceIDs) == 0:
+                WindowsProgramControl.openProgram("Spotify.exe")
+                while deviceIDs == None or len(deviceIDs) == 0:
                     deviceIDs = getDeviceIds()
+                WindowsProgramControl.minimizeProgByName("Spotify")
+                #WindowsProgramControl.minimizeProgByName(cached_currently_playing['item']['name'])
             sp.transfer_playback(deviceIDs[0])
             sp.pause_playback(device_id=deviceIDs[0])
             cached_currently_playing = sp.currently_playing()

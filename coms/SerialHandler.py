@@ -58,9 +58,9 @@ def clearBuffer():
     # flush the poop
     global ser
     if (ser != None):
-        print("cleared")
         ser.reset_output_buffer() # clear buffer
         ser.reset_input_buffer() #clear buffer
         ser.flush()
     else:
-        print("none")
+        #print("none")
+        return
