@@ -1,5 +1,10 @@
 import requests
 import base64
+from PIL import Image
+import win32api
+import win32con
+import win32gui
+import win32ui
 
 # ImageWriter.py
 # currently this is only used by our spotify driver to store and convert album art data
@@ -29,3 +34,31 @@ def imageTo64String(path):
     except Exception as e:
         print(e)
     return None
+
+
+# given a path, extract an exe's icon image and save it to the output path
+# from here: https://stackoverflow.com/questions/32341661/getting-a-windows-program-icon-and-saving-it-as-a-png-python/39811146
+def getAndWriteProgImage(input_path, output_path):
+
+    input_path = input_path.replace("\\", "/")
+    icoX = win32api.GetSystemMetrics(win32con.SM_CXICON)
+    icoY = win32api.GetSystemMetrics(win32con.SM_CXICON)
+
+    large, small = win32gui.ExtractIconEx(input_path, 0)
+    win32gui.DestroyIcon(small[0])
+
+    hdc = win32ui.CreateDCFromHandle(win32gui.GetDC(0))
+    hbmp = win32ui.CreateBitmap()
+    hbmp.CreateCompatibleBitmap(hdc, icoX, icoX)
+    hdc = hdc.CreateCompatibleDC()
+
+    hdc.SelectObject(hbmp)
+    hdc.DrawIcon((0,0), large[0])
+    
+    bmpstr = hbmp.GetBitmapBits(True)
+    img = Image.frombuffer(
+        'RGBA',
+        (32,32),
+        bmpstr, 'raw', 'BGRA', 0, 1
+    )
+    img.save(output_path)

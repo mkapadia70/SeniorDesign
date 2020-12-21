@@ -7,5 +7,5 @@ package-lock.json
 .DS_Store
 .cache
 coms/Apps/SpotifyAuth.py
-album.png
-album.jpg
+*.png
+*.jpg
