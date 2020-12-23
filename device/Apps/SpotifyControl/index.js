@@ -21,7 +21,7 @@ function loadData() {
         }
         else {
             console.log("failed to get spotify data...trying again")
-            
+
         }
     });
 

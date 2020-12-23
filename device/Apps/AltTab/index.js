@@ -33,12 +33,12 @@ function createOpenWindows(value, index) {
 
     $("#" + index).on('click', function () {
         $.getJSON("http://127.0.0.1:5001" + '/data', {
-                Name: "WindowsProgramControl",
-                Func: "switchFocus",
-                Params: $("#" + index).children('p')[0].innerHTML, // why doesnt this work with arrays of params??
-                ExpectReturn: false
+            Name: "WindowsProgramControl",
+            Func: "switchFocus",
+            Params: $("#" + index).children('p')[0].innerHTML, // why doesnt this work with arrays of params??
+            ExpectReturn: false
         }, function (data) {
-            
+
         });
         return false;
     });

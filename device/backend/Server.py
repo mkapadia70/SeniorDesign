@@ -18,6 +18,7 @@ else:
 
 app = Flask(__name__)
 
+
 def startServer():
     app.run(host='127.0.0.1', port=5001)
 
@@ -25,32 +26,25 @@ def startServer():
 @app.route("/data")
 def data():
 
-    
     content = request.args
     name = request.args.get('Name')
     funcs = request.args.get('Func')
     params = request.args.getlist("Params")
     expectReturn = request.args.get("ExpectReturn")
 
+    packageAndSend(name, funcs, params)
 
-    # this is probably extremely bad
-    ret = None
-    while ret == None:
-
-        packageAndSend(name, funcs, params)
-
-        if expectReturn == "true":
-            # this is potentially dangerous, but thats how i like to live
-            ret = SerialHandler.listen(ser2)
-            return jsonify(ret)
-        else:
-            return jsonify(request.args)  # just bs value
-
+    if expectReturn == "true":
+        # this could probably be improved, but I dont wanna rn
+        ret = SerialHandler.listen(ser2)
+        return jsonify(ret)
+    else:
+        return jsonify(request.args)  # just bs value
 
 
 def packageAndSend(name, funcs, params):
-   
-    # packages up everything and sends as generic request
+
+    # packages up everything and sends as generic request to Windows-side
     jason = [{"Name": name, "Funcs": [
         {"Name": funcs, "Params": params}]}]
 
@@ -72,20 +66,4 @@ if __name__ == "__main__":
     else:
         ser2 = SerialHandler.connectPort(outport)
 
-    runningLocal = False
-
-    if runningLocal:
-        # local tests so we can have python output
-        packageAndSend('SpotifyControl', 'skipSong', [])
-        packageAndSend('SpotifyControl', 'getUpdatedData', [])
-        SerialHandler.listen(ser2)
-        packageAndSend('SpotifyControl', 'getVolume', [])
-        SerialHandler.listen(ser2)
-        packageAndSend('SpotifyControl', 'getAlbumImage', [])
-        SerialHandler.listen(ser2)
-        packageAndSend('SpotifyControl', 'getVolume', [])
-        print(SerialHandler.listen(ser2))
-    else:
-        print("starting server")
-        startServer()
-
+    startServer()

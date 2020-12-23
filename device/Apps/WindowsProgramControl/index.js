@@ -1,7 +1,7 @@
 
 
-$(function (){
-    $("#notepad").on("click", function() {
+$(function () {
+    $("#notepad").on("click", function () {
         var request = $.ajax({
             type: 'get',
             url: "http://127.0.0.1:5001" + '/data',
