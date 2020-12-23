@@ -35,7 +35,7 @@ def openProgram(path):
         except Exception as ex:
             print(ex)
 
-# returns a list of open windows (for alt-tabbing purposes)
+# returns a list of open windows
 def getOpenWindows():
     global windows
     openWindowsString = []
@@ -46,17 +46,19 @@ def getOpenWindows():
     # also get the icon images????
     return openWindowsString
 
-# if the given program is open, switches the focus to it
-def switchFocus(newFocus):
+# if the given program is open, switches the focus to it (bring to front)
+# todo: add better way to do this without name (some sort of hash, best to store hash also on the RPi)
+def switchFocus(name):
     try:
-        app.connect(title_re=".*%s" % newFocus)
-        app_dialog = app.window(title_re=".*%s.*" % newFocus)
+        app.connect(title_re=".*%s" % name, visible_only=True, found_index=0)
+        app_dialog = app.window(title_re=".*%s.*" % name, visible_only=True, found_index=0)
         if app_dialog.exists():
             app_dialog.set_focus()
     except Exception as e:
         print(e)
 
 # minimizes the given program by name
+# todo: add better way to do this without name (some sort of hash, best to store hash also on the RPi)
 def minimizeProgByName(name):
     try:
         app.connect(title_re=".*%s" % name, visible_only=True, found_index=0)
