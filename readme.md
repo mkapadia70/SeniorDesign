@@ -4,18 +4,18 @@ Controller for various Windows functions via external Raspberry Pi w/ touchscree
 
 Functions including, but not limited to:
 
-* windows audio mix -- 90% done; needs polish 
-* overworld to switch between apps -- 90% done; needs polish
-* spotify integration -- 90% done; needs polish
-* movie mode/plex integration
-* drawing pad / touch mouse pad (like laptop)
-* windows/google calendar integration with clock/date time.
-* in game scoreboards, like how discord tracks stuff like that idk
-* launch applications
-* twitch/twitch chat integration
-* obs/streamlabs integration
-* switch desktop/windows -- 90% done
-* zoom controls
+* windows audio mix                              -- 90% needs polish 
+* overworld to switch between apps               -- 90% needs polish
+* spotify integration                            -- 90% needs polish
+* movie mode/plex integration                    -- 0% hard
+* drawing pad / touch mouse pad (like laptop)    -- 0% easy
+* windows/google calendar integration            -- 0% hard
+* in game scoreboards, like discord side-bar     -- 0% hard
+* launch applications                            -- 0% medium
+* twitch/twitch chat integration                 -- 0% medium-hard
+* obs/streamlabs integration                     -- 0% medium-hard
+* switch desktop/windows                         -- 90% needs polish
+* zoom controls                                  -- 0% medium-hard
 
 
 **Emulation**
