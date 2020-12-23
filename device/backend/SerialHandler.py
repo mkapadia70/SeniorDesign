@@ -4,6 +4,9 @@ import time
 import sys
 import serial.tools.list_ports
 
+# SerialHandler.py
+# this file handles sending/receiving data between pc and the device
+
 
 def checkConnected(port):
     ports = list(serial.tools.list_ports.comports())

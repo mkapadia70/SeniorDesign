@@ -6,6 +6,12 @@ import serial
 import json
 import SerialHandler
 
+# Server.py
+# this is an important 'middleman' program that 
+# * handles REST calls to/from our electron app
+# * handles serial connection (encoded json data) to/from our Windows device
+# this program is launched by the electron app on startup
+
 emulation = True  # True when using emulation, False otherwise
 rasp = not emulation
 
