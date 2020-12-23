@@ -14,7 +14,7 @@ Functions including, but not limited to:
 * launch applications
 * twitch/twitch chat integration
 * obs/streamlabs integration
-* switch desktop/windows
+* switch desktop/windows -- 90% done
 * zoom controls
 
 

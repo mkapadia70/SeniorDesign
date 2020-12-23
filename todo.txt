@@ -1,2 +1,0 @@
--- add volume back to the regular spotify data thing, then change the js/html accordingly
--- figure out data send/read errors
