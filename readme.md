@@ -67,10 +67,4 @@ To install all imports
 
 Also note that Microsoft Visual C++ 14.0 is required for pycaw (can be installed by searching online)
 
-**Run**
-
-To run both at the same time (for emulation): run.sh executable in the SeniorDesign directory
-
-To run separately: the coms and device directory each have their own run.sh executables
-
 
