@@ -21,10 +21,6 @@ def setup():
     windows = Desktop(backend="uia").windows()
     warnings.simplefilter('ignore', category=UserWarning)  # turns off annoying 32-bit warnings
 
-def startNotepad():
-    app = Application().start("notepad.exe")
-    app.UntitledNotepad.Edit.type_keys("Hello Jace, python is writing this...", with_spaces = True)
-
 def openProgram(path):
     global app
     try:
