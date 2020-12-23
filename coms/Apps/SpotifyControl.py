@@ -22,15 +22,18 @@ def getDeviceIds():
         ids.append(device['id'])
     return ids
 
+
 deviceIDs = getDeviceIds()
 
+
 def setup():
-    # setup 
+    # setup
     global sp
     global auth_manager
     sp = spotipy.Spotify(auth_manager=auth_manager)
     auth_manager = SpotifyAuth.getAuthManager()
     cached_currently_playing = sp.currently_playing()
+
 
 def pausePlayback():
     global sp
@@ -42,8 +45,6 @@ def startPlayback():
     sp.start_playback()
 
 # params: newVolume - the new volume for the player (0-100)
-
-
 def setVolume(newVolume):
     global sp
     sp.volume(int(newVolume))
@@ -78,6 +79,7 @@ def setRepeatStatus(repeatState):
     sp.repeat(repeatState)
 
 
+# get the current song data from spotify, also opens spotify minimzed if not open, and stores the data
 def getCurrentlyPlaying():
     global sp
     global cached_currently_playing
@@ -86,19 +88,19 @@ def getCurrentlyPlaying():
     try:
         while cached_currently_playing == None:
             if len(deviceIDs) == 0:
-                WindowsProgramControl.openProgram("Spotify.exe")
+                WindowsProgramControl.openProgram("Spotify.exe") # takes a looong time to open
                 while deviceIDs == None or len(deviceIDs) == 0:
                     deviceIDs = getDeviceIds()
                 WindowsProgramControl.minimizeProgByName("Spotify")
-                #WindowsProgramControl.minimizeProgByName(cached_currently_playing['item']['name'])
-            sp.transfer_playback(deviceIDs[0])
-            sp.pause_playback(device_id=deviceIDs[0])
+                sp.transfer_playback(deviceIDs[0])
+                sp.pause_playback(device_id=deviceIDs[0])
             cached_currently_playing = sp.currently_playing()
-        cached_currently_playing['volume'] = getVolume()
+        cached_currently_playing['volume'] = getVolume() # appends volume also (it's not included in the original data)
         return cached_currently_playing
     except Exception as e:
         print(e)
         return None
+
 
 def getUpdatedData():
     global sp
@@ -106,14 +108,16 @@ def getUpdatedData():
     # checks the small data for updates, then returns the big data
     newData = sp.currently_playing()
     attempts = 1
-    while( cached_currently_playing != None and newData['item']['id'] == cached_currently_playing['item']['id'] and attempts < 10):
+    while(newData != None and cached_currently_playing != None and newData['item']['id'] == cached_currently_playing['item']['id'] and attempts < 10):
         newData = sp.currently_playing()
-        attempts+=1
+        attempts += 1
     return getCurrentlyPlaying()
+
 
 def getTopArtists():
     global sp
     return sp.current_user_top_artists()
+
 
 def seek(pos):
     # seek to position in percentage of track
@@ -121,9 +125,11 @@ def seek(pos):
     pos_ms = int(float(pos) * sp.currently_playing()['item']['duration_ms'])
     sp.seek_track(pos_ms)
 
+
 def search(query):
     global sp
     return sp.search(query, type="track")
+
 
 def playTrack(uri):
     global sp
@@ -131,11 +137,15 @@ def playTrack(uri):
     updated = getUpdatedData()
     return updated
 
+
 def getAlbumImage():
     global sp
     cp = cached_currently_playing
     imagepath = 'coms/images/album.jpg'
-    ImageWriter.writeImage(imagepath, cp['item']['album']['images'][1]['url']) # bad. downloads image as local album.jpg
-    string = ImageWriter.imageTo64String(imagepath) # bad bad. converts that jpg to a base64 encoded string to send to RaspPi using json
-    jason = {"imageString": string} # this should be as simple a json as we can manage. Dat speed bro
-    return jason 
+    # bad. downloads image as local album.jpg
+    ImageWriter.writeImage(imagepath, cp['item']['album']['images'][1]['url'])
+    # bad bad. converts that jpg to a base64 encoded string to send to RaspPi using json
+    string = ImageWriter.imageTo64String(imagepath)
+    # this should be as simple a json as we can manage. Dat speed bro
+    jason = {"imageString": string}
+    return jason
