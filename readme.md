@@ -57,7 +57,7 @@ where "COM4->COM5" and "COM6->COM7" in the com0com settings, these need to be re
 
 Set up the nodejs by running 
 
-`npm install` and then running with `npm start` in devices directory
+`npm install` in the SeniorDesign/device directory
 
 **Python**
 
@@ -66,5 +66,11 @@ To install all imports
 `pip3 install -r requirements.txt`
 
 Also note that Microsoft Visual C++ 14.0 is required for pycaw (can be installed by searching online)
+
+**Run**
+
+To run both at the same time (for emulation): run.sh executable in the SeniorDesign directory
+
+To run separately: the coms and device directory each have their own run.sh executables
 
 
