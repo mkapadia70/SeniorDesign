@@ -42,7 +42,7 @@ function loadImage() {
     }).done(function (data) {
         if (data != null) {
             console.log(data)
-            base64_decode(data.imageString, __dirname + "\\albums\\album.jpg")
+            base64_decode(data.imageString, __dirname + "\\images\\album.jpg")
         }
         else {
             console.log("failed to get album image")
