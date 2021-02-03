@@ -52,6 +52,10 @@ You will need to do this with two connections for two-way emulation so something
 
 where "COM4->COM5" and "COM6->COM7" in the com0com settings, these need to be reflected in the code as well in the globals of device/server.py and coms/Main.py
 
+Like in this image:
+
+![image](https://github.com/EECSisFUN/SeniorDesign/blob/master/portExample.png)
+
 
 **Electron**
 
