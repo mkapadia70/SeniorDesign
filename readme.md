@@ -38,19 +38,23 @@ right click one of the devices and "update drivers"
 
 choose "search automatically for updates"
 
-it should find and update the drivers
+it should find and update the drivers (it might not, and that is fine)
 
 Then hit the reset button on com0com
 
-The second pair should change "COM#->COM#" to something like "COM4->COM5"
+The second pair should change "COM#->COM#" to something like "COM3->COM4" (or whatever ports are being used)
 
 to check this, expand "ports(COM & LPT)" in device manager
 
-and check that "com0com - serial port emulator(COM5)" and "com0com - serial port emulator(COM6)" are listed
+and check that "com0com - serial port emulator(COM3)" and "com0com - serial port emulator(COM3)" are listed (or whatever ports are being used)
 
-You will need to do this with two connections for two-way emulation so something like COM4, COM5, COM6, and COM7 need to be enabled
+You will need to do this with two connections for two-way emulation so something like "COM3->COM4" and "COM5->COM6" need to be enabled and listed in com0com
 
-where "COM4->COM5" and "COM6->COM7" in the com0com settings, these need to be reflected in the code as well in the globals of device/server.py and coms/Main.py
+whichever ports are enabled in com0com needs to be reflected in the files device/server.py and coms/Main.py
+
+Like in this image:
+
+![image](https://github.com/EECSisFUN/SeniorDesign/blob/master/portExample.png)
 
 
 **Electron**
@@ -65,6 +69,6 @@ To install all imports
 
 `pip3 install -r requirements.txt`
 
-Also note that Microsoft Visual C++ 14.0 is required for pycaw (can be installed by searching online)
+Also note that Microsoft Visual C++ 14.0 build tools are required for pycaw (theycan be installed here: https://visualstudio.microsoft.com/visual-cpp-build-tools/)
 
 
