@@ -13,7 +13,6 @@ def setupApps():
     SpotifyControl.setup()
     WindowsVolumeMixerControl.updateDevices()
     WindowsProgramControl.setup()
-    ExampleApp.setup()
 
 
 def callFunctions(json):

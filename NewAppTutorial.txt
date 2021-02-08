@@ -1,0 +1,44 @@
+This is how you add an app:
+
+I've made an 'Example App' for you to follow along and that also has some basic, skeleton code.
+
+First Recall:
+The 'coms' folder contains only code that is run on the Windows computer
+The 'device' folder contains only code that is run on the Raspberry Pi
+
+
+What needs to be added to Windows/coms side:
+A new app will need one(1) new .py file in the 'Apps' folder in 'coms' (see: 'coms/Apps/ExampleApp.py').
+This python file will contain 1 or more functions that each can take as many parameters as it needs, 
+performs some Windows-side action, 
+and then *optionally* returns a json object.
+
+**IMPORTANT**
+*Be sure to update 'coms/JsonHandler.py' to include your new .py file*
+*Something like 'from Apps import MyApp'
+
+
+What needs to be added to Device side:
+The device side is a little more complicated.
+You will need to make **folder** in 'device/Apps' with the name of the app (see: 'device/Apps/ExampleApp').
+Inside the folder 4 things are required:
+an 'index.html'
+an 'index.js'
+an 'info.json'
+and a folder called 'images'.
+
+
+An explanation of how everything works using the ExampleApp as an example:
+* The html creates a button with id "ExampleButton"
+* the javascript, using jquery, binds a function to the button's click event
+* when the button is clicked, a request is sent to a python server on the device
+* that python server then sends a json object through the serial port to our Windows machine
+* the json object is of the form: [{"Name": name, "Funcs": [{"Name": funcs, "Params": params}]}] 
+* ^ this info is given by the 'getJSON' parameters in the javascript
+* our python running on the Windows machine gets the json object 
+* from this it can find ExampleApp.py via the 'name' we give in the javascript
+* and then it can find the function 'getExampleData' also given by the javascript (a list of parameters can also be provided)
+* the python function 'getExampleData' returns a json object with one element: text, which has the value "this is text from python"
+* this json object is sent back from Windows to device via the serial port, then from the python server on the device to the javascript
+* the javscript then changes the innerHTML of the button to data.text (data being the json object, data.text being the value of the text element within data)
+(If the above seems complicated, don't worry, it is.)

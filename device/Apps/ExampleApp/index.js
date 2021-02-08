@@ -1,17 +1,30 @@
-function getPythonData() {
-    // requests open window data from windows
-    var request = $.ajax({
-        type: 'get',
-        url: "http://127.0.0.1:5001" + '/data',
-        //async: false,
-        data: {
+
+$(function () {
+    $('#ExampleButton').on('click', function () {
+        $.getJSON("http://127.0.0.1:5001" + '/data', {
             Name: "ExampleApp",
             Func: "getExampleData",
-            ExpectReturn: true // maybe add like a thing to confirm that the request went through
-        }
-    }).done(function (data) {
-        // once it has the open window data, make html elements for each open window
-        console.log(data);
-        document.getElementById("ExampleButton").innerHTML = data.text
+            Params: [],
+            ExpectReturn: true
+        }, function (data) {
+            console.log(data);
+            document.getElementById("ExampleButton").innerHTML = data.text
+        });
     });
-}
+});
+
+$(function () {
+    $('#TextButton').on('click', function () {
+        var text = document.getElementById("textbox").value
+        console.log(text)
+        $.getJSON("http://127.0.0.1:5001" + '/data', {
+            Name: "ExampleApp",
+            Func: "numberOfLetters",
+            Params: text,
+            ExpectReturn: true
+        }, function (data) {
+            console.log(data);
+            document.getElementById("number").innerHTML = data.numberVal
+        });
+    });
+});
