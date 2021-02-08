@@ -1,6 +1,7 @@
 from Apps import SpotifyControl
 from Apps import WindowsVolumeMixerControl
 from Apps import WindowsProgramControl
+from Apps import ExampleApp
 import time
 import SerialHandler
 
@@ -12,6 +13,7 @@ def setupApps():
     SpotifyControl.setup()
     WindowsVolumeMixerControl.updateDevices()
     WindowsProgramControl.setup()
+    ExampleApp.setup()
 
 
 def callFunctions(json):

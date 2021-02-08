@@ -19,8 +19,8 @@ if rasp:
     inport = "/dev/ttys0"
     outport = "/dev/ttys0"
 else:
-    inport = "COM5"  # change this according to your in and out com ports as set by com0com
-    outport = "COM7"
+    inport = "COM4"  # change this according to your in and out com ports as set by com0com
+    outport = "COM6"
 
 app = Flask(__name__)
 

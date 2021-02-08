@@ -11,8 +11,8 @@ if rasp:
     inport = "COM3"
     outport = "COM3"
 else:
-    inport = "COM4"  # change this according to your in and out com ports as set by com0com
-    outport = "COM6"
+    inport = "COM3"  # change this according to your in and out com ports as set by com0com
+    outport = "COM5"
 
 
 def main():
