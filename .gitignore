@@ -7,5 +7,3 @@ package-lock.json
 .DS_Store
 .cache
 coms/Apps/SpotifyAuth.py
-SpotifyAuth.py
-coms/Apps/SpotifyAuth.py
