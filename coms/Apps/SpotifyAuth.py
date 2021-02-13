@@ -6,4 +6,5 @@ def getAuthManager():
         client_id="",
         client_secret="",
         redirect_uri="http://localhost:4444/callback"
+        
     )
