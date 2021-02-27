@@ -7,4 +7,4 @@ package-lock.json
 .DS_Store
 .cache
 coms/Apps/SpotifyAuth.py
-coms/Apps/TwichAuth.py
+coms/Apps/TwitchAuth.py
