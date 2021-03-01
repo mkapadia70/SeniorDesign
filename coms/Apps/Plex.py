@@ -1,8 +1,8 @@
 from plexapi.myplex import MyPlexAccount
 
 
-username = "MeetKapadia19"
-password = "Khergam1234"
+username = "username"
+password = "password"
 serverName = "Jace Plex V3"
 def getPassword():
     global password
