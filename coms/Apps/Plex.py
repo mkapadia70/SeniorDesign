@@ -1,9 +1,12 @@
 from plexapi.myplex import MyPlexAccount
-from Apps import PlexAuth
+# from Apps import PlexAuth # running with main
+import PlexAuth # running just this file
+import ImageWriter
 
 
 account = MyPlexAccount(PlexAuth.getUsername(), PlexAuth.getPassword())
 plex = account.resource(PlexAuth.getServerName()).connect()
+baseurl = plex._baseurl
 
 movies = plex.library.section('Movies')
 
@@ -27,4 +30,11 @@ def getMovieByTitle(title):
     for movie in movies.search(title):
         arr.append(movie.title)
     return arr
+
+def getMoviePosterByTitle(title):
+    global movies
+    for movie in movies.search(title):
+        ImageWriter.writeImage(movie.title, baseurl + movie.art)
+
+getMoviePosterByTitle("tenet")
 
