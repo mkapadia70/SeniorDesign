@@ -8,3 +8,4 @@ package-lock.json
 .cache
 coms/Apps/SpotifyAuth.py
 coms/Apps/TwitchAuth.py
+.vscode/
