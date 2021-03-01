@@ -1,8 +1,10 @@
 from plexapi.myplex import MyPlexAccount
 from Apps import PlexAuth
 
+
 account = MyPlexAccount(PlexAuth.getUsername(), PlexAuth.getPassword())
 plex = account.resource(PlexAuth.getServerName()).connect()
+
 movies = plex.library.section('Movies')
 
 def getUnwatchedMovies():
