@@ -1,24 +1,8 @@
 from plexapi.myplex import MyPlexAccount
+from Apps import PlexAuth
 
-
-username = "MeetKapadia19"
-password = "Khergam1234"
-serverName = "Jace Plex V3"
-def getPassword():
-    global password
-    return password
-
-def getUsername():
-    global username 
-    return username
-
-def getServerName():
-    global serverName 
-    return serverName
-
-
-account = MyPlexAccount(getUsername(), getPassword())
-plex = account.resource(getServerName()).connect()
+account = MyPlexAccount(PlexAuth.getUsername(), PlexAuth.getPassword())
+plex = account.resource(PlexAuth.getServerName()).connect()
 movies = plex.library.section('Movies')
 
 def getUnwatchedMovies():
