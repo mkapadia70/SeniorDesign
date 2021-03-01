@@ -2,6 +2,7 @@ from Apps import SpotifyControl
 from Apps import WindowsVolumeMixerControl
 from Apps import WindowsProgramControl
 from Apps import ExampleApp
+from Apps import Plex
 import time
 import SerialHandler
 
