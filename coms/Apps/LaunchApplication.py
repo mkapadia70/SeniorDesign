@@ -1,5 +1,22 @@
-import winreg
 # Ref: https://stackoverflow.com/questions/53132434/list-of-installed-programs/54825112
+import os
+import winreg
+from pywinauto.application import Application
+from pywinauto import Desktop
+from pywinauto import warnings
+import re
+import copy
+
+app = None
+windows = None
+
+
+def setup():
+    global app
+    global windows
+    app = Application()
+    windows = Desktop(backend="uia").windows()
+    warnings.simplefilter('ignore', category=UserWarning)
 
 
 def foo(hive, flag):
@@ -28,14 +45,49 @@ def foo(hive, flag):
     return software_list
 
 
-if __name__ == '__main__':
-    software_list = foo(winreg.HKEY_LOCAL_MACHINE, winreg.KEY_WOW64_32KEY) + foo(winreg.HKEY_LOCAL_MACHINE,
+def getInstalledApps():
+    apps = foo(winreg.HKEY_LOCAL_MACHINE, winreg.KEY_WOW64_32KEY) + foo(winreg.HKEY_LOCAL_MACHINE,
                                                                                  winreg.KEY_WOW64_64KEY) + foo(
         winreg.HKEY_CURRENT_USER, 0)
 
-    count = 0
-    for software in software_list:
-        if software['install_location'] != 'undefined':
-            print(software['name'], ' ', software['install_location'])
-            count += 1
-    print('Number of installed apps with clear path: %s' % count)
+    for app in apps:
+        for key, value in list(app.items()):
+            if value == 'undefined':
+                app.clear()
+    apps = list(filter(None, apps))
+    return apps
+
+def launchApp(path):
+    global app
+    try:
+        app = app.connect(path=path)
+    except Exception as e:
+        try:
+            app = Application().start(path)
+        except Exception as ex:
+            print(ex)
+
+
+def checkDirPath(dirPath=None):
+    list = os.listdir(dirPath)
+    exe_list = []
+    if list:
+        for e in list:
+            e_copy = copy.copy(e)
+            r = re.compile('\.exe$')
+            if r.search(e_copy):
+                # e_copy = e.replace('.exe', '')
+                exe_list.append(e)
+    return exe_list
+
+
+if __name__ == '__main__':
+    apps = getInstalledApps()
+    for app in apps:
+        for key, value in list(app.items()):
+            if key == 'install_location':
+                print(value, ' ', checkDirPath(value))
+            # if value == 'C:\Microsoft VS Code\\':
+            #     v = checkDirPath(value)
+            #     # launchApp(value + '/' + v[0])
+            #     os.startfile(value + '/' + v[0])
