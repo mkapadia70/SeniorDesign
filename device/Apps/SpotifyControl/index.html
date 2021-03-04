@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -38,12 +38,102 @@
             <input id="volume" type="range" min="0" max="100" class="slider" step="1" style="width: 30%; outline: none;">
         </div>
     </div>
-    
     </div>
-
-    
-
-    
 </body>
+</html> -->
 
+<html>
+    <head>
+        <title>Spotify</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script>window.$ = window.jQuery = require('../../node_modules/jquery/dist/jquery.min.js');</script>
+        <script src="index.js"></script>
+        <link rel="stylesheet" type="text/css" href="../../node_modules/bootstrap/dist/css/bootstrap.css">
+        <style>
+            body{
+                background:#333333;
+            }
+            textarea:hover, input:hover, textarea:active, input:active, textarea:focus, input:focus, button:focus, button:active, button:hover, label:focus, .btn:active, .btn.active
+            {
+                outline:0px!important;
+                -webkit-appearance:none;
+                box-shadow:none !important;
+            }
+            .form-control{
+                background-color:#333333 !important;
+                color:#f8f9fa !important;
+            }
+            ::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+                color:#f8f9fa7e !important;
+            }
+            .main-cols{
+                height:75vh;
+            }
+            .vertical-center{
+                position:relative;
+                top:50%;
+                transform: translateY(-50%);
+            }
+            .btn-spotify{
+                width:65px;
+                height:65px;
+                background-color:#1ed760;
+            }
+            input[type='range']::-webkit-slider-thumb {
+                color:#1db954;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container-fluid text-light">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <input class="form-control form-control-lg border-0 rounded-0" type="text" id="search" placeholder="Search">
+                </div>
+                <div class="main-cols col-6 d-flex align-items-center justify-content-center">
+                    <img id="spotimage" src="images/default.PNG"  width="350" height="350">
+                </div>
+                <div class="main-cols col-6">
+                    <div class="vertical-center">
+                        <div id="title" class="h1">Song Title Here</div>
+                        <div id="artist" class="h3">Artist Here</div>
+                    </div>                
+                </div>
+                <div class="col-12 text-center">
+                    <button class="btn" id="shuffleSong">
+                        <svg role="img" height="20" width="20" viewBox="0 0 16 16" class="Svg-ulyrgf-0 hJgLcF">
+                            <path fill="white" d="M4.5 6.8l.7-.8C4.1 4.7 2.5 4 .9 4v1c1.3 0 2.6.6 3.5 1.6l.1.2zm7.5 4.7c-1.2 0-2.3-.5-3.2-1.3l-.6.8c1 1 2.4 1.5 3.8 1.5V14l3.5-2-3.5-2v1.5zm0-6V7l3.5-2L12 3v1.5c-1.6 0-3.2.7-4.2 2l-3.4 3.9c-.9 1-2.2 1.6-3.5 1.6v1c1.6 0 3.2-.7 4.2-2l3.4-3.9c.9-1 2.2-1.6 3.5-1.6z"></path>
+                        </svg>
+                    </button>
+                    <button class="btn" id="prevSong">
+                        <svg role="img" height="20" width="20" viewBox="0 0 16 16" class="Svg-ulyrgf-0 hJgLcF">
+                            <path fill="white" d="M13 2.5L5 7.119V3H3v10h2V8.881l8 4.619z"></path>
+                        </svg>
+                    </button>
+                    <button class="btn btn-spotify rounded-circle" id="pauseUnpause">
+                        <svg fill="white" height="25" width="25" viewBox="0 0 16 16" class="Svg-ulyrgf-0 hJgLcF">
+                            <path fill="none" d="M0 0h16v16H0z"></path>
+                            <path d="M3 2h3v12H3zM10 2h3v12h-3z"></path>
+                        </svg>
+                    </button>
+                    <button class="btn" id="skipSong">
+                        <svg role="img" height="20" width="20" viewBox="0 0 16 16" class="Svg-ulyrgf-0 hJgLcF">
+                            <path fill="white" d="M11 3v4.119L3 2.5v11l8-4.619V13h2V3z"></path>
+                        </svg>
+                    </button>
+                    <button class="btn" id="repeatSong">
+                        <svg role="img" height="20" width="20" viewBox="0 0 16 16" class="Svg-ulyrgf-0 hJgLcF">
+                            <path fill="white" d="M5.5 5H10v1.5l3.5-2-3.5-2V4H5.5C3 4 1 6 1 8.5c0 .6.1 1.2.4 1.8l.9-.5C2.1 9.4 2 9 2 8.5 2 6.6 3.6 5 5.5 5zm9.1 1.7l-.9.5c.2.4.3.8.3 1.3 0 1.9-1.6 3.5-3.5 3.5H6v-1.5l-3.5 2 3.5 2V13h4.5C13 13 15 11 15 8.5c0-.6-.1-1.2-.4-1.8z"></path>
+                        </svg>
+                    </button>
+                    <div style="display:flex; font: 2em arial; color:greenyellow">
+                        <div id="leftTime">0:00</div>
+                        <input id="seek" type="range" min="0" max="100" class="slider" step="0.01" style="width: 100%; outline: none;">
+                        <div id="rightTime">0:00</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
 </html>
