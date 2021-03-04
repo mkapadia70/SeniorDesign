@@ -1,4 +1,4 @@
-# uses a twitch api python library to get various twitch data
+# uses a twitch api python library to get various twitch data 
 from Apps import TwitchAuth
 
 crl = None

@@ -34,6 +34,7 @@ def getMovieByTitle(title):
 def getMoviePosterByTitle(title):
     global movies
     for movie in movies.search(title):
+        print(baseurl + movie.art)
         ImageWriter.writeImage(movie.title, baseurl + movie.art)
 
 getMoviePosterByTitle("tenet")
