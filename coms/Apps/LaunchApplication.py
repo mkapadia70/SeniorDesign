@@ -17,8 +17,6 @@ from PIL import Image
 from pywinauto import Desktop
 from pywinauto import warnings
 from pywinauto.application import Application
-from pathlib import Path
-
 
 app = None
 windows = None
@@ -102,7 +100,7 @@ def fetchExePaths(directory):
     exePaths = []
     for lnk in glob.glob(os.path.join(directory, "*.lnk")):
         shortcut = winshell.shortcut(lnk)
-        exePaths.append(shortcut.path)
+        exePaths.append(shortcut.path.replace("\\", "/" ))
     return exePaths
 
 
@@ -132,14 +130,28 @@ def extractExeIcons(exePath, exeName):
         bmpstr, 'raw', 'BGRA', 0, 1
     )
 
-    new_img_location = 'C:\\temp\\'+exeName+'.png'
+    new_img_location = 'C:\\temp\\' + exeName + '.png'
     new_img = img.resize((128, 128), reducing_gap=3.0)
     new_img.save(new_img_location, format("PNG"))
+    new_img_location = new_img_location.replace("\\", "/" )
+    return new_img_location
+
+
+def createProgramInfo(list1, list2, list3):
+    programs = []
+    for a, b, c in zip(list1, list2, list3):
+        program = {'exe_path': a, 'name': b, 'icon_path': c}
+        programs.append(program)
+    return programs
 
 
 if __name__ == '__main__':
-    # 'C:\ProgramData\Microsoft\Windows\Start Menu\Programs'
-    list = fetchExePaths('C:\ProgramData\Microsoft\Windows\Start Menu\Programs')
-    list_2 = extractFileNames('C:\ProgramData\Microsoft\Windows\Start Menu\Programs')
-    print(list)
-    print(list_2)
+    exe_paths = fetchExePaths(r'C:\ProgramData\Microsoft\Windows\Start Menu\Programs')
+    exe_names = extractFileNames(r'C:\ProgramData\Microsoft\Windows\Start Menu\Programs')
+
+    icon_paths = []
+    for path, name in zip(exe_paths, exe_names):
+        icon = extractExeIcons(path, name)
+        icon_paths.append(icon)
+
+    print(createProgramInfo(exe_paths, exe_names, icon_paths))
