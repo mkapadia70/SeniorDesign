@@ -1,11 +1,24 @@
-# Ref: https://stackoverflow.com/questions/53132434/list-of-installed-programs/54825112
+'''
+Ref: https://stackoverflow.com/questions/53132434/list-of-installed-programs/54825112
+     https://stackoverflow.com/questions/32341661/getting-a-windows-program-icon-and-saving-it-as-a-png-python/39811146
+'''
+import copy
+import glob
 import os
+import re
 import winreg
-from pywinauto.application import Application
+
+import win32api
+import win32con
+import win32gui
+import win32ui
+import winshell
+from PIL import Image
 from pywinauto import Desktop
 from pywinauto import warnings
-import re
-import copy
+from pywinauto.application import Application
+from pathlib import Path
+
 
 app = None
 windows = None
@@ -47,8 +60,8 @@ def foo(hive, flag):
 
 def getInstalledApps():
     apps = foo(winreg.HKEY_LOCAL_MACHINE, winreg.KEY_WOW64_32KEY) + foo(winreg.HKEY_LOCAL_MACHINE,
-                                                                                 winreg.KEY_WOW64_64KEY) + foo(
-        winreg.HKEY_CURRENT_USER, 0)
+                                                                        winreg.KEY_WOW64_64KEY) + foo(
+        winreg.HKEY_CURRENT_USER, 1)
 
     for app in apps:
         for key, value in list(app.items()):
@@ -56,6 +69,7 @@ def getInstalledApps():
                 app.clear()
     apps = list(filter(None, apps))
     return apps
+
 
 def launchApp(path):
     global app
@@ -68,26 +82,64 @@ def launchApp(path):
             print(ex)
 
 
-def checkDirPath(dirPath=None):
-    list = os.listdir(dirPath)
-    exe_list = []
-    if list:
-        for e in list:
-            e_copy = copy.copy(e)
-            r = re.compile('\.exe$')
-            if r.search(e_copy):
-                # e_copy = e.replace('.exe', '')
-                exe_list.append(e)
-    return exe_list
+def extractFileNames(directory):
+    from os import listdir
+    from os.path import isfile, join
+    files = [f for f in listdir(directory) if isfile(join(directory, f))]
+
+    program_names = []
+    if files:
+        for f in files:
+            f_copy = copy.copy(f)
+            r = re.compile('\.lnk$')
+            if r.search(f_copy):
+                f_copy = f_copy.replace('.lnk', '')
+                program_names.append(f_copy)
+    return program_names
+
+
+def fetchExePaths(directory):
+    exePaths = []
+    for lnk in glob.glob(os.path.join(directory, "*.lnk")):
+        shortcut = winshell.shortcut(lnk)
+        exePaths.append(shortcut.path)
+    return exePaths
+
+
+def extractExeIcons(exePath, exeName):
+    path = exePath.replace("\\", "/")
+    icoX = win32api.GetSystemMetrics(win32con.SM_CXICON)
+    icoY = win32api.GetSystemMetrics(win32con.SM_CYICON)
+
+    large, small = win32gui.ExtractIconEx(path, 0)
+    win32gui.DestroyIcon(small[0])
+
+    hdc = win32ui.CreateDCFromHandle(win32gui.GetDC(0))
+    hbmp = win32ui.CreateBitmap()
+    hbmp.CreateCompatibleBitmap(hdc, icoX, icoY)
+    hdc = hdc.CreateCompatibleDC()
+
+    hdc.SelectObject(hbmp)
+    hdc.DrawIcon((0, 0), large[0])
+
+    # For original bitmap
+    # hbmp.SaveBitmapFile(hdc, 'c:\\temp\\[filename].ico')
+
+    bmpstr = hbmp.GetBitmapBits(True)
+    img = Image.frombuffer(
+        'RGBA',
+        (32, 32),
+        bmpstr, 'raw', 'BGRA', 0, 1
+    )
+
+    new_img_location = 'C:\\temp\\'+exeName+'.png'
+    new_img = img.resize((128, 128), reducing_gap=3.0)
+    new_img.save(new_img_location, format("PNG"))
 
 
 if __name__ == '__main__':
-    apps = getInstalledApps()
-    for app in apps:
-        for key, value in list(app.items()):
-            if key == 'install_location':
-                print(value, ' ', checkDirPath(value))
-            # if value == 'C:\Microsoft VS Code\\':
-            #     v = checkDirPath(value)
-            #     # launchApp(value + '/' + v[0])
-            #     os.startfile(value + '/' + v[0])
+    # 'C:\ProgramData\Microsoft\Windows\Start Menu\Programs'
+    list = fetchExePaths('C:\ProgramData\Microsoft\Windows\Start Menu\Programs')
+    list_2 = extractFileNames('C:\ProgramData\Microsoft\Windows\Start Menu\Programs')
+    print(list)
+    print(list_2)
