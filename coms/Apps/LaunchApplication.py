@@ -100,40 +100,48 @@ def fetchExePaths(directory):
     exePaths = []
     for lnk in glob.glob(os.path.join(directory, "*.lnk")):
         shortcut = winshell.shortcut(lnk)
+        print(shortcut.lnk_filepath)
         exePaths.append(shortcut.path.replace("\\", "/" ))
     return exePaths
 
 
 def extractExeIcons(exePath, exeName):
-    path = exePath.replace("\\", "/")
-    icoX = win32api.GetSystemMetrics(win32con.SM_CXICON)
-    icoY = win32api.GetSystemMetrics(win32con.SM_CYICON)
+    try:
+        path = exePath.replace("\\", "/")
+        icoX = win32api.GetSystemMetrics(win32con.SM_CXICON)
+        icoY = win32api.GetSystemMetrics(win32con.SM_CYICON)
 
-    large, small = win32gui.ExtractIconEx(path, 0)
-    win32gui.DestroyIcon(small[0])
+        large, small = win32gui.ExtractIconEx(path, 0)
+        win32gui.DestroyIcon(small[0])
 
-    hdc = win32ui.CreateDCFromHandle(win32gui.GetDC(0))
-    hbmp = win32ui.CreateBitmap()
-    hbmp.CreateCompatibleBitmap(hdc, icoX, icoY)
-    hdc = hdc.CreateCompatibleDC()
+        hdc = win32ui.CreateDCFromHandle(win32gui.GetDC(0))
+        hbmp = win32ui.CreateBitmap()
+        hbmp.CreateCompatibleBitmap(hdc, icoX, icoY)
+        hdc = hdc.CreateCompatibleDC()
 
-    hdc.SelectObject(hbmp)
-    hdc.DrawIcon((0, 0), large[0])
+        hdc.SelectObject(hbmp)
+        hdc.DrawIcon((0, 0), large[0])
 
-    # For original bitmap
-    # hbmp.SaveBitmapFile(hdc, 'c:\\temp\\[filename].ico')
+        bmpstr = hbmp.GetBitmapBits(True)
+        img = Image.frombuffer(
+            'RGBA',
+            (32, 32),
+            bmpstr, 'raw', 'BGRA', 0, 1
+        )
 
-    bmpstr = hbmp.GetBitmapBits(True)
-    img = Image.frombuffer(
-        'RGBA',
-        (32, 32),
-        bmpstr, 'raw', 'BGRA', 0, 1
-    )
+        if re.search("Uninstall" or "Remove", exeName):
+            return None
+        else:
+            new_img_location = 'C:\\temp\\' + exeName + '.png'
+            new_img = img.resize((128, 128), reducing_gap=3.0)
+            new_img.save(new_img_location, format("PNG"))
+            new_img_location = new_img_location.replace("\\", "/" )
 
-    new_img_location = 'C:\\temp\\' + exeName + '.png'
-    new_img = img.resize((128, 128), reducing_gap=3.0)
-    new_img.save(new_img_location, format("PNG"))
-    new_img_location = new_img_location.replace("\\", "/" )
+            if os.stat(new_img_location).st_size == 143:
+                # For original bitmap
+                hbmp.SaveBitmapFile(hdc, 'c:\\temp\\' + exeName + '.png')
+    except:
+        new_img_location = None
     return new_img_location
 
 
@@ -145,13 +153,21 @@ def createProgramInfo(list1, list2, list3):
     return programs
 
 
+def traverseSubdirectories(cur_directory):
+    all_directories = [x[0] for x in os.walk(cur_directory)]
+
+    for dir in all_directories:
+        exe_paths = fetchExePaths(dir)
+        exe_names = extractFileNames(dir)
+
+        icon_paths = []
+        for path, name in zip(exe_paths, exe_names):
+            icon = extractExeIcons(path, name)
+            icon_paths.append(icon)
+
+        # print(exe_names, exe_paths, icon_paths)
+
+
 if __name__ == '__main__':
-    exe_paths = fetchExePaths(r'C:\ProgramData\Microsoft\Windows\Start Menu\Programs')
-    exe_names = extractFileNames(r'C:\ProgramData\Microsoft\Windows\Start Menu\Programs')
-
-    icon_paths = []
-    for path, name in zip(exe_paths, exe_names):
-        icon = extractExeIcons(path, name)
-        icon_paths.append(icon)
-
-    print(createProgramInfo(exe_paths, exe_names, icon_paths))
+    traverseSubdirectories(r'C:\ProgramData\Microsoft\Windows\Start Menu\Programs')
+    traverseSubdirectories(winshell.programs())
