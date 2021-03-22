@@ -92,7 +92,15 @@ def extractFileNames(directory):
             r = re.compile('\.lnk$')
             if r.search(f_copy):
                 f_copy = f_copy.replace('.lnk', '')
-                program_names.append(f_copy)
+                if not "Uninstall" in f_copy \
+                        and not "uninstall" in f_copy \
+                        and not "remove" in f_copy \
+                        and not "Remove" in f_copy \
+                        and not "x86" in f_copy \
+                        and not "Telemetry" in f_copy \
+                        and not "preferences" in f_copy \
+                        and not "skinned" in f_copy:
+                    program_names.append(f_copy)
     return program_names
 
 
@@ -100,12 +108,17 @@ def fetchExePaths(directory):
     exePaths = []
     for lnk in glob.glob(os.path.join(directory, "*.lnk")):
         shortcut = winshell.shortcut(lnk)
-        print(shortcut.lnk_filepath)
+        # print(shortcut.lnk_filepath)
         exePaths.append(shortcut.path.replace("\\", "/" ))
     return exePaths
 
 
 def extractExeIcons(exePath, exeName):
+    desktop = os.path.join(os.environ['USERPROFILE'], "Desktop")
+    iconPath = desktop + r'\icons'
+    if not os.path.exists(iconPath):
+        os.mkdir(iconPath)
+
     try:
         path = exePath.replace("\\", "/")
         icoX = win32api.GetSystemMetrics(win32con.SM_CXICON)
@@ -129,17 +142,12 @@ def extractExeIcons(exePath, exeName):
             bmpstr, 'raw', 'BGRA', 0, 1
         )
 
-        if re.search("Uninstall" or "Remove", exeName):
-            return None
-        else:
-            new_img_location = 'C:\\temp\\' + exeName + '.png'
-            new_img = img.resize((128, 128), reducing_gap=3.0)
-            new_img.save(new_img_location, format("PNG"))
-            new_img_location = new_img_location.replace("\\", "/" )
+        new_img_location = iconPath + '\\' + exeName + '.png'
+        # new_img = img.resize((128, 128), reducing_gap=3.0)
+        # new_img.save(new_img_location, format("PNG"))
+        new_img_location = new_img_location.replace("\\", "/" )
 
-            if os.stat(new_img_location).st_size == 143:
-                # For original bitmap
-                hbmp.SaveBitmapFile(hdc, 'c:\\temp\\' + exeName + '.png')
+        hbmp.SaveBitmapFile(hdc, iconPath + '\\' + exeName + '.png')
     except:
         new_img_location = None
     return new_img_location
