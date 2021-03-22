@@ -6,16 +6,16 @@ Functions including, but not limited to:
 
 * windows audio mix                              -- 90% needs polish -- jace fix
 * overworld to switch between apps               -- 90% needs polish -- jace fix
-* spotify integration                            -- 90% needs polish -- jace fix
-* media mode                                     -- 0% medium-hard   -- meet
-* drawing pad / touch mouse pad (like laptop)    -- 0% easy          -- everyone
-* windows/google calendar integration            -- 0% hard          -- idk
-* in game scoreboards, like discord side-bar     -- 0% hard          -- apurva
-* launch applications                            -- 0% medium        -- tri pham
-* twitch/twitch chat integration                 -- 0% medium-hard   -- max
-* obs/streamlabs integration                     -- 0% medium-hard   -- scrapped
+* spotify integration                            -- 100%             -- done
+* media mode                                     -- 50%              -- meet
+* drawing pad / touch mouse pad (like laptop)    -- 0%               -- everyone
+* windows/google calendar integration            -- 0%               -- tri and max
+* in game scoreboards, like discord side-bar     -- 0%               -- apurva
+* launch applications                            -- 85%              -- tri pham
+* twitch/twitch chat integration                 -- 50%              -- max
+* obs/streamlabs integration                     -- scrapped         -- scrapped
 * switch desktop/windows                         -- 90% needs polish -- jace fix
-* zoom controls                                  -- 0% medium-hard   -- jace
+* zoom controls                                  -- 0%               -- everyone
 
 
 **Emulation**
