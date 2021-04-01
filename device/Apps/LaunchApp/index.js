@@ -1,30 +1,24 @@
 
-$(function () {
-    $('#ExampleButton').on('click', function () {
-        $.getJSON("http://127.0.0.1:5001" + '/data', {
-            Name: "ExampleApp",
-            Func: "getExampleData",
-            Params: [],
+function loadAppInfo() {
+    // requests open window data from windows
+    var request = $.ajax({
+        type: 'get',
+        url: "http://127.0.0.1:5001" + '/data',
+        //async: false,
+        data: {
+            Name: "LaunchApplication",
+            Func: "getAllApplications",
+            // this fetches an array of applications
+            // where each app is a dictionary containing
+            // app name, app .exe, and app icon
             ExpectReturn: true
-        }, function (data) {
-            console.log(data);
-            document.getElementById("ExampleButton").innerHTML = data.text
-        });
+        }
+    }).done(function (data) {
+        // once it has the open window data, make html elements for each icon
+        data.forEach(displayApp);
     });
-});
+}
 
-$(function () {
-    $('#TextButton').on('click', function () {
-        var text = document.getElementById("textbox").value
-        console.log(text)
-        $.getJSON("http://127.0.0.1:5001" + '/data', {
-            Name: "ExampleApp",
-            Func: "numberOfLetters",
-            Params: text,
-            ExpectReturn: true
-        }, function (data) {
-            console.log(data);
-            document.getElementById("number").innerHTML = data.numberVal
-        });
-    });
-});
+function displayApp(value, index) {
+
+}

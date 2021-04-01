@@ -92,15 +92,15 @@ def extractFileNames(directory):
             r = re.compile('\.lnk$')
             if r.search(f_copy):
                 f_copy = f_copy.replace('.lnk', '')
-                if not "Uninstall" in f_copy \
-                        and not "uninstall" in f_copy \
-                        and not "remove" in f_copy \
-                        and not "Remove" in f_copy \
-                        and not "x86" in f_copy \
-                        and not "Telemetry" in f_copy \
-                        and not "preferences" in f_copy \
-                        and not "skinned" in f_copy:
-                    program_names.append(f_copy)
+                # if not "Uninstall" in f_copy \
+                #         and not "uninstall" in f_copy \
+                #         and not "remove" in f_copy \
+                #         and not "Remove" in f_copy \
+                #         and not "x86" in f_copy \
+                #         and not "Telemetry" in f_copy \
+                #         and not "preferences" in f_copy \
+                #         and not "skinned" in f_copy:
+                program_names.append(f_copy)
     return program_names
 
 
@@ -109,7 +109,19 @@ def fetchExePaths(directory):
     for lnk in glob.glob(os.path.join(directory, "*.lnk")):
         shortcut = winshell.shortcut(lnk)
         # print(shortcut.lnk_filepath)
-        exePaths.append(shortcut.path.replace("\\", "/" ))
+        # if not "Uninstall" in shortcut.lnk_filepath \
+        #         and not "uninstall" in shortcut.lnk_filepath \
+        #         and not "remove" in shortcut.lnk_filepath \
+        #         and not "Remove" in shortcut.lnk_filepath \
+        #         and not "x86" in shortcut.lnk_filepath \
+        #         and not "Telemetry" in shortcut.lnk_filepath \
+        #         and not "preferences" in shortcut.lnk_filepath \
+        #         and not "skinned" in shortcut.lnk_filepath:
+        if "VALORANT" in shortcut.lnk_filepath:
+            exePaths.append(shortcut.path.replace("\\", "/") + ' --launch-product=valorant --launch-patchline=live')
+        if "Discord" in shortcut.lnk_filepath:
+            exePaths.append(shortcut.path.replace("\\", "/") + ' --processStart Discord.exe')
+        exePaths.append(shortcut.path.replace("\\", "/"))
     return exePaths
 
 
@@ -121,6 +133,11 @@ def extractExeIcons(exePath, exeName):
 
     try:
         path = exePath.replace("\\", "/")
+        if "Discord" in path:
+            path = os.environ['USERPROFILE'].replace("\\", "/") + "/AppData/Local/Discord/app.ico"
+        if "valorant" in path:
+            path = os.environ['systemdrive'].replace("\\",
+                                                     "/") + "/ProgramData/Riot Games/Metadata/valorant.live/valorant.live.ico"
         icoX = win32api.GetSystemMetrics(win32con.SM_CXICON)
         icoY = win32api.GetSystemMetrics(win32con.SM_CYICON)
 
@@ -142,12 +159,12 @@ def extractExeIcons(exePath, exeName):
             bmpstr, 'raw', 'BGRA', 0, 1
         )
 
-        new_img_location = iconPath + '\\' + exeName + '.png'
+        new_img_location = iconPath + '\\' + exeName + '.ico'
         # new_img = img.resize((128, 128), reducing_gap=3.0)
         # new_img.save(new_img_location, format("PNG"))
-        new_img_location = new_img_location.replace("\\", "/" )
+        new_img_location = new_img_location.replace("\\", "/")
 
-        hbmp.SaveBitmapFile(hdc, iconPath + '\\' + exeName + '.png')
+        hbmp.SaveBitmapFile(hdc, iconPath + '\\' + exeName + '.ico')
     except:
         new_img_location = None
     return new_img_location
@@ -156,9 +173,13 @@ def extractExeIcons(exePath, exeName):
 def createProgramInfo(list1, list2, list3):
     programs = []
     for a, b, c in zip(list1, list2, list3):
-        program = {'exe_path': a, 'name': b, 'icon_path': c}
+        program = {'name': a, 'exe_path': b, 'icon_path': c}
         programs.append(program)
     return programs
+
+
+global all_programs
+all_programs = []
 
 
 def traverseSubdirectories(cur_directory):
@@ -173,9 +194,15 @@ def traverseSubdirectories(cur_directory):
             icon = extractExeIcons(path, name)
             icon_paths.append(icon)
 
-        # print(exe_names, exe_paths, icon_paths)
+        all_programs.append(createProgramInfo(exe_names, exe_paths, icon_paths))
+
+
+def getAllApplications():
+    traverseSubdirectories(r'C:\ProgramData\Microsoft\Windows\Start Menu\Programs')
+    traverseSubdirectories(winshell.programs())
+    from functools import reduce
+    return reduce(lambda x, y: x + y, all_programs)
 
 
 if __name__ == '__main__':
-    traverseSubdirectories(r'C:\ProgramData\Microsoft\Windows\Start Menu\Programs')
-    traverseSubdirectories(winshell.programs())
+    print(getAllApplications())
