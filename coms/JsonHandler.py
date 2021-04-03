@@ -2,7 +2,7 @@ from Apps import SpotifyControl
 from Apps import WindowsVolumeMixerControl
 from Apps import WindowsProgramControl
 from Apps import ExampleApp
-# from Apps import Plex
+from Apps import LaunchApplication
 import time
 import SerialHandler
 
@@ -14,6 +14,7 @@ def setupApps():
     SpotifyControl.setup()
     WindowsVolumeMixerControl.updateDevices()
     WindowsProgramControl.setup()
+    LaunchApplication.setup()
 
 
 def callFunctions(json):

@@ -17,6 +17,7 @@ from PIL import Image
 from pywinauto import Desktop
 from pywinauto import warnings
 from pywinauto.application import Application
+import json
 
 app = None
 windows = None
@@ -100,7 +101,7 @@ def extractFileNames(directory):
                 #         and not "Telemetry" in f_copy \
                 #         and not "preferences" in f_copy \
                 #         and not "skinned" in f_copy:
-                program_names.append(f_copy)
+                program_names.append(f_copy.replace(" ", "_"))
     return program_names
 
 
@@ -126,8 +127,8 @@ def fetchExePaths(directory):
 
 
 def extractExeIcons(exePath, exeName):
-    desktop = os.path.join(os.environ['USERPROFILE'], "Desktop")
-    iconPath = desktop + r'\icons'
+    # desktop = os.path.join(os.environ['USERPROFILE'], "Desktop")
+    iconPath = os.getcwd() + r'\icons'
     if not os.path.exists(iconPath):
         os.mkdir(iconPath)
 
@@ -159,12 +160,12 @@ def extractExeIcons(exePath, exeName):
             bmpstr, 'raw', 'BGRA', 0, 1
         )
 
-        new_img_location = iconPath + '\\' + exeName + '.ico'
+        new_img_location = iconPath + '\\' + exeName + '.png'
         # new_img = img.resize((128, 128), reducing_gap=3.0)
         # new_img.save(new_img_location, format("PNG"))
         new_img_location = new_img_location.replace("\\", "/")
 
-        hbmp.SaveBitmapFile(hdc, iconPath + '\\' + exeName + '.ico')
+        hbmp.SaveBitmapFile(hdc, iconPath + '\\' + exeName + '.png')
     except:
         new_img_location = None
     return new_img_location
@@ -178,11 +179,8 @@ def createProgramInfo(list1, list2, list3):
     return programs
 
 
-global all_programs
-all_programs = []
-
-
 def traverseSubdirectories(cur_directory):
+    all_programs = []
     all_directories = [x[0] for x in os.walk(cur_directory)]
 
     for dir in all_directories:
@@ -195,14 +193,19 @@ def traverseSubdirectories(cur_directory):
             icon_paths.append(icon)
 
         all_programs.append(createProgramInfo(exe_names, exe_paths, icon_paths))
+    return all_programs
 
 
 def getAllApplications():
-    traverseSubdirectories(r'C:\ProgramData\Microsoft\Windows\Start Menu\Programs')
-    traverseSubdirectories(winshell.programs())
+    system_progs = traverseSubdirectories(r'C:\ProgramData\Microsoft\Windows\Start Menu\Programs')
+    user_progs = traverseSubdirectories(winshell.programs())
+    all_programs = system_progs + user_progs
+
+    # flatten 2D array to 1D array
     from functools import reduce
-    return reduce(lambda x, y: x + y, all_programs)
+    all_programs_list = reduce(lambda x, y: x + y, all_programs)
+    return json.dumps(all_programs_list, separators=(',', ':'))
 
 
-if __name__ == '__main__':
-    print(getAllApplications())
+def setup():
+    getAllApplications()
