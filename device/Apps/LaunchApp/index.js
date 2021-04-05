@@ -24,12 +24,25 @@ function displayApps(value, index) {
         !value.name.includes("skinned") ){
             var path = value.icon_path
             var name = value.name
-            displayApp = '<div id="' + index + '" class="col-3 my-2" style="display: flex; justify-content: space-between;"> \
+            var exe_path = value.exe_path
+            displayApp = '<div id="' + index + '" class="col-1 my-2"> \
                             <img type="image" src='+ String(path) +' height=50 width=50> \
-                            <p> '+ String(name) +'<\p> \
+                            <p style="word-break: break-all"> '+ String(name) +'<\p> \
                             </div>'
 
             $("#appContainer").append(displayApp)
+
+            $("#" + index).on('click', function () {
+            $.getJSON("http://127.0.0.1:5001" + '/data', {
+                Name: "LaunchApplication",
+                Func: "launchApp",
+                Params: exe_path,
+                ExpectReturn: false
+            }, function (data) {
+
+            });
+            return false;
+            });
         }
     }
 }

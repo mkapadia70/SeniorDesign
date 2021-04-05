@@ -162,7 +162,7 @@ def extractExeIcons(exePath, exeName):
         )
 
         new_img_location = iconPath + '\\' + exeName + '.png'
-        # new_img = img.resize((128, 128), reducing_gap=3.0)
+        # new_img = img.resize((32, 32), reducing_gap=3.0)
         # new_img.save(new_img_location, format("PNG"))
         new_img_location = new_img_location.replace("\\", "/")
 
@@ -195,6 +195,13 @@ def traverseSubdirectories(cur_directory):
 
         all_programs.append(createProgramInfo(exe_names, exe_paths, icon_paths))
     return all_programs
+
+
+def launchApp(exe_file):
+    try:
+        win32api.WinExec(exe_file.replace("/", "\\"))
+    except:
+        pass
 
 
 def getAllApplicationsEmulation():
