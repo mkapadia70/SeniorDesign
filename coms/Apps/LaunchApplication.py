@@ -18,6 +18,7 @@ from pywinauto import Desktop
 from pywinauto import warnings
 from pywinauto.application import Application
 import json
+from Apps import ImageWriter
 
 app = None
 windows = None
@@ -196,7 +197,7 @@ def traverseSubdirectories(cur_directory):
     return all_programs
 
 
-def getAllApplications():
+def getAllApplicationsEmulation():
     system_progs = traverseSubdirectories(r'C:\ProgramData\Microsoft\Windows\Start Menu\Programs')
     user_progs = traverseSubdirectories(winshell.programs())
     all_programs = system_progs + user_progs
@@ -207,5 +208,32 @@ def getAllApplications():
     return json.dumps(all_programs_list, separators=(',', ':'))
 
 
+def getAllApplicationsRPi():
+    system_progs = traverseSubdirectories(r'C:\ProgramData\Microsoft\Windows\Start Menu\Programs')
+    user_progs = traverseSubdirectories(winshell.programs())
+    all_programs = system_progs + user_progs
+
+    # flatten 2D array to 1D array
+    from functools import reduce
+    all_programs_list = reduce(lambda x, y: x + y, all_programs)
+
+    all_programs_list_rpi = []
+
+    for prog in all_programs_list:
+        try:
+            ImageWriter.writeIcon(prog['icon_path'])
+            string = ImageWriter.iconTo64String(prog['icon_path'])
+            jason = {"name": prog['name'],
+                     "exe_path": prog['exe_path'],
+                     "icon_path": string}
+
+            all_programs_list_rpi.append(jason)
+        except:
+            pass
+
+    return json.dumps(all_programs_list_rpi, separators=(',', ':'))
+
+
 def setup():
-    getAllApplications()
+    getAllApplicationsEmulation()
+    getAllApplicationsRPi()

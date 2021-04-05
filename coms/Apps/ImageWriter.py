@@ -32,6 +32,17 @@ def writeImage(image_name, pic_url):
         print(e)
     return False
 
+
+def writeIcon(icon_path):
+    try:
+        with open(icon_path, 'wb') as handle:
+            handle.write(icon_path)
+            return True
+    except Exception as e:
+        print(e)
+    return False
+
+
 # this function encodes an image using base64 encoding and return a string of the encoding
 # this is being used to send an image, as text, as a json object
 def imageTo64String(image_name):
@@ -39,6 +50,15 @@ def imageTo64String(image_name):
     try:
         with open(read_path, "rb") as image_file:
             return str(base64.b64encode(image_file.read()))
+    except Exception as e:
+        print(e)
+    return None
+
+
+def iconTo64String(icon_path):
+    try:
+        with open(icon_path, "rb") as icon_file:
+            return str(base64.b64encode(icon_file.read()))
     except Exception as e:
         print(e)
     return None
