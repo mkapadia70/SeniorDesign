@@ -119,11 +119,14 @@ def fetchExePaths(directory):
         #         and not "Telemetry" in shortcut.lnk_filepath \
         #         and not "preferences" in shortcut.lnk_filepath \
         #         and not "skinned" in shortcut.lnk_filepath:
-        if "VALORANT" in shortcut.lnk_filepath:
-            exePaths.append(shortcut.path.replace("\\", "/") + ' --launch-product=valorant --launch-patchline=live')
-        if "Discord" in shortcut.lnk_filepath:
-            exePaths.append(shortcut.path.replace("\\", "/") + ' --processStart Discord.exe')
-        exePaths.append(shortcut.path.replace("\\", "/"))
+        if shortcut.path:
+            if "VALORANT" in shortcut.lnk_filepath:
+                exePaths.append(shortcut.path.replace("\\", "/") + ' --launch-product=valorant --launch-patchline=live')
+            elif "Discord" in shortcut.lnk_filepath or "Teams" in shortcut.lnk_filepath:
+                app_name = str(os.path.basename(os.path.dirname(shortcut.path))) + '.exe'
+                exePaths.append(shortcut.path.replace("\\", "/") + ' --processStart ' + '\"' + app_name + '\"')
+            else:
+                exePaths.append(shortcut.path.replace("\\", "/"))
     return exePaths
 
 
@@ -140,6 +143,8 @@ def extractExeIcons(exePath, exeName):
         if "valorant" in path:
             path = os.environ['systemdrive'].replace("\\",
                                                      "/") + "/ProgramData/Riot Games/Metadata/valorant.live/valorant.live.ico"
+        if "Teams" in path:
+            path = os.environ['USERPROFILE'].replace("\\", "/") + "/AppData/Local/Microsoft/Teams/app.ico"
         icoX = win32api.GetSystemMetrics(win32con.SM_CXICON)
         icoY = win32api.GetSystemMetrics(win32con.SM_CYICON)
 
@@ -199,7 +204,8 @@ def traverseSubdirectories(cur_directory):
 
 def launchApp(exe_file):
     try:
-        win32api.WinExec(exe_file.replace("/", "\\"))
+        import subprocess
+        subprocess.run(exe_file, timeout=1, shell=True)
     except:
         pass
 
