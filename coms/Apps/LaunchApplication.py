@@ -250,19 +250,18 @@ def getAllApplicationsRPi():
 
     for prog in all_programs_list:
         try:
-            ImageWriter.writeIcon(prog['icon_path'])
-            string = ImageWriter.iconTo64String(prog['icon_path'])
-            jason = {"name": prog['name'],
-                     "exe_path": prog['exe_path'],
-                     "icon_path": string}
+            if prog['icon_path'] is not None:
+                string = ImageWriter.iconTo64String(prog['icon_path'])
+                jason = {"name": prog['name'],
+                         "exe_path": prog['exe_path'],
+                         "icon_path": string}
 
-            all_programs_list_rpi.append(jason)
+                all_programs_list_rpi.append(jason)
         except:
             pass
-
     return json.dumps(all_programs_list_rpi, separators=(',', ':'))
 
 
 def setup():
     getAllApplicationsEmulation()
-    # getAllApplicationsRPi()
+    getAllApplicationsRPi()
