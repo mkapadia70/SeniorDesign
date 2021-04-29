@@ -122,7 +122,7 @@ def fetchExePaths(directory):
         if shortcut.path:
             if "VALORANT" in shortcut.lnk_filepath:
                 exePaths.append(shortcut.path.replace("\\", "/") + ' --launch-product=valorant --launch-patchline=live')
-            elif "Discord" in shortcut.lnk_filepath or "Teams" in shortcut.lnk_filepath:
+            elif "Update.exe" in shortcut.path:
                 app_name = str(os.path.basename(os.path.dirname(shortcut.path))) + '.exe'
                 exePaths.append(shortcut.path.replace("\\", "/") + ' --processStart ' + '\"' + app_name + '\"')
             else:
@@ -166,15 +166,24 @@ def extractExeIcons(exePath, exeName):
             bmpstr, 'raw', 'BGRA', 0, 1
         )
 
-        new_img_location = iconPath + '\\' + exeName + '.png'
-        # new_img = img.resize((32, 32), reducing_gap=3.0)
-        # new_img.save(new_img_location, format("PNG"))
+        new_img_location = iconPath + '\\' + exeName + '.ico'
+        img.save(new_img_location, format("ico"))
         new_img_location = new_img_location.replace("\\", "/")
 
-        hbmp.SaveBitmapFile(hdc, iconPath + '\\' + exeName + '.png')
+        hbmp.SaveBitmapFile(hdc, iconPath + '\\' + exeName + '.bmp')
     except:
         new_img_location = None
     return new_img_location
+
+
+def verifyExeIcons(iconPath):
+    if iconPath is None:
+        return iconPath
+    img_size = os.path.getsize(iconPath)
+    path = iconPath
+    if img_size < 1999:
+        path = iconPath[:len(iconPath) - 3] + 'bmp'
+    return path
 
 
 def createProgramInfo(list1, list2, list3):
@@ -204,10 +213,10 @@ def traverseSubdirectories(cur_directory):
 
 def launchApp(exe_file):
     try:
+        os.startfile(exe_file)
+    except Exception:
         import subprocess
-        subprocess.run(exe_file, timeout=1, shell=True)
-    except:
-        pass
+        subprocess.Popen(exe_file)
 
 
 def getAllApplicationsEmulation():
@@ -218,6 +227,13 @@ def getAllApplicationsEmulation():
     # flatten 2D array to 1D array
     from functools import reduce
     all_programs_list = reduce(lambda x, y: x + y, all_programs)
+
+    # do a check here for icons since some of them dont show up as ico files
+    # instead replacing them bitmaps that dont have transparent background
+    for prog in all_programs_list:
+        prog['icon_path'] = verifyExeIcons(prog['icon_path'])
+
+    # print(json.dumps(all_programs_list, separators=(',', ':'), indent = 1))
     return json.dumps(all_programs_list, separators=(',', ':'))
 
 
@@ -249,4 +265,4 @@ def getAllApplicationsRPi():
 
 def setup():
     getAllApplicationsEmulation()
-    getAllApplicationsRPi()
+    # getAllApplicationsRPi()
