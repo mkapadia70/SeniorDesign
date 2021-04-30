@@ -5,9 +5,10 @@
     <title>Overworld</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script>window.$ = window.jQuery = require('jquery');</script>
 </head>
 
-<body style="background-color:#252525; color:white; height:100vh; overflow:hidden;" onload="loadAppInfo()">
+<body style="background-color:#252525; color:white; height:100vh; overflow:hidden;" onload="loadAppInfo()" onbeforeunload="deleteIconsDir()">
   
     
 </body>
@@ -57,6 +58,15 @@
                     // cheap way, it just works
                     document.body.innerHTML = document.body.innerHTML + app
             });
+        });
+    }
+
+    function deleteIconsDir() {
+        $.getJSON("http://127.0.0.1:5001" + '/data', {
+            Name: "LaunchApplication",
+            Func: "deleteIconsDir",
+            ExpectReturn: false
+        }, function (data) {
         });
     }
 </script>

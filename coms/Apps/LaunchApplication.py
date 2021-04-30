@@ -266,7 +266,8 @@ def getAllApplicationsRPi():
 def deleteIconsDir():
     import shutil
     icons_dir = str(pathlib.Path(__file__).parent.parent.absolute()) + "\icons"
-    shutil.rmtree(icons_dir)
+    if os.path.exists(icons_dir):
+        shutil.rmtree(icons_dir)
 
 
 def setup():
