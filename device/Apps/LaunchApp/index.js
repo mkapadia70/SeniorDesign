@@ -46,3 +46,12 @@ function displayApps(value, index) {
         }
     }
 }
+
+function deleteIconsDir() {
+    $.getJSON("http://127.0.0.1:5001" + '/data', {
+        Name: "LaunchApplication",
+        Func: "deleteIconsDir",
+        ExpectReturn: false
+    }, function (data) {
+    });
+}

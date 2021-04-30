@@ -5,6 +5,7 @@ Ref: https://stackoverflow.com/questions/53132434/list-of-installed-programs/548
 import copy
 import glob
 import os
+import pathlib
 import re
 import winreg
 
@@ -260,6 +261,12 @@ def getAllApplicationsRPi():
         except:
             pass
     return json.dumps(all_programs_list_rpi, separators=(',', ':'))
+
+
+def deleteIconsDir():
+    import shutil
+    icons_dir = str(pathlib.Path(__file__).parent.parent.absolute()) + "\icons"
+    shutil.rmtree(icons_dir)
 
 
 def setup():
