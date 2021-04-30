@@ -12,7 +12,7 @@ import SerialHandler
 # * handles serial connection (encoded json data) to/from our Windows device
 # this program is launched by the electron app on startup
 
-emulation = True  # True when using emulation, False otherwise
+emulation = False  # True when using emulation, False otherwise
 rasp = not emulation
 
 if rasp:
