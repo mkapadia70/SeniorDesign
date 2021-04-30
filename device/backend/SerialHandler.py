@@ -25,7 +25,7 @@ def connectPort(port):
         stopbits=serial.STOPBITS_ONE,
         bytesize=serial.EIGHTBITS,
         timeout=1)
-    ser.set_buffer_size(rx_size=115200, tx_size=115200)
+    #ser.set_buffer_size(rx_size=115200, tx_size=115200)
     return ser
 
 
