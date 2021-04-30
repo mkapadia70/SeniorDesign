@@ -3,6 +3,7 @@ from Apps import WindowsVolumeMixerControl
 from Apps import WindowsProgramControl
 from Apps import ExampleApp
 from Apps import LaunchApplication
+from Apps import Twitch
 import time
 import SerialHandler
 
@@ -15,6 +16,7 @@ def setupApps():
     WindowsVolumeMixerControl.updateDevices()
     WindowsProgramControl.setup()
     LaunchApplication.setup()
+    Twitch.setup()
 
 
 def callFunctions(json):
