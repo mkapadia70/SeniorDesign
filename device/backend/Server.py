@@ -59,7 +59,7 @@ def packageAndSend(name, funcs, params):
 
 if __name__ == "__main__":
     print('starting server')
-    while (not SerialHandler.checkConnected(inport) or not SerialHandler.checkConnected(outport)):
+    while ((not SerialHandler.checkConnected(inport) or not SerialHandler.checkConnected(outport)) and emulation):
         print("Device Not Found")
         time.sleep(5)
 
