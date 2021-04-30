@@ -10,9 +10,11 @@ rasp = not emulation
 if rasp:
     inport = "COM3"
     outport = "COM3"
+    print("running on rasp pi")
 else:
     inport = "COM3"  # change this according to your in and out com ports as set by com0com
     outport = "COM5"
+    print("running on emulation")
 
 
 def main():
