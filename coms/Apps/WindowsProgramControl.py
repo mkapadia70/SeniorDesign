@@ -36,6 +36,7 @@ def openProgram(path):
 
 # returns a list of open windows
 def getOpenWindows():
+    setup()
     global windows
     openWindowsString = []
     for w in windows:

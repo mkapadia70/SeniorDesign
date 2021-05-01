@@ -12,14 +12,14 @@ import SerialHandler
 # * handles serial connection (encoded json data) to/from our Windows device
 # this program is launched by the electron app on startup
 
-emulation = False  # True when using emulation, False otherwise
+emulation = True  # True when using emulation, False otherwise
 rasp = not emulation
 
 if rasp:
     inport = "/dev/ttyS0"
     outport = "/dev/ttyS0"
 else:
-    inport = "COM8"  # change this according to your in and out com ports as set by com0com
+    inport = "COM3"  # change this according to your in and out com ports as set by com0com
     outport = "COM6"
 
 app = Flask(__name__)

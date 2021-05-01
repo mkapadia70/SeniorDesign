@@ -13,7 +13,7 @@ function setup(){
 function makeRadioButtons(value, index){
     var id = value
     var input = '<input type="radio" id=' + id + ' name="window" value=' + id + '>'
-    var label = '<label for=' + id + '>' + id + '</label><br></br>' 
+    var label = '<label for=' + id + '>' + id + '</label></br>' 
     $("#radioholder").append(input)
     $("#radioholder").append(label)
 }
@@ -271,6 +271,45 @@ $(function () {
         $.getJSON("http://127.0.0.1:5001" + '/data', {
             Name: "Media",
             Func: "closePlayer",
+            Params: prog,
+            ExpectReturn: true
+        }, function (data) {
+        });
+    });
+});
+
+$(function () {
+    $('#mute').on('click', function () {
+        var prog = $('input[name="window"]:checked').val();
+        $.getJSON("http://127.0.0.1:5001" + '/data', {
+            Name: "Media",
+            Func: "mute",
+            Params: prog,
+            ExpectReturn: true
+        }, function (data) {
+        });
+    });
+});
+
+$(function () {
+    $('#theaterMode').on('click', function () {
+        var prog = $('input[name="window"]:checked').val();
+        $.getJSON("http://127.0.0.1:5001" + '/data', {
+            Name: "Media",
+            Func: "theaterMode",
+            Params: prog,
+            ExpectReturn: true
+        }, function (data) {
+        });
+    });
+});
+
+$(function () {
+    $('#miniplayer').on('click', function () {
+        var prog = $('input[name="window"]:checked').val();
+        $.getJSON("http://127.0.0.1:5001" + '/data', {
+            Name: "Media",
+            Func: "miniplayer",
             Params: prog,
             ExpectReturn: true
         }, function (data) {

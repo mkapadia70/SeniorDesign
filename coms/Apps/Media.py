@@ -22,7 +22,7 @@ def pressESC(Program):
 
 def pressLeftArrow(Program):
     WindowsProgramControl.switchFocus(Program)
-    keyboard = Controller(Program)
+    keyboard = Controller()
     keyboard.press(Key.left)
     keyboard.release(Key.left)
 
@@ -146,3 +146,24 @@ def skipToNextItem(Program):
     keyboard.press("n")
     keyboard.release(Key.shift)
     keyboard.release("n")
+
+def mute(Program):
+    WindowsProgramControl.switchFocus(Program)
+    keyboard = Controller()
+    key =  "m" 
+    keyboard.press(key)
+    keyboard.release(key)
+
+def theaterMode(Program):
+    WindowsProgramControl.switchFocus(Program)
+    keyboard = Controller()
+    key =  "t" 
+    keyboard.press(key)
+    keyboard.release(key)
+
+def miniplayer(Program):
+    WindowsProgramControl.switchFocus(Program)
+    keyboard = Controller()
+    key =  "i" 
+    keyboard.press(key)
+    keyboard.release(key)

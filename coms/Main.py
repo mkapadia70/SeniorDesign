@@ -4,7 +4,7 @@ import time
 
 # Main.py
 
-emulation = False  # enable this when using emulation
+emulation = True  # enable this when using emulation
 rasp = not emulation
 
 if rasp:
