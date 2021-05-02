@@ -33,12 +33,12 @@ function createWindow() {
 	const win = new BrowserWindow({
 		width: 1280,
 		height: 800,
-		//fullscreen: true, //uncomment in the final code
+		fullscreen: true, //uncomment in the final code
 		webPreferences: {
 			nodeIntegration: true
 		}
 	})
-	//win.removeMenu() //uncomment in the final code
+	win.removeMenu() //uncomment in the final code
 	win.loadFile('index.html')
 }
 
