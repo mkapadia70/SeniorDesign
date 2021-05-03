@@ -22,7 +22,7 @@ function displayApps(value, index) {
         !value.name.includes("Remove") && !value.name.includes("remove") &&
         !value.name.includes("x86") && !value.name.includes("preferences") &&
         !value.name.includes("skinned") ){
-            var path = value.icon_path
+            var path = value.icon_path.replace(" ", "%20")
             var name = value.name
             var exe_path = value.exe_path
             displayApp = '<div id="' + index + '" class="col-1 my-2"> \
@@ -46,6 +46,7 @@ function displayApps(value, index) {
         }
     }
 }
+
 function deleteIconsDir() {
     $.getJSON("http://127.0.0.1:5001" + '/data', {
         Name: "LaunchApplication",
@@ -54,4 +55,3 @@ function deleteIconsDir() {
     }, function (data) {
     });
 }
-
