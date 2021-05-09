@@ -2,18 +2,16 @@
 
 Controller for various Windows functions via external Raspberry Pi w/ touchscreen
 
-Functions including, but not limited to:
+Functionality:
 
-* windows audio mix                              -- 90% needs polish -- jace fix
-* overworld to switch between apps               -- 90% needs polish -- jace fix
-* spotify integration                            -- 100%             -- done
-* media mode                                     -- 90%              -- meet
-* drawing pad / touch mouse pad (like laptop)    -- 95%              -- apurva
-* windows/google calendar integration            -- 0%               -- tri and max
-* launch applications                            -- 95%              -- tri pham
-* twitch/twitch chat integration                 -- 95%              -- max
-* switch desktop/windows                         -- 90% needs polish -- jace fix
-* zoom controls                                  -- 0%               -- everyone
+* windows audio mix                             
+* overworld to switch between apps              
+* spotify integration                            
+* media mode                                    
+* drawing pad / touch mouse pad (like laptop)   
+* launch applications                            
+* twitch/twitch chat integration                
+* switch desktop/windows                         
 
 
 **Emulation**
